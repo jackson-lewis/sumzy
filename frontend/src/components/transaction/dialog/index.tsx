@@ -108,16 +108,9 @@ export default function TransactionDialog() {
   }
 
   function handleCategoryChange(event: ChangeEvent<HTMLSelectElement>) {
-    const categoryId = Number(event.target.value.replace(/d|u/, ''))
+    const categoryType: CategoryType = event.target.value[0] === 'd' ? 'DEFAULT' : 'USER'
 
-    let categoryType: CategoryType = 'DEFAULT'
-    const userCategoryIds = data?.userCategories.map((category) => category.id)
-
-    if (userCategoryIds?.includes(categoryId)) {
-      categoryType = 'USER'
-    }
-
-    setCategoryValue(`${categoryType === 'DEFAULT' ? 'd' : 'u'}${categoryId}`)
+    setCategoryValue(event.target.value)
     setCategoryType(categoryType)
   }
 
