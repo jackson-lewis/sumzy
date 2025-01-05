@@ -1,0 +1,14 @@
+.passwordValidations {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  list-style: none;
+
+  li {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+}

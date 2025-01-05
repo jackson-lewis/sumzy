@@ -1,0 +1,86 @@
+.dialog {
+    padding: 20px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    border-radius: 12px;
+
+    &::backdrop {
+        background-color: rgba(0, 0, 0, .25);
+    }
+
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    fieldset {
+        border: none;
+    }
+}
+
+.heading {
+    margin: 0 0 20px;
+    
+    text-align: center;
+    font-size: 1.25rem;
+}
+
+.field {
+    margin-bottom: 10px;
+    
+    label {
+        display: block;
+    }
+
+    &.type {
+        display: flex;
+        gap: 20px;
+    }
+}
+
+.direction {
+    border: none;
+}
+
+.styled-radio {
+    width: 100%;
+
+    input {
+        width: 1px;
+        height: 1px;
+        appearance: none;
+        position: absolute;
+        top: -999px;
+        left: -999px;
+
+        &:checked + label {
+            background-color: var(--primary);
+            color: #ffffff;
+        }
+    }
+
+    label {
+        padding: 10px 4px;
+        cursor: pointer;
+
+        text-align: center;
+        border-radius: 4px;
+    }
+}
+
+.submit {
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 12px 24px;
+    cursor: pointer;
+
+    border-radius: 8px;
+    border: none;
+    font-size: 1.125rem;
+    font-weight: 600;
+    background-color: var(--primary);
+    color: #ffffff;
+}

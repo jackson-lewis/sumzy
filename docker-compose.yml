@@ -1,0 +1,36 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DATABASE_URL=postgres://postgres:example@db/sumzy
+    depends_on:
+      - db
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - sumzy
+
+  db:
+    image: postgres
+    restart: always
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: example
+    volumes:
+      - pgdata:/var/lib/postgresql/data 
+    networks:
+      - sumzy
+
+volumes:
+  pgdata:
+
+networks:
+  sumzy:
+    driver: bridge

@@ -1,0 +1,12 @@
+{
+  "scripts": {
+    "start": "docker-compose up",
+    "build": "docker-compose up --build"
+  },
+  "devDependencies": {
+    "@types/node": "^22.9.0",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3"
+  }
+}

@@ -1,0 +1,61 @@
+.expense {
+    padding: 15px 20px;
+    position: relative;
+
+    border-radius: 8px;
+    background-color: var(--l-black);
+
+    time {
+        margin-bottom: 10px;
+        display: block;
+
+        line-height: 1;
+    }
+
+    p {
+        font-size: 1.125rem;
+        line-height: 1;
+        font-weight: 500;
+    }
+
+    div {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+}
+
+p.category {
+    margin: 0;
+    padding: 2px 6px;
+
+    font-size: .875rem;
+    color: var(--white);
+    background-color: var(--black);
+    border-radius: 4px;
+    text-transform: uppercase;
+}
+
+.action-button {
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    cursor: pointer;
+
+    background: none;
+    border: none;
+    border-radius: 8px;
+
+    transition: 200ms;
+
+    &.edit {
+        right: 54px;
+    }
+
+    &:hover {
+        background-color: rgba(0, 0, 0, .1);
+    }
+}

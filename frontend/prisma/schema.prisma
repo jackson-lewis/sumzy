@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int     @id @default(autoincrement())
+  name     String
+  email    String  @unique
+  password String
+  verified Boolean @default(false)
+  reports  Report[]
+}
+
+model DefaultCategory {
+  id           Int          @id @default(autoincrement())
+  name         String
+  transactions Transaction[]
+}
+
+model Category {
+  id           Int          @id @default(autoincrement())
+  userId       Int
+  name         String
+  transactions Transaction[]
+}
+
+model Transaction {
+  id                Int       @id @default(autoincrement())
+  userId            Int
+  amount            Decimal
+  frequency         Frequency
+  description       String?
+  merchant          Int?
+  categoryId        Int?
+  defaultCategoryId Int?
+  categoryType      CategoryType
+  date              DateTime  @default(now())
+  category          Category? @relation(fields: [categoryId], references: [id])
+  defaultCategory   DefaultCategory? @relation(fields: [defaultCategoryId], references: [id])
+}
+
+enum Frequency {
+  one_time
+  recurring
+}
+
+enum CategoryType {
+  DEFAULT
+  USER
+}
+
+model Event {
+  id          Int       @id @default(autoincrement())
+  aggregateId Int
+  eventData   Json
+  eventType   EventType
+  createdAt   DateTime  @default(now())
+}
+
+model Report {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  tIncome         Int
+  tExpense        Int
+  tCategories     Json
+  compare         Json
+  date            DateTime @default(now())
+  lastUpdatedDate DateTime @default(now())
+  tSurplus        Int
+  user            User @relation(fields: [userId], references: [id])
+}
+
+enum EventType {
+  CREATED
+  UPDATED
+  DELETED
+}

@@ -1,0 +1,10 @@
+.message {
+  margin-bottom: 15px;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  svg {
+    min-width: 24px;
+  }
+}
