@@ -1,7 +1,11 @@
 'use client'
 
 import Money from '@/components/global/money'
-import { ComparePeriod, CompareTotal } from '@/types'
+import {
+  ComparePeriod,
+  CompareTotal,
+  Report as FakeReport
+} from '@/types'
 import styles from './style.module.scss'
 import ExpenseCategories from './expense-categories'
 import { useState } from 'react'
@@ -96,6 +100,8 @@ export default function MonthlySummaryReport() {
     )
   }
 
+  const compare = report.compare as FakeReport['compare']
+
   return (
     <>
       <h1>{monthYear} Report</h1>
@@ -103,29 +109,33 @@ export default function MonthlySummaryReport() {
       <ExpenseCategories
         categoryTotals={report.tCategories}
       />
-      <dl className={styles.totals}>
-        <Total
-          title="Income"
-          total={report.tIncome}
-          compareTotal={report.compare[comparePeriod]?.income}
-        />
-        <Total
-          title="Expense"
-          total={report.tExpense}
-          compareTotal={report.compare[comparePeriod]?.expense}
-        />
-        <Total
-          title="Surplus"
-          total={report.tSurplus}
-          compareTotal={report.compare[comparePeriod]?.surplus}
-        />
-      </dl>
-      <CompareSelector
-        comparePeriod={comparePeriod}
-        setComparePeriod={setComparePeriod}
-        hasPrevMonthReport={!!report.compare.prevMonth}
-        hasYearOverYearReport={!!report.compare.yearOverYear}
-      />
+      {report.compare && (
+        <>
+          <dl className={styles.totals}>
+            <Total
+              title="Income"
+              total={report.tIncome}
+              compareTotal={compare[comparePeriod]?.income}
+            />
+            <Total
+              title="Expense"
+              total={report.tExpense}
+              compareTotal={compare[comparePeriod]?.expense}
+            />
+            <Total
+              title="Surplus"
+              total={report.tSurplus}
+              compareTotal={compare[comparePeriod]?.surplus}
+            />
+          </dl>
+          <CompareSelector
+            comparePeriod={comparePeriod}
+            setComparePeriod={setComparePeriod}
+            hasPrevMonthReport={!!compare.prevMonth}
+            hasYearOverYearReport={!!compare.yearOverYear}
+          />
+        </>
+      )}
     </>
   )    
 }

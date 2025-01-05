@@ -1,5 +1,4 @@
-import { Category } from '@prisma/client'
-import 'react';
+import 'react'
 
 declare module 'react' {
   interface CSSProperties {

@@ -1,5 +1,5 @@
-import { Category } from '@/types'
 import { deleteCategory } from '@/lib/category'
+import { Category } from '@prisma/client'
 
 export default function CategoryItem({
   category
