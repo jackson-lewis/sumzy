@@ -19,6 +19,7 @@ import useTransactions from '@/lib/use-transactions'
 import { transactionAction } from '@/lib/actions/transaction'
 import { useCategories, useTx } from '@/lib/swr'
 import styles from './style.module.scss'
+import { SubmitButton } from '@/components/site/user/form'
 
 
 export default function TransactionDialog() {
@@ -34,7 +35,7 @@ export default function TransactionDialog() {
   const [categoryType, setCategoryType] = useState<CategoryType>()
   const [descValue, setDescValue] = useState<string>('')
   const update = !!transaction
-  const [state, formAction, pending] = useActionState(
+  const [state, formAction] = useActionState(
     transactionAction,
     null
   )
@@ -73,7 +74,11 @@ export default function TransactionDialog() {
 
   function closeAction() {
     closeEditModal()
-    setCategoryValue('')
+    setAmountValue('')
+    setCategoryValue('d1')
+    setCategoryType('DEFAULT')
+    setDescValue('')
+    setTransactionSetup([undefined, undefined])
     formRef.current?.reset()
   }
 
@@ -107,8 +112,11 @@ export default function TransactionDialog() {
     })
   }
 
-  function handleCategoryChange(event: ChangeEvent<HTMLSelectElement>) {
-    const categoryType: CategoryType = event.target.value[0] === 'd' ? 'DEFAULT' : 'USER'
+  function handleCategoryChange(
+    event: ChangeEvent<HTMLSelectElement>
+  ) {
+    const categoryType: CategoryType = 
+      event.target.value[0] === 'd' ? 'DEFAULT' : 'USER'
 
     setCategoryValue(event.target.value)
     setCategoryType(categoryType)
@@ -232,12 +240,9 @@ export default function TransactionDialog() {
             <p>Failed to load categories</p>
           )}
           <DateSelector value={transaction?.date} />
-          <button
-            className={styles.submit}
-            disabled={pending}
-          >
+          <SubmitButton>
             {update ? 'Update' : 'Add'}
-          </button>
+          </SubmitButton>
           <button
             type="button"
             onClick={() => {
