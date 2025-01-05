@@ -32,7 +32,10 @@
     margin-bottom: 10px;
     
     label {
+        margin-bottom: 4px;
         display: block;
+
+        font-size: .875rem;
     }
 
     &.type {
@@ -41,8 +44,13 @@
     }
 }
 
-.direction {
+.direction,
+.frequency {
     border: none;
+
+    label {
+        font-size: 1rem;
+    }
 }
 
 .styled-radio {
@@ -69,4 +77,40 @@
         text-align: center;
         border-radius: 4px;
     }
+}
+
+.description {
+    width: 100%;
+    padding: 4px 6px;
+
+    border: 1px solid var(--black);
+    border-radius: 4px;
+}
+
+.category {
+    width: 100%;
+    padding: 4px 6px;
+
+    border: 1px solid var(--black);
+    border-radius: 4px;
+}
+
+.date {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 4px 6px;
+
+    border: 1px solid var(--black);
+    border-radius: 4px;
+}
+
+.cancel {
+    width: 100%;
+    margin-top: 8px;
+    padding: 4px;
+
+    background: none;
+    border: none;
+    text-align: center;
+    text-decoration: underline;
 }

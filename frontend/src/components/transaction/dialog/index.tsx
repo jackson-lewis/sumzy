@@ -166,7 +166,7 @@ export default function TransactionDialog() {
             </div>
           </div>
         </fieldset>
-        <fieldset name="frequency">
+        <fieldset name="frequency" className={styles.frequency}>
           <div className={[styles.field, styles.type].join(' ')}>
             <div className={styles['styled-radio']}>
               <input
@@ -206,6 +206,7 @@ export default function TransactionDialog() {
               id="desc"
               value={descValue}
               onChange={(event) => setDescValue(event.target.value)}
+              className={styles.description}
             />
           </div>
           {data ? (
@@ -217,6 +218,7 @@ export default function TransactionDialog() {
                 value={categoryValue}
                 required
                 onChange={handleCategoryChange}
+                className={styles.category}
               >
                 {data.defaultCategories.map((category) => (
                   <option
@@ -248,6 +250,7 @@ export default function TransactionDialog() {
             onClick={() => {
               closeAction()
             }}
+            className={styles.cancel}
           >
             Cancel
           </button>

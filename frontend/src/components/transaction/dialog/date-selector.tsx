@@ -39,6 +39,7 @@ export default function DateSelector({
         data-testid="date_selector_input"
         value={date}
         onChange={handleChange}
+        className={styles.date}
       />
     </div>
   )
