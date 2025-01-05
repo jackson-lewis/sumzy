@@ -1,0 +1,16 @@
+{
+  "name": "Sumzy Personal Finance Tracker",
+  "short_name": "Sumzy",
+  "description": "A personal finance tracker to help you manage your money",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#262e2c",
+  "theme_color": "#42EEBA",
+  "icons": [
+    {
+      "src": "/sumzy.svg",
+      "sizes": "512x512",
+      "type": "image/svg"
+    }
+  ]
+}
