@@ -45,7 +45,7 @@ describe('Construct fetch options for API request', () => {
     expect(options.body).toBe(JSON.stringify(body))
   })
 
-  it('should set Authorization header with POST', async () => {
+  it('should set Cookie header with POST', async () => {
     const body = {
       property: 'value'
     }
@@ -56,7 +56,7 @@ describe('Construct fetch options for API request', () => {
     )
 
     expect(options).toHaveProperty('headers')
-    expect(options.headers).toHaveProperty('Authorization')
+    expect(options.headers).toHaveProperty('Cookie')
   })
 })
 

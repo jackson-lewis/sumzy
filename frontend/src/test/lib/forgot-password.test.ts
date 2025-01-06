@@ -1,5 +1,20 @@
+/** @jest-environment node */
 import { forgotPassword } from '@/lib/actions/user'
 
+
+jest.mock('next/headers', () => ({
+  ...jest.requireActual('next/headers'),
+  __esModule: true,
+  cookies: jest.fn(() => {
+    return Promise.resolve({
+      get: () => {
+        return {
+          value: 'sessionvalue'
+        }
+      }
+    })
+  })
+}))
 
 describe('Forgot password', () => {
   it('should return success message when request is successful', async () => {
