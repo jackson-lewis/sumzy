@@ -1,6 +1,5 @@
 import { User } from '@prisma/client'
 import { jwtVerify, SignJWT } from 'jose'
-import jwt from 'jsonwebtoken'
 
 
 type Token = {
@@ -8,26 +7,10 @@ type Token = {
   action: 'sign_in' | 'reset_password' | 'verify_email'
 }
 
-const JWT_SECRET = ''
 const fp_secretKey = process.env.FORGOT_PASSWORD_SECRET
 const fp_encodedKey = new TextEncoder().encode(fp_secretKey)
 const ve_secretKey = process.env.VERIFY_EMAIL_SECRET
 const ve_encodedKey = new TextEncoder().encode(ve_secretKey)
-
-export function generateToken(
-  userId: Token['userId'],
-  action: Token['action'],
-  expiresIn: string
-) {
-  return jwt.sign({ userId, action }, JWT_SECRET, {
-    expiresIn
-  })
-}
-
-
-export function generateSignInToken(userId: number) {
-  return generateToken(userId, 'sign_in', '30d')
-}
 
 
 export async function generateEmailVerifyLink(user: User) {
