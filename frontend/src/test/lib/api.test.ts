@@ -1,13 +1,20 @@
+/** @jest-environment node */
 import { apiRequest, buildFetchOptions } from '@/lib/api'
 import { Transaction } from '@/types'
 
-jest.mock('../../lib/actions/user', () => {
-  return {
-    getUserToken: jest.fn(() => {
-      return Promise.resolve('token')
+jest.mock('next/headers', () => ({
+  ...jest.requireActual('next/headers'),
+  __esModule: true,
+  cookies: jest.fn(() => {
+    return Promise.resolve({
+      get: () => {
+        return {
+          value: 'sessionvalue'
+        }
+      }
     })
-  }
-})
+  })
+}))
 
 describe('Construct fetch options for API request', () => {
   it('should set method with POST', async () => {
