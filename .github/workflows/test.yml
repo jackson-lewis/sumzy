@@ -56,3 +56,6 @@ jobs:
     - name: Test
       working-directory: frontend
       run: CI=true npm test
+      env:
+        DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        DIRECT_URL: ${{ secrets.DIRECT_URL }}
