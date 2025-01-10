@@ -7,6 +7,7 @@
     "build": "prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
+    "test:ci": "prisma migrate deploy && jest",
     "test": "npm run docker:test:up && dotenv -e .env.test -- prisma migrate deploy && dotenv -e .env.test -- jest",
     "test:watch": "npm run docker:test:up && dotenv -e .env.test -- prisma migrate deploy && dotenv -e .env.test -- jest --watch",
     "postinstall": "prisma generate",
