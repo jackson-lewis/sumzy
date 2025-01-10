@@ -12,8 +12,27 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
 
+    services:
+      docker:
+        image: docker:19.03.12
+        options: --privileged
+        ports:
+          - 2375:2375
+        env:
+          DOCKER_TLS_CERTDIR: ""
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
+          - /tmp:/tmp
+
     steps:
     - uses: actions/checkout@v4
+
+    - name: Set up Docker Compose
+      run: sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+      
+    - name: Make Docker Compose executable
+      run: sudo chmod +x /usr/local/bin/docker-compose
+
     - name: Set-up Node.js
       uses: actions/setup-node@v4
       with:
