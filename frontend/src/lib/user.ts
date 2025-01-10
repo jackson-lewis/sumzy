@@ -1,7 +1,12 @@
-export function validatePassword(pwd: string) {
+import { PasswordValidationTypes } from '@/types/user'
+
+
+export function validatePassword(pwd: string): {
+    [k in PasswordValidationTypes]: boolean
+} {
   return {
     length: pwdLength(pwd),
-    upper: pwdContainsUppercase(pwd),
+    uppercase: pwdContainsUppercase(pwd),
     number: pwdContainsNumber(pwd),
     special: pwdContainsSpecialChar(pwd)
   }

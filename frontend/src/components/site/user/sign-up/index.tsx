@@ -10,33 +10,46 @@ import {
   NewPasswordField, 
   SubmitButton 
 } from '../form'
-import { signUp } from '@/lib/actions/user'
+import { signUp } from '@/lib/actions/user-sign-up'
+import { SignUpActionResponse } from '@/types/user'
 
+
+const initialState: SignUpActionResponse = {
+  success: false,
+  message: ''
+}
 
 export default function SignUpForm() {
-  const [message, formAction, pending] = useActionState(signUp, null)
+  const [state, formAction, pending] = useActionState(signUp, initialState)
   const [disableSubmit, setDisableSubmit] = useState(true)
 
   return (
     <UserForm action={formAction}>
       <h1>Sign Up</h1>
-      <Message message={message} type="error" />
+      <Message
+        message={state?.message}
+        type={state.success ? 'info' : 'error'}
+      />
       <FormField
         label="Name"
         name="name"
         type="text"
         autoComplete="name"
-        required
+        defaultValue={state.inputs?.name}
+        error={state.errors?.name}
       />
       <FormField
         label="Email"
         name="email"
         type="email"
-        autoComplete="email"
         required
+        autoComplete="email"
+        defaultValue={state.inputs?.email}
+        error={state.errors?.email}
       />
       <NewPasswordField
         setDisableSubmit={setDisableSubmit}
+        error={state.errors?.password}
       />
       <SubmitButton
         disabled={disableSubmit || pending}

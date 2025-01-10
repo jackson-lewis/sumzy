@@ -2,6 +2,12 @@
   margin-bottom: 20px;
   position: relative;
 
+  &.error {
+    input {
+      border-color: var(--red);
+    }
+  }
+
   label {
     margin-bottom: 4px;
     display: block;
@@ -28,6 +34,12 @@
       border-color: var(--primary);
     }
   }
+}
+
+.error-message {
+  margin-top: 4px;
+  color: var(--red);
+  font-size: .875rem;
 }
 
 .forgotPassword {

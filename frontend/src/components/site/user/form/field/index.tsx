@@ -6,12 +6,14 @@ export default function FormField({
   label,
   name,
   type,
+  error,
   ...rest
 }: {
   label: string
+  error?: string[]
 } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
-    <div className={styles.field}>
+    <div className={[styles.field, error && styles.error].join(' ')}>
       <label htmlFor={name}>{label}</label>
       {(name === 'password' && rest.autoComplete === 'current-password') && (
         <Link
@@ -25,10 +27,13 @@ export default function FormField({
         type={type}
         name={name}
         id={name}
+        aria-describedby={`${name}-error`}
         data-testid={name}
-        required
         {...rest}
       />
+      {error && (
+        <p id={`${name}-error`} className={styles['error-message']}>{error[0]}</p>
+      )}
     </div>
   )
 }

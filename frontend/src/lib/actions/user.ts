@@ -4,11 +4,7 @@ import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import bcrypt from 'bcrypt'
 import { apiRequest } from '@/lib/api'
-import {
-  generateEmailVerifyLink
-} from '@/services/user/token'
 import { prisma } from '../prisma'
-import { sendUserVerifyEmail } from '@/services/notification/user'
 import { createSession, decrypt, deleteSession } from '../session'
 import { User } from '@prisma/client'
 
@@ -37,39 +33,6 @@ export async function signIn(prevState: unknown, formData: FormData) {
 
   await createSession(user.id)
   redirect('/dashboard?action=sign-in')
-}
-
-
-export async function signUp(
-  prevState: unknown,
-  formData: FormData
-) {
-  const email = formData.get('email') as string
-
-  const existingUser = await prisma.user.findFirst({
-    where: {
-      email
-    }
-  })
-
-  if (existingUser) {
-    return 'Email address already in use'
-  }
-
-  const hash = bcrypt.hashSync(formData.get('password')as string, 10)
-
-  const user = await prisma.user.create({
-    data: {
-      name: formData.get('name') as string,
-      email,
-      password: hash
-    }
-  })
-
-  const emailVerifyLink = await generateEmailVerifyLink(user)
-  await sendUserVerifyEmail({ ...user, emailVerifyLink })
-
-  redirect('/sign-up/verify-email')
 }
 
 

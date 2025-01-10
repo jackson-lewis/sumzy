@@ -77,7 +77,7 @@ describe('Validate password', () => {
 
     expect(valid).toStrictEqual({
       length: true,
-      upper: true,
+      uppercase: true,
       number: true,
       special: true
     })
@@ -89,7 +89,7 @@ describe('Validate password', () => {
 
     expect(valid).toStrictEqual({
       length: false,
-      upper: true,
+      uppercase: true,
       number: true,
       special: true
     })
@@ -101,7 +101,7 @@ describe('Validate password', () => {
 
     expect(valid).toStrictEqual({
       length: true,
-      upper: false,
+      uppercase: false,
       number: true,
       special: true
     })
@@ -113,7 +113,7 @@ describe('Validate password', () => {
 
     expect(valid).toStrictEqual({
       length: true,
-      upper: true,
+      uppercase: true,
       number: false,
       special: true
     })
@@ -125,7 +125,7 @@ describe('Validate password', () => {
 
     expect(valid).toStrictEqual({
       length: true,
-      upper: true,
+      uppercase: true,
       number: true,
       special: false
     })
@@ -137,7 +137,7 @@ describe('Validate password', () => {
 
     expect(valid).toStrictEqual({
       length: false,
-      upper: false,
+      uppercase: false,
       number: false,
       special: false
     })
