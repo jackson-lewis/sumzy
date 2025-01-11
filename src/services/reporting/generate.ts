@@ -15,7 +15,7 @@ export class ReportGenerator {
   private userId: number
   private year: number
   private month: number
-  private date: Date
+  date: Date
   private endOfMonth: Date
   private totals: ReportTotals
   private events!: Event[]
@@ -28,7 +28,7 @@ export class ReportGenerator {
       year,
       month - 1
     )
-    this.endOfMonth = this.getEndOfMonth(this.date)
+    this.endOfMonth = this.getEndOfMonth()
     this.totals = {
       income: 0,
       expense: 0,
@@ -72,12 +72,7 @@ export class ReportGenerator {
       lastUpdatedDate
     }
 
-    const existingReport = await prisma.report.findFirst({
-      where: {
-        userId: this.userId,
-        date: this.date
-      }
-    })
+    const existingReport = await this.getExistingReport()
 
     if (existingReport) {
       await prisma.report.update({
@@ -103,6 +98,15 @@ export class ReportGenerator {
     })
   }
 
+  getExistingReport() {
+    return prisma.report.findFirst({
+      where: {
+        userId: this.userId,
+        date: this.date
+      }
+    })
+  }
+
   getEvents() {
     return prisma.event.findMany({
       where: {
@@ -117,13 +121,13 @@ export class ReportGenerator {
     })
   }
 
-  getEndOfMonth(date: Date) {
-    const endOfMonth = new Date(date)
+  getEndOfMonth() {
+    const endOfMonth = new Date(this.date)
     let lastDayOfMonth = 30
   
-    if ([0,2,4,6,7,9,11].indexOf(date.getMonth()) >= 0) {
+    if ([0,2,4,6,7,9,11].indexOf(this.date.getMonth()) >= 0) {
       lastDayOfMonth = 31
-    } else if (date.getMonth() === 1) {
+    } else if (this.date.getMonth() === 1) {
       lastDayOfMonth = 28
     }
   

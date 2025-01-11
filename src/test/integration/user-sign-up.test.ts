@@ -6,6 +6,7 @@ import {
   SignUpDataKeys,
   SignUpFormData
 } from '@/types/user'
+import { seedUser } from '../seeding'
 
 jest.mock('next/navigation', () => {
   return {
@@ -66,18 +67,9 @@ describe('Sign up process', () => {
   })
 
   it('should fail signup with email already exists', async () => {
-    await prisma.user.create({
-      data: {
-        id: 1,
-        name: 'Jackson Lewis',
-        email: 'jacksonlwss@gmail.com',
-        password: 'Password1!',
-        verified: false
-      }
-    })
+    await seedUser()
     
     const formData = setupFormData()
-
     const res = await signUp(initialState, formData)
 
     expect(res.success).toBe(false)
