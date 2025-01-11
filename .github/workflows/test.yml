@@ -4,8 +4,6 @@ on:
   push:
     branches:
     - main
-    paths:
-    - frontend/**
 
 jobs:
   test:
@@ -18,30 +16,27 @@ jobs:
     - name: Run docker-compose
       uses: hoverkraft-tech/compose-action@v2.0.1
       with:
-        compose-file: "./frontend/docker-compose.test.yml"
+        compose-file: "docker-compose.test.yml"
 
     - name: Set-up Node.js
       uses: actions/setup-node@v4
       with:
         node-version: 22
         cache: 'npm'
-        cache-dependency-path: frontend/package-lock.json
     
     - uses: actions/cache@v4
       id: npm-cache
       with:
-        path: frontend/node_modules
-        key: ${{ runner.os }}-node-${{ hashFiles('frontend/package-lock.json') }}
+        path: node_modules
+        key: ${{ runner.os }}-node-${{ hashFiles('package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
 
     - name: Install dependancies
       if: steps.npm-cache.outputs.cache-hit != 'true'
-      working-directory: frontend
       run: npm ci
 
     - name: Test
-      working-directory: frontend
       run: CI=true npm run test:ci
       env:
         DATABASE_URL: ${{ secrets.DATABASE_URL }}
