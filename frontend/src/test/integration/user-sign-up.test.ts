@@ -57,7 +57,7 @@ describe('Sign up process', () => {
     await prisma.$disconnect()
   })
   
-  it('should sign user upwp', async () => {
+  it('should sign user up', async () => {
     const formData = setupFormData()
 
     const res = await signUp(initialState, formData)
