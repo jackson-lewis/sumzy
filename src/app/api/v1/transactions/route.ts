@@ -45,7 +45,7 @@ export async function POST(req: NextRequest) {
 
     await storeEvent(transaction, 'CREATED')
     await generateReport(
-      userId,
+      Number(userId),
       trueDate.getFullYear(), 
       trueDate.getMonth() + 1
     )
@@ -177,7 +177,7 @@ export async function PATCH(request: NextRequest) {
 
   await storeEvent(transaction, 'UPDATED')
   await generateReport(
-    userId,
+    Number(userId),
     trueDate.getFullYear(), 
     trueDate.getMonth() + 1
   )
@@ -202,7 +202,7 @@ export async function DELETE(request: NextRequest) {
 
   await storeEvent(transaction, 'DELETED')
   await generateReport(
-    userId,
+    Number(userId),
     date.getFullYear(), 
     date.getMonth() + 1
   )

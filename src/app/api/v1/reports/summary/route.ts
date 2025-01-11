@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import { generateReport } from '@/services/reporting/generate'
+import { ReportGenerator } from '@/services/reporting/generate'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(req: NextRequest) {
@@ -38,7 +38,11 @@ export async function POST(req: NextRequest) {
     })
   }
 
-  const data = await generateReport(userId, Number(year), Number(month))
+  const generator = new ReportGenerator(
+    Number(userId),
+    Number(year),
+    Number(month)
+  )
 
-  return NextResponse.json(data)
+  return NextResponse.json(await generator.generate())
 }
