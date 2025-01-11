@@ -64,4 +64,23 @@ describe('Sign up process', () => {
 
     expect(res).toBeUndefined()
   })
+
+  it('should fail signup with email already exists', async () => {
+    await prisma.user.create({
+      data: {
+        id: 1,
+        name: 'Jackson Lewis',
+        email: 'jacksonlwss@gmail.com',
+        password: 'Password1!',
+        verified: false
+      }
+    })
+    
+    const formData = setupFormData()
+
+    const res = await signUp(initialState, formData)
+
+    expect(res.success).toBe(false)
+    expect(res.message).toBe('Email address already in use')
+  })
 })
