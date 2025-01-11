@@ -1,22 +1,18 @@
 import type { Config } from 'jest'
 
-// Add any custom config to be passed to Jest
+
 const config: Config = {
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
-  // Add more setup options before each test is run
   setupFilesAfterEnv: [
     '<rootDir>/src/test/load-env.ts',
     '<rootDir>/src/test/prisma-mock.ts'
   ],
   moduleNameMapper: {
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
-    '^.+\\.(css|sass|scss)$': require.resolve('./__mocks__/styleMock.js'),
-    '^.+\\.(png|jpg|jpeg|gif|webp|avif|ico|bmp)$': require.resolve(`./__mocks__/fileMock.js`),
-    '^@/(.*)$': '<rootDir>/src/$1',
-    '@next/font/(.*)': `<rootDir>/__mocks__/nextFontMock.js`,
-    'next/font/(.*)': `<rootDir>/__mocks__/nextFontMock.js`,
-    'server-only': `<rootDir>/__mocks__/empty.js`
+    '^.+\\.(css|sass|scss)$': require.resolve('./src/test/mocks/style.js'),
+    '^.+\\.(png|jpg|jpeg|gif|webp|avif|ico|bmp)$': require.resolve('./src/test/mocks/file.js'),
+    '^@/(.*)$': '<rootDir>/src/$1'
   },
   testPathIgnorePatterns: [
     '/node_modules/',
