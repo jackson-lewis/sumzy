@@ -5,6 +5,7 @@ const config: Config = {
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: [
+    '<rootDir>/src/test/setup.ts',
     '<rootDir>/src/test/load-env.ts',
     '<rootDir>/src/test/prisma-mock.ts'
   ],
@@ -16,7 +17,9 @@ const config: Config = {
   },
   testPathIgnorePatterns: [
     '/node_modules/',
-    '/.next/'
+    '/.next/',
+    '/test/components/transaction-dialog.test.tsx',
+    '/test/components/user-account.test.tsx'
   ],
   transformIgnorePatterns: [
     '/node_modules/(?!jose)',

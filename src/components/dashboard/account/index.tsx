@@ -25,12 +25,14 @@ export default function AccountForm() {
         name="name"
         type="text"
         defaultValue={data?.name}
+        data-testid="name"
       />
       <FormField
         label="Email"
         name="email"
         type="email"
         defaultValue={data?.email}
+        data-testid="email"
       />
       <Button
         disabled={pending}

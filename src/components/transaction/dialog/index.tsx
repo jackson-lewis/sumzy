@@ -41,7 +41,7 @@ export default function TransactionDialog() {
   )
   const { data } = useCategories()
   const formRef = useRef<HTMLFormElement>(null)
-  const { data: transactions, mutate } = useTx()
+  const { data: transactions, trigger } = useTx()
 
   useEffect(() => {
     if (transaction) {
@@ -57,17 +57,19 @@ export default function TransactionDialog() {
   }, [transaction])
 
   useEffect(() => {
+    trigger()
+
     if (transactions && state && !(state instanceof Error)) {
-      if (update)  {
-        mutate(transactions.map((tx) => {
-          if (tx.id === state.id) {
-            return state
-          }
-          return tx
-        }))
-      } else {
-        mutate([ ...transactions, state ])
-      }
+      // if (update)  {
+      //   mutate(transactions.map((tx) => {
+      //     if (tx.id === state.id) {
+      //       return state
+      //     }
+      //     return tx
+      //   }))
+      // } else {
+      //   mutate([ ...transactions, state ])
+      // }
       closeAction()
     }
   }, [state])

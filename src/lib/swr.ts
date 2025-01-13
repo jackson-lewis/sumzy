@@ -9,6 +9,7 @@ import {
 } from '@prisma/client'
 import { usePathname, useSearchParams } from 'next/navigation'
 import useSWR from 'swr'
+import useSWRMutation from 'swr/mutation'
 
 export const fetcher = async (url: string) => {
   return fetch(`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}${url}`)
@@ -49,12 +50,9 @@ export function useTx() {
     .replace('/dashboard/', '')
     .replace(/s$/, '')
 
-  return useSWR<Transaction[]>(
-    [
-      `/v1/transactions?direction=${direction}&frequency=${frequency}`,
-      getUserToken()
-    ],
-    fetcherWithToken
+  return useSWRMutation<Transaction[]>(
+    `/v1/transactions?direction=${direction}&frequency=${frequency}`,
+    fetcher
   )
 }
 
