@@ -4,15 +4,15 @@ const config: Config = {
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
   setupFilesAfterEnv: [
-    '<rootDir>/src/test/setup.ts',
-    '<rootDir>/src/test/load-env.ts',
-    '<rootDir>/src/test/prisma-mock.ts'
+    '<rootDir>/test/setup.ts',
+    '<rootDir>/test/load-env.ts',
+    '<rootDir>/test/prisma-mock.ts'
   ],
   moduleNameMapper: {
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
-    '^.+\\.(css|sass|scss)$': require.resolve('./src/test/mocks/style.js'),
+    '^.+\\.(css|sass|scss)$': require.resolve('./test/mocks/style.js'),
     '^.+\\.(png|jpg|jpeg|gif|webp|avif|ico|bmp)$': require.resolve(
-      './src/test/mocks/file.js'
+      './test/mocks/file.js'
     ),
     '^@/(.*)$': '<rootDir>/src/$1'
   },

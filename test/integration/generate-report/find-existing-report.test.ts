@@ -1,7 +1,7 @@
 /** @jest-environment node */
 import { ReportGenerator } from '@/services/reporting/generate'
-import { seedReport, seedUser } from '@/test/seeding'
 import { prisma } from '@/lib/prisma'
+import { seedReport, seedUser } from '../../seeding'
 
 describe('Get an existing report', () => {
   beforeAll(async () => {
