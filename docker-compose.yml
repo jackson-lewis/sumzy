@@ -1,10 +1,10 @@
 services:
   frontend:
     build:
-      context: ./frontend
+      context: .
       dockerfile: dockerfile
     ports:
-      - "3000:3000"
+      - '3000:3000'
     environment:
       - PORT=3000
       - DATABASE_URL=postgres://postgres:example@db/sumzy
@@ -20,11 +20,11 @@ services:
     image: postgres
     restart: always
     ports:
-      - "5432:5432"
+      - '5432:5432'
     environment:
       POSTGRES_PASSWORD: example
     volumes:
-      - pgdata:/var/lib/postgresql/data 
+      - pgdata:/var/lib/postgresql/data
     networks:
       - sumzy
 
