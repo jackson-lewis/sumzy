@@ -1,6 +1,6 @@
 import { TransactionDirection } from '@/types'
-import { apiRequest } from './api'
 import { Category, DefaultCategory, Transaction } from '@prisma/client'
+import { apiRequest } from './api'
 
 /**
  * Delete a transaction for the authenticated user.
@@ -14,9 +14,7 @@ export async function deleteTransaction(id: Transaction['id']) {
   )
 }
 
-export function txDirection(
-  transaction: Transaction
-): TransactionDirection {
+export function txDirection(transaction: Transaction): TransactionDirection {
   return Number(transaction.amount) < 0 ? 'expense' : 'income'
 }
 

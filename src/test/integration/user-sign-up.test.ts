@@ -1,11 +1,11 @@
 /** @jest-environment node */
-import { signUp } from '@/lib/actions/user-sign-up'
-import { prisma } from '@/lib/prisma'
 import {
   SignUpActionResponse,
   SignUpDataKeys,
   SignUpFormData
 } from '@/types/user'
+import { signUp } from '@/lib/actions/user-sign-up'
+import { prisma } from '@/lib/prisma'
 import { seedUser } from '../seeding'
 
 jest.mock('next/navigation', () => {
@@ -37,12 +37,11 @@ const userInput: SignUpFormData = {
 function setupFormData(data: Partial<SignUpFormData> = {}) {
   const formData = new FormData()
 
-  const mergedData = {...userInput, ...data}
+  const mergedData = { ...userInput, ...data }
 
-  Object.keys(mergedData)
-    .forEach((key) => {
-      formData.append(key, mergedData[key as SignUpDataKeys])
-    })
+  Object.keys(mergedData).forEach((key) => {
+    formData.append(key, mergedData[key as SignUpDataKeys])
+  })
 
   return formData
 }
@@ -50,14 +49,12 @@ function setupFormData(data: Partial<SignUpFormData> = {}) {
 describe('Sign up process', () => {
   afterAll(async () => {
     const deleteUser = prisma.user.deleteMany()
-  
-    await prisma.$transaction([
-      deleteUser
-    ])
-  
+
+    await prisma.$transaction([deleteUser])
+
     await prisma.$disconnect()
   })
-  
+
   it('should sign user up', async () => {
     const formData = setupFormData()
 
@@ -68,7 +65,7 @@ describe('Sign up process', () => {
 
   it('should fail signup with email already exists', async () => {
     await seedUser()
-    
+
     const formData = setupFormData()
     const res = await signUp(initialState, formData)
 

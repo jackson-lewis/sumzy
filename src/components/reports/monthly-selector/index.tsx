@@ -2,19 +2,14 @@
 
 import { ChangeEvent } from 'react'
 import { useRouter } from 'next/navigation'
-import {
-  useActiveMonth,
-  useActiveYear
-} from '@/lib/form-submit'
+import { useActiveMonth, useActiveYear } from '@/lib/form-submit'
 
 export default function MonthlySelector() {
   let year = useActiveYear()
   let month = useActiveMonth()
   const router = useRouter()
 
-  function handleChange(
-    event: ChangeEvent<HTMLSelectElement>
-  ) {
+  function handleChange(event: ChangeEvent<HTMLSelectElement>) {
     const { value } = event.target
     const valueAsNumber = Number(value)
 
@@ -29,22 +24,12 @@ export default function MonthlySelector() {
 
   return (
     <div>
-      <select
-        name="year"
-        id="year"
-        value={year}
-        onChange={handleChange}
-      >
+      <select name="year" id="year" value={year} onChange={handleChange}>
         <option>2023</option>
         <option>2024</option>
         <option>2025</option>
       </select>
-      <select
-        name="month"
-        id="month"
-        value={month}
-        onChange={handleChange}
-      >
+      <select name="month" id="month" value={month} onChange={handleChange}>
         <option>1</option>
         <option>2</option>
         <option>3</option>

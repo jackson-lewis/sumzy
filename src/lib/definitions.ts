@@ -1,5 +1,5 @@
 import { z } from 'zod'
- 
+
 export const SignupFormSchema = z.object({
   name: z
     .string()
@@ -12,16 +12,16 @@ export const SignupFormSchema = z.object({
     .regex(/[a-zA-Z]/, { message: 'Contain at least one letter.' })
     .regex(/[0-9]/, { message: 'Contain at least one number.' })
     .regex(/[^a-zA-Z0-9]/, {
-      message: 'Contain at least one special character.',
+      message: 'Contain at least one special character.'
     })
-    .trim(),
+    .trim()
 })
 
 export type SessionPayload = {
   userId: number
   expiresAt: Date
 }
- 
+
 export type FormState =
   | {
       errors?: {

@@ -14,7 +14,7 @@
     margin-bottom: 4px;
     display: block;
 
-    font-size: .875rem;
+    font-size: 0.875rem;
   }
 
   input {
@@ -26,11 +26,11 @@
     border-radius: 4px;
     line-height: 1.5;
     font-size: 1.125rem;
-    background-color: rgba(var(--white-rgb), .6);
+    background-color: rgba(var(--white-rgb), 0.6);
     appearance: none;
     outline: none;
 
-    transition: border-color .2s;
+    transition: border-color 0.2s;
 
     &:focus {
       border-color: var(--primary);

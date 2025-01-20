@@ -1,14 +1,12 @@
 import { Category } from '@prisma/client'
 import { prisma } from './prisma'
 
-
-
 /**
  * Delete a category for the authenticated user.
  */
 export async function deleteCategory(id: Category['id']) {
   const fnReturn: {
-    category: Category | null,
+    category: Category | null
     error: Error | null
   } = {
     category: null,
@@ -21,12 +19,14 @@ export async function deleteCategory(id: Category['id']) {
         id
       }
     })
-  } catch(error) {
-    fnReturn.error = error instanceof Error ? error : new Error(
-      'An error occurred while deleting the category.'
-    )
+  } catch (error) {
+    fnReturn.error =
+      error instanceof Error
+        ? error
+        : new Error(
+            `An error occurred while deleting the category. this is really rally loddsds`
+          )
   }
-  
 
   return fnReturn
 }

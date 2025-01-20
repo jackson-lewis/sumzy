@@ -1,26 +1,16 @@
 'use client'
 
-import {
-  ChangeEvent,
-  useActionState,
-  useEffect,
-  useRef,
-  useState
-} from 'react'
+import { ChangeEvent, useActionState, useEffect, useRef, useState } from 'react'
 import Form from 'next/form'
+import { TransactionDirection, TransactionFrequency } from '@/types'
 import { CategoryType } from '@prisma/client'
-import DateSelector from './date-selector'
-import CurrencyInput from '@/components/global/currency-input'
-import {
-  TransactionDirection,
-  TransactionFrequency,
-} from '@/types'
-import useTransactions from '@/lib/use-transactions'
 import { transactionAction } from '@/lib/actions/transaction'
 import { useCategories, useTx } from '@/lib/swr'
-import styles from './style.module.scss'
+import useTransactions from '@/lib/use-transactions'
+import CurrencyInput from '@/components/global/currency-input'
 import { SubmitButton } from '@/components/site/user/form'
-
+import DateSelector from './date-selector'
+import styles from './style.module.scss'
 
 export default function TransactionDialog() {
   const {
@@ -35,10 +25,7 @@ export default function TransactionDialog() {
   const [categoryType, setCategoryType] = useState<CategoryType>()
   const [descValue, setDescValue] = useState<string>('')
   const update = !!transaction
-  const [state, formAction] = useActionState(
-    transactionAction,
-    null
-  )
+  const [state, formAction] = useActionState(transactionAction, null)
   const { data } = useCategories()
   const formRef = useRef<HTMLFormElement>(null)
   const { data: transactions, trigger } = useTx()
@@ -47,10 +34,9 @@ export default function TransactionDialog() {
     if (transaction) {
       setAmountValue(transaction.amount.toString())
       setCategoryValue(
-        (
-          transaction.categoryType === 'DEFAULT' ? 
-            `d${transaction.defaultCategoryId}` : `u${transaction.categoryId}`
-        ) || ''
+        (transaction.categoryType === 'DEFAULT'
+          ? `d${transaction.defaultCategoryId}`
+          : `u${transaction.categoryId}`) || ''
       )
       setDescValue(transaction.description || '')
     }
@@ -84,40 +70,28 @@ export default function TransactionDialog() {
     formRef.current?.reset()
   }
 
-  function handleDirectionChange(
-    event: ChangeEvent<HTMLInputElement>
-  ) {
+  function handleDirectionChange(event: ChangeEvent<HTMLInputElement>) {
     if (update) {
       return
     }
 
     setTransactionSetup((setup) => {
-      return [
-        event.target.value as TransactionDirection,
-        setup[1]
-      ]
+      return [event.target.value as TransactionDirection, setup[1]]
     })
   }
 
-  function handleFrequencyChange(
-    event: ChangeEvent<HTMLInputElement>
-  ) {
+  function handleFrequencyChange(event: ChangeEvent<HTMLInputElement>) {
     if (update) {
       return
     }
 
     setTransactionSetup((setup) => {
-      return [
-        setup[0],
-        event.target.value as TransactionFrequency
-      ]
+      return [setup[0], event.target.value as TransactionFrequency]
     })
   }
 
-  function handleCategoryChange(
-    event: ChangeEvent<HTMLSelectElement>
-  ) {
-    const categoryType: CategoryType = 
+  function handleCategoryChange(event: ChangeEvent<HTMLSelectElement>) {
+    const categoryType: CategoryType =
       event.target.value[0] === 'd' ? 'DEFAULT' : 'USER'
 
     setCategoryValue(event.target.value)
@@ -127,21 +101,9 @@ export default function TransactionDialog() {
   return (
     <dialog ref={dialogRef} className={styles.dialog}>
       <Form action={formAction} ref={formRef}>
-        <input
-          type="hidden"
-          name="update"
-          value={update ? 'true' : 'false'}
-        />
-        <input
-          type="hidden"
-          name="id"
-          value={transaction?.id}
-        />
-        <input
-          type="hidden"
-          name="categoryType"
-          value={categoryType}
-        />
+        <input type="hidden" name="update" value={update ? 'true' : 'false'} />
+        <input type="hidden" name="id" value={transaction?.id} />
+        <input type="hidden" name="categoryType" value={categoryType} />
         <fieldset name="direction" className={styles.direction}>
           <div className={[styles.field, styles.type].join(' ')}>
             <div className={styles['styled-radio']}>
@@ -223,18 +185,12 @@ export default function TransactionDialog() {
                 className={styles.category}
               >
                 {data.defaultCategories.map((category) => (
-                  <option
-                    key={`d${category.id}`}
-                    value={`d${category.id}`}
-                  >
+                  <option key={`d${category.id}`} value={`d${category.id}`}>
                     {category.name}
                   </option>
                 ))}
                 {data.userCategories.map((category) => (
-                  <option
-                    key={`u${category.id}`}
-                    value={`u${category.id}`}
-                  >
+                  <option key={`u${category.id}`} value={`u${category.id}`}>
                     {category.name}
                   </option>
                 ))}
@@ -244,9 +200,7 @@ export default function TransactionDialog() {
             <p>Failed to load categories</p>
           )}
           <DateSelector value={transaction?.date} />
-          <SubmitButton>
-            {update ? 'Update' : 'Add'}
-          </SubmitButton>
+          <SubmitButton>{update ? 'Update' : 'Add'}</SubmitButton>
           <button
             type="button"
             onClick={() => {

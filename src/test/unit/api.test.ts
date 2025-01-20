@@ -1,6 +1,6 @@
 /** @jest-environment node */
-import { apiRequest, buildFetchOptions } from '@/lib/api'
 import { Transaction } from '@/types'
+import { apiRequest, buildFetchOptions } from '@/lib/api'
 
 jest.mock('next/headers', () => ({
   ...jest.requireActual('next/headers'),
@@ -21,11 +21,7 @@ describe('Construct fetch options for API request', () => {
     const body = {
       property: 'value'
     }
-    const options = await buildFetchOptions(
-      'POST',
-      body,
-      true
-    )
+    const options = await buildFetchOptions('POST', body, true)
 
     expect(options).toHaveProperty('method')
     expect(options.method).toBe('POST')
@@ -35,11 +31,7 @@ describe('Construct fetch options for API request', () => {
     const body = {
       property: 'value'
     }
-    const options = await buildFetchOptions(
-      'POST',
-      body,
-      true
-    )
+    const options = await buildFetchOptions('POST', body, true)
 
     expect(options).toHaveProperty('body')
     expect(options.body).toBe(JSON.stringify(body))
@@ -49,17 +41,12 @@ describe('Construct fetch options for API request', () => {
     const body = {
       property: 'value'
     }
-    const options = await buildFetchOptions(
-      'POST',
-      body,
-      true
-    )
+    const options = await buildFetchOptions('POST', body, true)
 
     expect(options).toHaveProperty('headers')
     expect(options.headers).toHaveProperty('Cookie')
   })
 })
-
 
 describe('API requests for transactions', () => {
   it('should return object', async () => {
@@ -71,7 +58,7 @@ describe('API requests for transactions', () => {
         category: 1,
         frequency: 'one_time',
         description: 'Lunch',
-        date: (new Date()).toISOString()
+        date: new Date().toISOString()
       }
     ]
 
@@ -113,9 +100,10 @@ describe('API requests for transactions', () => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
         status: 401,
-        json: () => Promise.resolve({
-          message: 'Unauthorized'
-        })
+        json: () =>
+          Promise.resolve({
+            message: 'Unauthorized'
+          })
       })
     ) as jest.Mock
 

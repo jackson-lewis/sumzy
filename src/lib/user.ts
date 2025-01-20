@@ -1,8 +1,7 @@
 import { PasswordValidationTypes } from '@/types/user'
 
-
 export function validatePassword(pwd: string): {
-    [k in PasswordValidationTypes]: boolean
+  [k in PasswordValidationTypes]: boolean
 } {
   return {
     length: pwdLength(pwd),

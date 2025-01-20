@@ -1,26 +1,29 @@
 'use client'
 
-import { TransactionDirection, TransactionFrequency } from '@/types'
-import styles from './style.module.scss'
 import Link, { LinkProps } from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { TransactionDirection, TransactionFrequency } from '@/types'
+import styles from './style.module.scss'
 
 export default function FrequencySelector({
   direction
-} : {
+}: {
   direction: TransactionDirection
 }) {
   const path = direction === 'expense' ? 'expenses' : 'income'
   const searchParams = useSearchParams()
-  const frequency = (
-    searchParams.get('frequency') || 'one_time'
-  ) as TransactionFrequency
+  const frequency = (searchParams.get('frequency') ||
+    'one_time') as TransactionFrequency
 
-  const oneTimeProps: React.AnchorHTMLAttributes<HTMLAnchorElement> & LinkProps & React.RefAttributes<HTMLAnchorElement> = {
+  const oneTimeProps: React.AnchorHTMLAttributes<HTMLAnchorElement> &
+    LinkProps &
+    React.RefAttributes<HTMLAnchorElement> = {
     href: `/dashboard/${path}?frequency=one_time`
   }
 
-  const recurringProps: React.AnchorHTMLAttributes<HTMLAnchorElement> & LinkProps & React.RefAttributes<HTMLAnchorElement> = {
+  const recurringProps: React.AnchorHTMLAttributes<HTMLAnchorElement> &
+    LinkProps &
+    React.RefAttributes<HTMLAnchorElement> = {
     href: `/dashboard/${path}?frequency=recurring`
   }
 
@@ -34,16 +37,8 @@ export default function FrequencySelector({
 
   return (
     <div className={styles.selector}>
-      <Link
-        {...oneTimeProps}
-      >
-        One time
-      </Link>
-      <Link
-        {...recurringProps}
-      >
-        Recurring
-      </Link>
+      <Link {...oneTimeProps}>One time</Link>
+      <Link {...recurringProps}>Recurring</Link>
     </div>
   )
 }

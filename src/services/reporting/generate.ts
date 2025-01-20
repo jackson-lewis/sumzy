@@ -1,15 +1,14 @@
 import {
-  TransactionFrequency,
   AggregateType,
   ComparePeriod,
-  ReportTotals,
   CompareTotals,
+  ReportTotals,
   Totals,
+  TransactionFrequency
 } from '@/types/reporting'
-import { prisma } from '@/lib/prisma'
 import { CategoryType, Event, Transaction } from '@prisma/client'
 import { JsonObject } from '@prisma/client/runtime/library'
-
+import { prisma } from '@/lib/prisma'
 
 export class ReportGenerator {
   private userId: number
@@ -24,10 +23,7 @@ export class ReportGenerator {
     this.userId = userId
     this.year = year
     this.month = month
-    this.date = new Date(
-      year,
-      month - 1
-    )
+    this.date = new Date(year, month - 1)
     this.endOfMonth = this.getEndOfMonth()
     this.totals = {
       income: 0,
@@ -50,7 +46,7 @@ export class ReportGenerator {
     this.calculateTotals('expense')
     this.calculateTotals('income')
 
-    this.totals.surplus = this.totals.income - (this.totals.expense * -1)
+    this.totals.surplus = this.totals.income - this.totals.expense * -1
 
     const compare: {
       [k in ComparePeriod]: CompareTotals | null
@@ -83,16 +79,16 @@ export class ReportGenerator {
           ...reportData
         }
       })
-  
+
       /**
        * update comparable reports
        */
       await this.regenerateComparableReport('nextMonth')
       await this.regenerateComparableReport('yearOverYear')
-  
+
       return reportData
     }
-  
+
     return await prisma.report.create({
       data: reportData
     })
@@ -124,18 +120,18 @@ export class ReportGenerator {
   getEndOfMonth() {
     const endOfMonth = new Date(this.date)
     let lastDayOfMonth = 30
-  
-    if ([0,2,4,6,7,9,11].indexOf(this.date.getMonth()) >= 0) {
+
+    if ([0, 2, 4, 6, 7, 9, 11].indexOf(this.date.getMonth()) >= 0) {
       lastDayOfMonth = 31
     } else if (this.date.getMonth() === 1) {
       lastDayOfMonth = 28
     }
-  
+
     endOfMonth.setDate(lastDayOfMonth)
     endOfMonth.setHours(23)
     endOfMonth.setMinutes(59)
     endOfMonth.setSeconds(59)
-  
+
     return endOfMonth
   }
 
@@ -145,24 +141,28 @@ export class ReportGenerator {
   ) {
     const calculateTotals = (event: Event) => {
       const amount = Number(this.getEventField(event, 'amount'))
-      const categoryType = 
-        this.getEventField(event, 'categoryType') as unknown as CategoryType
+      const categoryType = this.getEventField(
+        event,
+        'categoryType'
+      ) as unknown as CategoryType
       const categoryTypeMarker = categoryType
-        .toLocaleUpperCase().at(0) as string
+        .toLocaleUpperCase()
+        .at(0) as string
       const categoryId = this.getTxCategoryId(event)
-  
+
       this.totals[aggregateType] += amount
-  
+
       if (categoryId) {
-        this.totals.categories[categoryTypeMarker + categoryId] = amount + 
-          (this.totals.categories[categoryTypeMarker + categoryId] || 0) || 0
+        this.totals.categories[categoryTypeMarker + categoryId] =
+          amount +
+            (this.totals.categories[categoryTypeMarker + categoryId] || 0) || 0
       }
-  
+
       if (typeof callback === 'function') {
         callback(event)
       }
     }
-  
+
     this.calculateTransactionTotals(aggregateType, 'one_time', calculateTotals)
     this.calculateTransactionTotals(aggregateType, 'recurring', calculateTotals)
   }
@@ -173,11 +173,12 @@ export class ReportGenerator {
     reducerFn: (event: Event) => void
   ) {
     const events = this.getEventsByType(aggregateType, frequency)
-  
-    const filterFn = frequency === 'one_time' ?
-      this.filterOneTimeEvents :
-      this.filterRecurringEvents
-  
+
+    const filterFn =
+      frequency === 'one_time'
+        ? this.filterOneTimeEvents
+        : this.filterRecurringEvents
+
     filterFn(events).forEach(reducerFn)
   }
 
@@ -190,20 +191,15 @@ export class ReportGenerator {
     } = {}
     const deletedExpenses: number[] = []
 
-    ;(this.events)
+    this.events
       .filter((event) => {
         const transactionFrequency = this.getEventField(event, 'frequency')
         return (
-          (
-            (
-              aggregateType === 'expense' && 
-              Number((event.eventData as unknown as Transaction).amount) < 0
-            ) || 
-            (
-              aggregateType === 'income' && 
-              Number((event.eventData as unknown as Transaction).amount) > 0
-            )
-          ) &&
+          ((aggregateType === 'expense' &&
+            Number((event.eventData as unknown as Transaction).amount) < 0) ||
+            (aggregateType === 'income' &&
+              Number((event.eventData as unknown as Transaction).amount) >
+                0)) &&
           transactionFrequency === frequency
         )
       })
@@ -213,7 +209,7 @@ export class ReportGenerator {
         if (event.eventType == 'DELETED') {
           deletedExpenses.push(aggregateId)
         }
-    
+
         if (expenses[aggregateId]) {
           expenses[aggregateId].push(event)
         } else {
@@ -228,9 +224,7 @@ export class ReportGenerator {
     return Object.values(expenses)
   }
 
-  filterOneTimeEvents(
-    events: Event[][]
-  ) {
+  filterOneTimeEvents(events: Event[][]) {
     return events
       .map((events) => {
         return events.pop()
@@ -240,13 +234,13 @@ export class ReportGenerator {
         if (!event) {
           return false
         }
-  
+
         const _transactionDate = this.getEventField(event, 'date') as string
         if (!_transactionDate) {
           return false
         }
         const transactionDate = new Date(_transactionDate)
-  
+
         /**
          * Transactions from a previous month may be changes, so this
          * check should always be against the transaction date rather
@@ -256,31 +250,30 @@ export class ReportGenerator {
       })
   }
 
-  filterRecurringEvents(
-    events: Event[][]
-  ) {
+  filterRecurringEvents(events: Event[][]) {
     return events
       .map((events) => {
         if (!events.length) {
           return null
         }
-  
+
         let latestEvent!: Event | null
-        
+
         events.map((event) => {
           const transactionDate = this.getEventField(event, 'date') as string
           const eventDate = new Date(
-            event.eventType === 'CREATED' && transactionDate ?
-              transactionDate : event.createdAt
+            event.eventType === 'CREATED' && transactionDate
+              ? transactionDate
+              : event.createdAt
           )
-  
+
           if (eventDate < this.endOfMonth) {
             latestEvent = event
           } else {
             console.log('recurring event latest event not found', event.id)
           }
         })
-  
+
         return latestEvent
       })
       .filter((event) => {
@@ -293,9 +286,7 @@ export class ReportGenerator {
    * - previous month
    * - year on year
    */
-  async compareTotals(
-    period: ComparePeriod
-  ): Promise<CompareTotals | null> {
+  async compareTotals(period: ComparePeriod): Promise<CompareTotals | null> {
     const compareDate = new Date(this.date)
 
     if (period === 'prevMonth') {
@@ -346,11 +337,9 @@ export class ReportGenerator {
       surplus: calculateCompareTotal('surplus')
     }
 
-    const allNull = Object
-      .values(returnTotals)
-      .every((totalValue) => {
-        return !!totalValue
-      })
+    const allNull = Object.values(returnTotals).every((totalValue) => {
+      return !!totalValue
+    })
 
     if (allNull) {
       return returnTotals
@@ -359,11 +348,9 @@ export class ReportGenerator {
     return null
   }
 
-  async regenerateComparableReport(
-    period: 'nextMonth' | 'yearOverYear'
-  ) {
+  async regenerateComparableReport(period: 'nextMonth' | 'yearOverYear') {
     const compareDate = new Date(this.date)
-  
+
     if (period === 'nextMonth') {
       if (this.month === 12) {
         compareDate.setMonth(0)
@@ -374,14 +361,14 @@ export class ReportGenerator {
     } else {
       compareDate.setFullYear(this.year + 1)
     }
-  
+
     const report = await prisma.report.findFirst({
       where: {
         userId: Number(this.userId),
         date: compareDate
       }
     })
-  
+
     if (report) {
       const comparableReport = new ReportGenerator(
         this.userId,
@@ -400,29 +387,20 @@ export class ReportGenerator {
     }
     return false
   }
-  
-  
+
   getTxCategoryId(event: Event) {
     if (event.eventData && typeof event.eventData === 'object') {
       const eventData = event.eventData as unknown as Transaction
-      const {
-        categoryType,
-        defaultCategoryId,
-        categoryId
-      } = eventData
-  
+      const { categoryType, defaultCategoryId, categoryId } = eventData
+
       return categoryType === 'DEFAULT' ? defaultCategoryId : categoryId
     }
-  
+
     return null
   }
 }
 
-export function generateReport(
-  userId: number,
-  year: number,
-  month: number
-) {
+export function generateReport(userId: number, year: number, month: number) {
   const reportGenerator = new ReportGenerator(userId, year, month)
   return reportGenerator.generate()
 }

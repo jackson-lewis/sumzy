@@ -1,24 +1,24 @@
 .wrapper {
-    padding: 4px 8px;
+  padding: 4px 8px;
 
-    border: 1px solid #222222;
-    border-radius: 4px;
-    font-size: 1rem;
+  border: 1px solid #222222;
+  border-radius: 4px;
+  font-size: 1rem;
 
-    input {
-        appearance: none;
-        outline: none;
+  input {
+    appearance: none;
+    outline: none;
 
-        border: none;
-        background: none;
-        font-size: inherit;
+    border: none;
+    background: none;
+    font-size: inherit;
 
-        &::-webkit-inner-spin-button, 
-        &::-webkit-outer-spin-button { 
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            appearance: none;
-            margin: 0; 
-        }
+    &::-webkit-inner-spin-button,
+    &::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      margin: 0;
     }
+  }
 }

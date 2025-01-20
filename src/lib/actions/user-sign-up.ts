@@ -1,24 +1,26 @@
 'use server'
 
 import { redirect } from 'next/navigation'
+import { sendUserVerifyEmail } from '@/services/notification/user'
+import { generateEmailVerifyLink } from '@/services/user/token'
+import { SignUpActionResponse, SignUpFormData } from '@/types/user'
 import bcrypt from 'bcrypt'
 import { z } from 'zod'
 import { prisma } from '../prisma'
-import { SignUpActionResponse, SignUpFormData } from '@/types/user'
-import { generateEmailVerifyLink } from '@/services/user/token'
-import { sendUserVerifyEmail } from '@/services/notification/user'
-
 
 const schema = z.object({
   name: z.string().min(1, 'Name is required'),
   email: z.string().email('Invalid email address'),
-  password: z.string()
+  password: z
+    .string()
     .min(8, 'Password must be at least 8 characters')
     .regex(/[A-Z]/i, 'Password must contain at least one uppercase letter')
     .regex(/\d/, 'Password must contain at least one number')
-    .regex(/[^a-zA-Z0-9]/, 'Password must contain at least one special character')
+    .regex(
+      /[^a-zA-Z0-9]/,
+      'Password must contain at least one special character'
+    )
 })
-
 
 export async function signUp(
   _: SignUpActionResponse,
@@ -30,7 +32,7 @@ export async function signUp(
     password: formData.get('password') as string,
     password_confirm: formData.get('password_confirm') as string
   }
-  
+
   const validatedFields = schema.safeParse(data)
 
   if (!validatedFields.success) {

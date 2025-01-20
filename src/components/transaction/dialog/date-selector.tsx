@@ -1,11 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import styles from './style.module.scss'
 
-export default function DateSelector({
-  value
-} : {
-  value?: Date
-}) {
+export default function DateSelector({ value }: { value?: Date }) {
   const [date, setDate] = useState<string>('')
 
   useEffect(() => {
@@ -18,11 +14,13 @@ export default function DateSelector({
     const day = today.getDate()
     const month = today.getMonth() + 1
 
-    setDate([
-      today.getFullYear(),
-      month > 10 ? month : `0${month}`,
-      day > 10 ? day : `0${day}`
-    ].join('-'))
+    setDate(
+      [
+        today.getFullYear(),
+        month > 10 ? month : `0${month}`,
+        day > 10 ? day : `0${day}`
+      ].join('-')
+    )
   }, [value])
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
@@ -33,7 +31,7 @@ export default function DateSelector({
     <div className={styles.field}>
       <label htmlFor="date">Date</label>
       <input
-        type="date" 
+        type="date"
         name="date"
         id="date"
         data-testid="date_selector_input"

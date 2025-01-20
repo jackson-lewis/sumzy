@@ -1,6 +1,5 @@
 import type { Config } from 'jest'
 
-
 const config: Config = {
   coverageProvider: 'v8',
   testEnvironment: 'jsdom',
@@ -12,7 +11,9 @@ const config: Config = {
   moduleNameMapper: {
     '^.+\\.module\\.(css|sass|scss)$': 'identity-obj-proxy',
     '^.+\\.(css|sass|scss)$': require.resolve('./src/test/mocks/style.js'),
-    '^.+\\.(png|jpg|jpeg|gif|webp|avif|ico|bmp)$': require.resolve('./src/test/mocks/file.js'),
+    '^.+\\.(png|jpg|jpeg|gif|webp|avif|ico|bmp)$': require.resolve(
+      './src/test/mocks/file.js'
+    ),
     '^@/(.*)$': '<rootDir>/src/$1'
   },
   testPathIgnorePatterns: [
@@ -25,11 +26,9 @@ const config: Config = {
     '/node_modules/(?!jose)',
     '^.+\\.module\\.(css|sass|scss)$'
   ],
-  watchPathIgnorePatterns: [
-    '/.next/'
-  ],
+  watchPathIgnorePatterns: ['/.next/'],
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }],
+    '^.+\\.(js|jsx|ts|tsx)$': ['babel-jest', { presets: ['next/babel'] }]
   }
 }
 

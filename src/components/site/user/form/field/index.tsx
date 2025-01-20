@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import styles from './style.module.scss'
 
-
 export default function FormField({
   label,
   name,
@@ -15,11 +14,8 @@ export default function FormField({
   return (
     <div className={[styles.field, error && styles.error].join(' ')}>
       <label htmlFor={name}>{label}</label>
-      {(name === 'password' && rest.autoComplete === 'current-password') && (
-        <Link
-          href="/sign-in/forgot-password"
-          className={styles.forgotPassword}
-        >
+      {name === 'password' && rest.autoComplete === 'current-password' && (
+        <Link href="/sign-in/forgot-password" className={styles.forgotPassword}>
           Forgot password?
         </Link>
       )}
@@ -32,7 +28,9 @@ export default function FormField({
         {...rest}
       />
       {error && (
-        <p id={`${name}-error`} className={styles['error-message']}>{error[0]}</p>
+        <p id={`${name}-error`} className={styles['error-message']}>
+          {error[0]}
+        </p>
       )}
     </div>
   )

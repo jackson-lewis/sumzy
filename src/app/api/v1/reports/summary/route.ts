@@ -1,6 +1,6 @@
-import { prisma } from '@/lib/prisma'
-import { ReportGenerator } from '@/services/reporting/generate'
 import { NextRequest, NextResponse } from 'next/server'
+import { ReportGenerator } from '@/services/reporting/generate'
+import { prisma } from '@/lib/prisma'
 
 export async function GET(req: NextRequest) {
   const userId = req.headers.get('x-user-id')
@@ -20,11 +20,13 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(report)
   }
 
-  return NextResponse.json({ message: 'Report not found' }, {
-    status: 400
-  })
+  return NextResponse.json(
+    { message: 'Report not found' },
+    {
+      status: 400
+    }
+  )
 }
-
 
 export async function POST(req: NextRequest) {
   const userId = req.headers.get('x-user-id')
@@ -33,9 +35,12 @@ export async function POST(req: NextRequest) {
   const month = searchParams.get('month')
 
   if (!userId) {
-    return NextResponse.json({ message: 'Unauthorized' }, {
-      status: 401
-    })
+    return NextResponse.json(
+      { message: 'Unauthorized' },
+      {
+        status: 401
+      }
+    )
   }
 
   const generator = new ReportGenerator(

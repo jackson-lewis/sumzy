@@ -6,36 +6,31 @@ import {
   useEffect,
   useState
 } from 'react'
-import styles from './style.module.scss'
 import { Transaction } from '@/types'
+import styles from './style.module.scss'
 
 /**
  * Props are passed to the `<input />` except for `value`
- * and `onChange` which get overridden 
+ * and `onChange` which get overridden
  */
 export default function CurrencyInput({
   value,
   setAmountValue,
   ...rest
-} : {
+}: {
   value?: Transaction['amount']
   setAmountValue: Dispatch<SetStateAction<string>>
   autoFocus?: boolean
-} & DetailedHTMLProps<
-  HTMLAttributes<HTMLInputElement>,
-  HTMLInputElement
->) {
+} & DetailedHTMLProps<HTMLAttributes<HTMLInputElement>, HTMLInputElement>) {
   const [inputValue, setInputValue] = useState('')
 
   useEffect(() => {
     setInputValue(() => {
       const rawValue = value
       let parsedValue = ''
-    
+
       if (rawValue) {
-        parsedValue = (rawValue < 0 ?
-          (rawValue * -1) :
-          rawValue).toString()
+        parsedValue = (rawValue < 0 ? rawValue * -1 : rawValue).toString()
       }
 
       return parsedValue
@@ -57,10 +52,7 @@ export default function CurrencyInput({
         required
         {...newProps}
         onChange={(event) => {
-          setAmountValue(
-            (event.target as HTMLInputElement)
-              .value
-          )
+          setAmountValue((event.target as HTMLInputElement).value)
         }}
       />
     </div>

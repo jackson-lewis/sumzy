@@ -1,7 +1,7 @@
 /** @jest-environment node */
-import { prisma } from '@/lib/prisma'
 import { ReportGenerator } from '@/services/reporting/generate'
 import { seedReport, seedUser } from '@/test/seeding'
+import { prisma } from '@/lib/prisma'
 
 describe('Get an existing report', () => {
   beforeAll(async () => {
@@ -11,12 +11,9 @@ describe('Get an existing report', () => {
   afterAll(async () => {
     const deleteReport = prisma.report.deleteMany()
     const deleteUser = prisma.user.deleteMany()
-  
-    await prisma.$transaction([
-      deleteReport,
-      deleteUser
-    ])
-  
+
+    await prisma.$transaction([deleteReport, deleteUser])
+
     await prisma.$disconnect()
   })
 

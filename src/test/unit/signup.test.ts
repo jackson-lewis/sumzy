@@ -1,10 +1,10 @@
 /** @jest-environment node */
-import { signUp } from '@/lib/actions/user-sign-up'
 import {
   SignUpActionResponse,
   SignUpDataKeys,
   SignUpFormData
 } from '@/types/user'
+import { signUp } from '@/lib/actions/user-sign-up'
 import { prismaMock } from '../prisma-mock'
 
 jest.mock('next/navigation', () => {
@@ -36,16 +36,14 @@ const userInput: SignUpFormData = {
 function setupFormData(data: Partial<SignUpFormData> = {}) {
   const formData = new FormData()
 
-  const mergedData = {...userInput, ...data}
+  const mergedData = { ...userInput, ...data }
 
-  Object.keys(mergedData)
-    .forEach((key) => {
-      formData.append(key, mergedData[key as SignUpDataKeys])
-    })
+  Object.keys(mergedData).forEach((key) => {
+    formData.append(key, mergedData[key as SignUpDataKeys])
+  })
 
   return formData
 }
-
 
 describe('Sign up action input validation', () => {
   it('should return error if passwords do not match', async () => {
@@ -105,10 +103,11 @@ describe('Sign up action input validation', () => {
 
     expect(res.success).toBe(false)
     expect(res.message).toBe('Please fix the errors in the form')
-    expect(res.errors?.password?.[0]).toBe('Password must be at least 8 characters')
+    expect(res.errors?.password?.[0]).toBe(
+      'Password must be at least 8 characters'
+    )
   })
 })
-
 
 describe('Sign up action existing user validation', () => {
   it('should return error if email already in use', async () => {
@@ -128,7 +127,6 @@ describe('Sign up action existing user validation', () => {
     expect(res.message).toBe('Email address already in use')
   })
 })
-
 
 describe('Sign up action email verification', () => {
   it('should succeed', async () => {

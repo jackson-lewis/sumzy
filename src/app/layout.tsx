@@ -1,10 +1,10 @@
-import type { Metadata } from 'next'
 import { Onest } from 'next/font/google'
+import type { Metadata } from 'next'
 import './globals.scss'
 
 const onest = Onest({
   variable: '--font-onest',
-  subsets: ["latin"]
+  subsets: ['latin']
 })
 
 export const metadata: Metadata = {
@@ -12,15 +12,13 @@ export const metadata: Metadata = {
 }
 
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
   children: React.ReactNode
 }>) {
   return (
     <html lang="en-GB">
-      <body className={onest.variable}>
-        {children}
-      </body>
+      <body className={onest.variable}>{children}</body>
     </html>
   )
 }

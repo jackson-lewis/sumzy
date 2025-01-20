@@ -46,9 +46,11 @@ export type Report = {
     [k: number]: number
   }
   compare: {
-    [k in ComparePeriod]: {
-      [k in keyof ReportTotals]: CompareTotal
-    } | null
+    [k in ComparePeriod]:
+      | {
+          [k in keyof ReportTotals]: CompareTotal
+        }
+      | null
   }
   date: Date
   lastUpdatedDate: Date

@@ -5,10 +5,7 @@ import Form from 'next/form'
 import { createCategory } from '@/lib/actions/category'
 
 export default function AddCategory() {
-  const [state, formAction, pending] = useActionState(
-    createCategory,
-    null
-  )
+  const [state, formAction, pending] = useActionState(createCategory, null)
 
   useEffect(() => {
     console.log({ state })

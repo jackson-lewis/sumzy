@@ -1,5 +1,5 @@
-import AccountForm from '@/components/dashboard/account'
 import { render } from '@testing-library/react'
+import AccountForm from '@/components/dashboard/account'
 
 jest.mock('@/lib/actions/user', () => ({
   __esModule: true,
@@ -12,9 +12,9 @@ jest.mock('@/lib/actions/user', () => ({
 }))
 
 jest.mock('next/dist/client/form', () => ({
-	useAppOrPagesRouter: jest.fn().mockReturnValue({
-		asPath: '/some-path'
-	})
+  useAppOrPagesRouter: jest.fn().mockReturnValue({
+    asPath: '/some-path'
+  })
 }))
 
 jest.mock('@/lib/swr', () => ({

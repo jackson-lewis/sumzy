@@ -1,5 +1,5 @@
-import { Metadata } from 'next'
 import { SearchParams } from 'next/dist/server/request/search-params'
+import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Dashboard ~ Sumzy'

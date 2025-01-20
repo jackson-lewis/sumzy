@@ -1,10 +1,10 @@
-import FormField from './field'
-import NewPasswordField from './new-password'
-import SubmitButton from './submit-button'
-import Message from './message'
 import AltActionText from './alt-action-text'
 import Container from './container'
+import FormField from './field'
 import UserForm from './form'
+import Message from './message'
+import NewPasswordField from './new-password'
+import SubmitButton from './submit-button'
 
 export {
   UserForm,

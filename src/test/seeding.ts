@@ -1,5 +1,5 @@
-import { prisma } from '@/lib/prisma'
 import { Report, User } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 
 export async function seedUser(user: Partial<User> = {}) {
   return prisma.user.create({
@@ -30,13 +30,13 @@ export async function seedReport(report: Partial<Report> = {}) {
       tCategories: {
         1: 500,
         2: 1000,
-        ...(report.tCategories as unknown || {})
+        ...((report.tCategories as unknown) || {})
       },
       compare: {
         prevMonth: null,
         yearOverYear: null,
-        ...(report.compare as unknown || {})
-      },
+        ...((report.compare as unknown) || {})
+      }
     }
   })
 }

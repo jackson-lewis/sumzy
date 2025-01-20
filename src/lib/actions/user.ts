@@ -1,13 +1,12 @@
 'use server'
 
-import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { User } from '@prisma/client'
 import bcrypt from 'bcrypt'
 import { apiRequest } from '@/lib/api'
 import { prisma } from '../prisma'
 import { createSession, decrypt, deleteSession } from '../session'
-import { User } from '@prisma/client'
-
 
 export async function signIn(prevState: unknown, formData: FormData) {
   const email = formData.get('email') as string
@@ -18,15 +17,15 @@ export async function signIn(prevState: unknown, formData: FormData) {
       email
     }
   })
-  
+
   if (!user) {
-   return 'Email address or password invalid'
+    return 'Email address or password invalid'
   }
 
   if (!bcrypt.compareSync(password, user.password)) {
     return 'Email address or password invalid'
   }
-  
+
   if (!user.verified) {
     return 'Email address not verified'
   }
@@ -35,24 +34,18 @@ export async function signIn(prevState: unknown, formData: FormData) {
   redirect('/dashboard?action=sign-in')
 }
 
-
 export async function signOut() {
   deleteSession()
   redirect('/sign-in?action=sign-out')
 }
 
-
-export async function getUserToken()  {
+export async function getUserToken() {
   const cookieStore = await cookies()
 
   return cookieStore.get('token')?.value
 }
 
-
-export async function updateUser(
-  prevState: unknown,
-  formData: FormData
-) {
+export async function updateUser(prevState: unknown, formData: FormData) {
   const cookie = (await cookies()).get('session')?.value
   const session = await decrypt(cookie)
   const user = await prisma.user.update({
@@ -68,7 +61,6 @@ export async function updateUser(
   return user
 }
 
-
 export async function verifyEmailToken(token: string): Promise<string | void> {
   const { data, error } = await apiRequest<User>(
     'v1/users/verify-email-token',
@@ -76,7 +68,7 @@ export async function verifyEmailToken(token: string): Promise<string | void> {
     { token },
     false
   )
-  
+
   if (error) {
     return error.message
   }
@@ -87,25 +79,20 @@ export async function verifyEmailToken(token: string): Promise<string | void> {
   }
 }
 
-
-export async function forgotPassword(
-  prevState: unknown,
-  formData: FormData
-) {
+export async function forgotPassword(prevState: unknown, formData: FormData) {
   try {
     return await apiRequest(
       'v1/users/forgot-password',
       'POST',
       Object.fromEntries(formData.entries()),
       false
-    )
-      .then(({ error }) => {
-        if (error) {
-          throw error
-        }
+    ).then(({ error }) => {
+      if (error) {
+        throw error
+      }
 
-        return 'A reset password link has been sent to your email'
-      })
+      return 'A reset password link has been sent to your email'
+    })
   } catch (error) {
     if (error instanceof Error) {
       return error.message
@@ -115,23 +102,18 @@ export async function forgotPassword(
   }
 }
 
-
-export async function resetPassword(
-  prevState: unknown,
-  formData: FormData
-) {
+export async function resetPassword(prevState: unknown, formData: FormData) {
   try {
     await apiRequest(
       'v1/users/reset-password',
       'POST',
       Object.fromEntries(formData.entries()),
       false
-    )
-      .then((data) => {
-        if (data instanceof Error) {
-          throw new Error(data.message)
-        }
-      })
+    ).then((data) => {
+      if (data instanceof Error) {
+        throw new Error(data.message)
+      }
+    })
   } catch (error) {
     if (error instanceof Error) {
       return error.message
@@ -139,6 +121,6 @@ export async function resetPassword(
 
     return 'An error occurred while resetting your email'
   }
-  
+
   redirect('/sign-in?action=reset-password')
 }

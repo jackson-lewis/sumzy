@@ -1,7 +1,7 @@
+import { Suspense } from 'react'
 import CategoryLink from '@/components/transaction/category'
 import FrequencySelector from '@/components/transaction/frequency-selector'
 import TransactionsList from '@/components/transaction/list'
-import { Suspense } from 'react'
 
 export default function Expenses() {
   return (

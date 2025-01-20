@@ -1,7 +1,7 @@
-import { prisma } from '@/lib/prisma'
+import { type NextRequest, NextResponse } from 'next/server'
 import { sendUserVerifyEmail } from '@/services/notification/user'
 import { generateEmailVerifyLink } from '@/services/user/token'
-import { NextResponse, type NextRequest } from 'next/server'
+import { prisma } from '@/lib/prisma'
 
 export async function POST(request: NextRequest) {
   const formData = await request.formData()
@@ -13,11 +13,14 @@ export async function POST(request: NextRequest) {
       email
     }
   })
-  
+
   if (existingUser) {
-    return NextResponse.json({
-      message: 'Email address already in use'
-    }, { status: 400 })
+    return NextResponse.json(
+      {
+        message: 'Email address already in use'
+      },
+      { status: 400 }
+    )
   }
 
   // const hashedPassword = await bcrypt.hash(password, 10)
@@ -37,7 +40,6 @@ export async function POST(request: NextRequest) {
   return NextResponse.json(null, { status: 201 })
 }
 
-
 export async function GET(req: NextRequest) {
   const userId = req.headers.get('x-user-id')
 
@@ -49,22 +51,27 @@ export async function GET(req: NextRequest) {
     })
 
     if (!user) {
-      return NextResponse.json({
-        message: 'User not found'
-      }, { status: 404 })
+      return NextResponse.json(
+        {
+          message: 'User not found'
+        },
+        { status: 404 }
+      )
     }
-  
+
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...userData } = user
-  
+
     return NextResponse.json(userData, { status: 200 })
-  } catch(error) {
-    return NextResponse.json({
-      message: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 400 })
+  } catch (error) {
+    return NextResponse.json(
+      {
+        message: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 400 }
+    )
   }
 }
-
 
 export async function PATCH(req: NextRequest) {
   const userId = req.headers.get('x-user-id')

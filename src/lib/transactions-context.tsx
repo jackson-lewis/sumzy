@@ -1,11 +1,11 @@
 'use client'
 
 import {
-  createContext,
   Dispatch,
   ReactNode,
   RefObject,
   SetStateAction,
+  createContext,
   useRef,
   useState
 } from 'react'
@@ -15,7 +15,6 @@ import {
   TransactionFrequency
 } from '@/types'
 import { Transaction } from '@prisma/client'
-
 
 export const TransactionsContext = createContext<{
   transaction: Transaction | undefined
@@ -37,9 +36,8 @@ export default function TransactionsProvider({
   children: ReactNode
 }) {
   const [transaction, setTransaction] = useState<Transaction>()
-  const [transactionSetup, setTransactionSetup] = useState<
-    TransactionDialogSetup
-  >([undefined, undefined])
+  const [transactionSetup, setTransactionSetup] =
+    useState<TransactionDialogSetup>([undefined, undefined])
 
   const dialogRef = useRef<HTMLDialogElement>(null)
 
@@ -81,15 +79,17 @@ export default function TransactionsProvider({
   }
 
   return (
-    <TransactionsContext.Provider value={{
-      transaction,
-      setTransaction,
-      transactionSetup,
-      setTransactionSetup,
-      dialogRef,
-      showEditModal,
-      closeEditModal
-    }}>
+    <TransactionsContext.Provider
+      value={{
+        transaction,
+        setTransaction,
+        transactionSetup,
+        setTransactionSetup,
+        dialogRef,
+        showEditModal,
+        closeEditModal
+      }}
+    >
       {children}
     </TransactionsContext.Provider>
   )

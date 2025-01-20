@@ -3,16 +3,15 @@
 import { useActionState, useState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
+import { resetPassword } from '@/lib/actions/user'
 import {
-  UserForm,
   AltActionText,
+  Container,
   Message,
   NewPasswordField,
   SubmitButton,
-  Container
+  UserForm
 } from '../form'
-import { resetPassword } from '@/lib/actions/user'
-
 
 export default function ResetPasswordForm() {
   const [message, formAction, pending] = useActionState(
@@ -39,17 +38,9 @@ export default function ResetPasswordForm() {
     <UserForm action={formAction}>
       <h1>Reset your password</h1>
       <Message message={message} type="error" />
-      <NewPasswordField
-        setDisableSubmit={setDisableSubmit}
-      />
-      <input
-        type="hidden"
-        name="token"
-        value={token}
-      />
-      <SubmitButton
-        disabled={disableSubmit || pending}
-      >
+      <NewPasswordField setDisableSubmit={setDisableSubmit} />
+      <input type="hidden" name="token" value={token} />
+      <SubmitButton disabled={disableSubmit || pending}>
         Reset Password
       </SubmitButton>
       <AltActionText>

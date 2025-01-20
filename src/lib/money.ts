@@ -1,12 +1,9 @@
 export function formatAmount(amount: number) {
-  return Number(amount).toLocaleString(
-    'en-GB',
-    {
-      style: 'currency',
-      currency: 'GBP',
-      // roundingPriority: 'morePrecision'
-    }
-  )
+  return Number(amount).toLocaleString('en-GB', {
+    style: 'currency',
+    currency: 'GBP'
+    // roundingPriority: 'morePrecision'
+  })
 }
 
 export function formatDate(date: Date) {

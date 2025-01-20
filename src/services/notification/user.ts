@@ -1,5 +1,5 @@
-import { User } from '@prisma/client'
 import { ForgotPasswordUser, UnverifiedUser } from '@/types/user'
+import { User } from '@prisma/client'
 import { transporter } from './nodemailer'
 
 export async function sendUserVerifyEmail(user: UnverifiedUser) {
@@ -19,10 +19,7 @@ export async function sendUserVerifyEmail(user: UnverifiedUser) {
   return info
 }
 
-
-export async function sendPasswordResetEmail(
-  user: ForgotPasswordUser
-) {
+export async function sendPasswordResetEmail(user: ForgotPasswordUser) {
   console.log(`Sending password reset email to ${user.email}`)
 
   const html = `
@@ -36,13 +33,11 @@ export async function sendPasswordResetEmail(
     subject: 'Reset Your Password',
     html
   })
-  
+
   console.log('Email sent:', info.messageId)
 }
 
-export async function sendPasswordResetSuccessEmail(
-  user: User
-) {
+export async function sendPasswordResetSuccessEmail(user: User) {
   console.log(`Sending password reset success email to ${user.email}`)
 
   const html = `
@@ -55,7 +50,6 @@ export async function sendPasswordResetSuccessEmail(
     subject: 'Your Password Has Been Reset',
     html
   })
-  
+
   console.log('Email sent:', info.messageId)
 }
-

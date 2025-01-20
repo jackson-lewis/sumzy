@@ -1,5 +1,5 @@
-import { ComparePeriod } from '@/types'
 import { Dispatch, SetStateAction } from 'react'
+import { ComparePeriod } from '@/types'
 import styles from './style.module.scss'
 
 export default function CompareSelector<CP extends ComparePeriod>({

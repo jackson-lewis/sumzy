@@ -1,5 +1,6 @@
 'use client'
 
+import { usePathname, useSearchParams } from 'next/navigation'
 import {
   Category,
   DefaultCategory,
@@ -7,27 +8,26 @@ import {
   Transaction,
   User
 } from '@prisma/client'
-import { usePathname, useSearchParams } from 'next/navigation'
 import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
 
 export const fetcher = async (url: string) => {
-  return fetch(`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}${url}`)
-    .then(r => r.json())
+  return fetch(`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}${url}`).then((r) =>
+    r.json()
+  )
 }
 
 export async function fetcherWithToken(key: [string, string]) {
-  return fetch(
-    `${process.env.NEXT_PUBLIC_API_GATEWAY_URL}${key[0]}`
+  return fetch(`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}${key[0]}`).then(
+    (r) => r.json()
   )
-    .then(r => r.json())
 }
 
-export function getUserToken()  {
+export function getUserToken() {
   if (typeof document === 'undefined') {
     return
   }
-  
+
   let token = ''
   const cookies = document.cookie.split(';')
 
@@ -46,9 +46,7 @@ export function useTx() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const frequency = searchParams.get('frequency') || 'one_time'
-  const direction = pathname
-    .replace('/dashboard/', '')
-    .replace(/s$/, '')
+  const direction = pathname.replace('/dashboard/', '').replace(/s$/, '')
 
   return useSWRMutation<Transaction[]>(
     `/v1/transactions?direction=${direction}&frequency=${frequency}`,
@@ -58,12 +56,9 @@ export function useTx() {
 
 export function useCategories() {
   return useSWR<{
-    defaultCategories: DefaultCategory[],
+    defaultCategories: DefaultCategory[]
     userCategories: Category[]
-  }>(
-    ['/v1/transactions/categories', getUserToken()],
-    fetcherWithToken
-  )
+  }>(['/v1/transactions/categories', getUserToken()], fetcherWithToken)
 }
 
 export function useReports() {
@@ -77,10 +72,6 @@ export function useReports() {
   )
 }
 
-
 export function useUser() {
-  return useSWR<User>(
-    ['/v1/users', getUserToken()],
-    fetcherWithToken
-  )
+  return useSWR<User>(['/v1/users', getUserToken()], fetcherWithToken)
 }

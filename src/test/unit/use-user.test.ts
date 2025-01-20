@@ -1,6 +1,6 @@
-import { useUser } from '@/lib/swr'
 import { User } from '@/types'
 import { renderHook } from '@testing-library/react'
+import { useUser } from '@/lib/swr'
 
 const user: User = {
   name: 'John',
@@ -16,7 +16,7 @@ jest.mock('swr', () => ({
       error: undefined,
       loading: false
     }
-  }),
+  })
 }))
 
 describe('Get user with useUser hook', () => {

@@ -1,24 +1,19 @@
 'use client'
 
-import Money from '@/components/global/money'
-import {
-  ComparePeriod,
-  CompareTotal,
-  Report as FakeReport
-} from '@/types'
-import styles from './style.module.scss'
-import ExpenseCategories from './expense-categories'
 import { useState } from 'react'
-import CompareSelector from './compare-selector'
-import { useReports } from '@/lib/swr'
+import { ComparePeriod, CompareTotal, Report as FakeReport } from '@/types'
 import { useActiveMonth, useActiveYear } from '@/lib/form-submit'
-
+import { useReports } from '@/lib/swr'
+import Money from '@/components/global/money'
+import CompareSelector from './compare-selector'
+import ExpenseCategories from './expense-categories'
+import styles from './style.module.scss'
 
 function Total({
   title,
   total,
   compareTotal
-} : {
+}: {
   title: string
   total: number
   compareTotal: CompareTotal | undefined
@@ -48,32 +43,27 @@ function Total({
         <Money amount={total} />
       </dd>
       {compareTotal !== undefined ? (
-        <dd
-          className={[
-            styles.compare,
-            styles[direction]
-          ].join(' ')}
-        >
+        <dd className={[styles.compare, styles[direction]].join(' ')}>
           <Money amount={compareTotal.amount} />
           <span>{`${compareTotal.percentage}%`}</span>
         </dd>
-      ) : <dd className={styles.compare} />}
+      ) : (
+        <dd className={styles.compare} />
+      )}
     </>
   )
 }
 
-function LastUpdatedDate({ date } : { date: Date }) {
+function LastUpdatedDate({ date }: { date: Date }) {
   const dateTime = date.toLocaleDateString('en-GB', {
-    'dateStyle': 'medium'
+    dateStyle: 'medium'
   })
 
   const displayTime = date.toLocaleDateString('en-GB')
 
   return (
     <p>
-      Last updated:
-      {' '}
-      <time dateTime={dateTime}>{displayTime}</time>
+      Last updated: <time dateTime={dateTime}>{displayTime}</time>
     </p>
   )
 }
@@ -88,8 +78,7 @@ export default function MonthlySummaryReport() {
     month: 'long',
     year: 'numeric'
   })
-  const [comparePeriod, setComparePeriod] = 
-    useState<ComparePeriod>('prevMonth')
+  const [comparePeriod, setComparePeriod] = useState<ComparePeriod>('prevMonth')
 
   if (!report) {
     return (
@@ -106,9 +95,7 @@ export default function MonthlySummaryReport() {
     <>
       <h1>{monthYear} Report</h1>
       <LastUpdatedDate date={new Date(report.lastUpdatedDate)} />
-      <ExpenseCategories
-        categoryTotals={report.tCategories}
-      />
+      <ExpenseCategories categoryTotals={report.tCategories} />
       {report.compare && (
         <>
           <dl className={styles.totals}>
@@ -137,5 +124,5 @@ export default function MonthlySummaryReport() {
         </>
       )}
     </>
-  )    
+  )
 }

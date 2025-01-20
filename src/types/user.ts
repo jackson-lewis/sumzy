@@ -20,13 +20,16 @@ export type SignUpActionResponse = {
   message: string
   inputs?: SignUpFormData
   errors?: {
-    [key in keyof Omit<
-      SignUpFormData, 'password_confirm'
-    >]?: string[] | undefined
+    [key in keyof Omit<SignUpFormData, 'password_confirm'>]?:
+      | string[]
+      | undefined
   }
 }
 
 export type SignUpDataKeys = keyof SignUpFormData
 
-export type PasswordValidationTypes = 
-  'length' | 'uppercase' | 'number' | 'special'
+export type PasswordValidationTypes =
+  | 'length'
+  | 'uppercase'
+  | 'number'
+  | 'special'

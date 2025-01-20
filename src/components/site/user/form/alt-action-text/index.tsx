@@ -5,7 +5,5 @@ export default function AltActionText({
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <p className={styles.altActionText}>{children}</p>
-  )
+  return <p className={styles.altActionText}>{children}</p>
 }

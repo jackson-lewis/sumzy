@@ -1,10 +1,9 @@
-import { NextResponse, type NextRequest } from 'next/server'
-import { CategoryType, Frequency, Prisma } from '@prisma/client'
-import { prisma } from '@/lib/prisma'
-import { TransactionDirection } from '@/types'
+import { type NextRequest, NextResponse } from 'next/server'
 import { storeEvent } from '@/services/reporting/event'
 import { generateReport } from '@/services/reporting/generate'
-
+import { TransactionDirection } from '@/types'
+import { CategoryType, Frequency, Prisma } from '@prisma/client'
+import { prisma } from '@/lib/prisma'
 
 export async function POST(req: NextRequest) {
   const userId = req.headers.get('x-user-id') as string
@@ -31,12 +30,10 @@ export async function POST(req: NextRequest) {
         userId: Number(userId),
         amount: new Prisma.Decimal(amount),
         categoryType,
-        categoryId: 
-          categoryType === CategoryType.USER ? 
-            Number(trueCategoryId) : null,
-        defaultCategoryId: 
-          categoryType === CategoryType.DEFAULT ? 
-            Number(trueCategoryId) : null,
+        categoryId:
+          categoryType === CategoryType.USER ? Number(trueCategoryId) : null,
+        defaultCategoryId:
+          categoryType === CategoryType.DEFAULT ? Number(trueCategoryId) : null,
         date: trueDate.toISOString() as unknown as Date,
         frequency,
         description
@@ -46,20 +43,21 @@ export async function POST(req: NextRequest) {
     await storeEvent(transaction, 'CREATED')
     await generateReport(
       Number(userId),
-      trueDate.getFullYear(), 
+      trueDate.getFullYear(),
       trueDate.getMonth() + 1
     )
-  
+
     return NextResponse.json(transaction, { status: 201 })
   } catch (error) {
     console.log(error)
-    return NextResponse.json({
-      message: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 400 })
+    return NextResponse.json(
+      {
+        message: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 400 }
+    )
   }
 }
-
-
 
 function formatDate(raw: string) {
   const match = raw.match(/(?:-|\/)/)
@@ -69,7 +67,7 @@ function formatDate(raw: string) {
 
     if (segments.length === 3) {
       const [Y, M, D] = segments.map(Number)
-      return new Date(Y, (M - 1), D)
+      return new Date(Y, M - 1, D)
     }
   }
 
@@ -83,10 +81,8 @@ function formatDate(raw: string) {
 export async function GET(request: NextRequest) {
   const userId = request.headers.get('x-user-id')
   const searchParams = request.nextUrl.searchParams
-  const direction = 
-    searchParams.get('direction') as TransactionDirection
-  const frequency = 
-    searchParams.get('frequency') as Frequency
+  const direction = searchParams.get('direction') as TransactionDirection
+  const frequency = searchParams.get('frequency') as Frequency
   const from = searchParams.get('from')
   const to = searchParams.get('to')
 
@@ -133,12 +129,14 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(transactions)
   } catch (error) {
-    return NextResponse.json({
-      message: error instanceof Error ? error.message : 'Unknown error'
-    }, { status: 400 })
+    return NextResponse.json(
+      {
+        message: error instanceof Error ? error.message : 'Unknown error'
+      },
+      { status: 400 }
+    )
   }
 }
-
 
 export async function PATCH(request: NextRequest) {
   const {
@@ -164,12 +162,10 @@ export async function PATCH(request: NextRequest) {
     data: {
       amount: Number(amount),
       categoryType,
-      categoryId: 
-        categoryType === CategoryType.USER ? 
-          Number(trueCategoryId) : null,
-      defaultCategoryId: 
-        categoryType === CategoryType.DEFAULT ? 
-          Number(trueCategoryId) : null,
+      categoryId:
+        categoryType === CategoryType.USER ? Number(trueCategoryId) : null,
+      defaultCategoryId:
+        categoryType === CategoryType.DEFAULT ? Number(trueCategoryId) : null,
       description,
       date: trueDate
     }
@@ -178,19 +174,18 @@ export async function PATCH(request: NextRequest) {
   await storeEvent(transaction, 'UPDATED')
   await generateReport(
     Number(userId),
-    trueDate.getFullYear(), 
+    trueDate.getFullYear(),
     trueDate.getMonth() + 1
   )
 
   return NextResponse.json(transaction)
 }
 
-
 export async function DELETE(request: NextRequest) {
   const userId = request.headers.get('x-user-id') as string
   const searchParams = request.nextUrl.searchParams
   const id = searchParams.get('id')
-  
+
   const transaction = await prisma.transaction.delete({
     where: {
       id: Number(id),
@@ -201,11 +196,7 @@ export async function DELETE(request: NextRequest) {
   const date = new Date(transaction.date)
 
   await storeEvent(transaction, 'DELETED')
-  await generateReport(
-    Number(userId),
-    date.getFullYear(), 
-    date.getMonth() + 1
-  )
+  await generateReport(Number(userId), date.getFullYear(), date.getMonth() + 1)
 
   return NextResponse.json(transaction)
 }

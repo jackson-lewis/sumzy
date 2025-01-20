@@ -1,8 +1,8 @@
-import { prisma } from '@/lib/prisma'
+import { type NextRequest, NextResponse } from 'next/server'
 import { sendPasswordResetSuccessEmail } from '@/services/notification/user'
 import { verifyToken } from '@/services/user/token'
 import bcrypt from 'bcrypt'
-import { NextResponse, type NextRequest } from 'next/server'
+import { prisma } from '@/lib/prisma'
 
 export async function POST(request: NextRequest) {
   const {
@@ -17,17 +17,23 @@ export async function POST(request: NextRequest) {
     const payload = await verifyToken(token, 'reset_password')
 
     if (!payload) {
-      return NextResponse.json({
-        message: 'Invalid token'
-      }, { status: 400 })
+      return NextResponse.json(
+        {
+          message: 'Invalid token'
+        },
+        { status: 400 }
+      )
     }
 
     const passwordMatch = password === password_confirm
 
     if (!passwordMatch) {
-      return NextResponse.json({
-        message: 'Passwords do not match'
-      }, { status: 400 })
+      return NextResponse.json(
+        {
+          message: 'Passwords do not match'
+        },
+        { status: 400 }
+      )
     }
 
     const hash = bcrypt.hashSync(password, 10)
@@ -44,9 +50,12 @@ export async function POST(request: NextRequest) {
     await sendPasswordResetSuccessEmail(user)
 
     return NextResponse.json({ success: true }, { status: 200 })
-  } catch(error) {
-    return NextResponse.json({
-      message: error instanceof Error ? error.message : 'Uknown error'
-    }, { status: 400 })
+  } catch (error) {
+    return NextResponse.json(
+      {
+        message: error instanceof Error ? error.message : 'Uknown error'
+      },
+      { status: 400 }
+    )
   }
 }

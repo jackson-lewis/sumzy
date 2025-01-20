@@ -1,7 +1,6 @@
 /** @jest-environment node */
 import { forgotPassword } from '@/lib/actions/user'
 
-
 jest.mock('next/headers', () => ({
   ...jest.requireActual('next/headers'),
   __esModule: true,

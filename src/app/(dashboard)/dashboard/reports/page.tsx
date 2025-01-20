@@ -1,6 +1,6 @@
+import { Suspense } from 'react'
 import MonthlySelector from '@/components/reports/monthly-selector'
 import MonthlySummaryReport from '@/components/reports/monthly-summary'
-import { Suspense } from 'react'
 
 export default function Reports() {
   return (

@@ -1,7 +1,7 @@
-import LinkButton from '@/components/shared/button'
-import styles from './style.module.scss'
 import Image from 'next/image'
 import Link from 'next/link'
+import LinkButton from '@/components/shared/button'
+import styles from './style.module.scss'
 
 export default function Header() {
   return (

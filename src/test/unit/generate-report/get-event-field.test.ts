@@ -11,7 +11,7 @@ const event: Event = {
   eventData: {
     id: 1,
     amount: 10,
-    date: new Date(),
+    date: new Date()
   } as unknown as JsonValue
 }
 

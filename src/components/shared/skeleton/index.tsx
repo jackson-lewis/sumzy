@@ -8,7 +8,6 @@ export function Skeleton({
   variant: 'text' | 'rect' | 'circle'
   style?: CSSProperties
 }) {
-
   return (
     <div
       className={[styles.skeleton, styles[variant]].join(' ')}

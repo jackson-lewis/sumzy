@@ -1,9 +1,8 @@
 'use client'
 
-import TransactionItem, { TransactionItemSkeleton } from '../item'
 import { useTx } from '@/lib/swr'
+import TransactionItem, { TransactionItemSkeleton } from '../item'
 import styles from './style.module.scss'
-
 
 export default function TransactionsList() {
   const { data, isLoading } = useTx()
@@ -23,10 +22,7 @@ export default function TransactionsList() {
   return (
     <div className={styles.list}>
       {data?.map((transaction) => (
-        <TransactionItem
-          key={transaction.id}
-          transaction={transaction}
-        />
+        <TransactionItem key={transaction.id} transaction={transaction} />
       ))}
     </div>
   )

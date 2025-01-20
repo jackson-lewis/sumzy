@@ -6,11 +6,7 @@ export default function Home() {
     <main>
       <div className={styles.hero}>
         <h1>Personal Finance Tracking</h1>
-        <LinkButton
-          href="/sign-up"
-          color="green"
-          variant="fill"
-        >
+        <LinkButton href="/sign-up" color="green" variant="fill">
           Sign up
         </LinkButton>
       </div>

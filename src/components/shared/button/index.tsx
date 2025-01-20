@@ -34,12 +34,12 @@ export default function LinkButton({
   variant = 'outline',
   color = 'white',
   ...rest
-}: ButtonProps & React.AnchorHTMLAttributes<HTMLAnchorElement> & LinkProps & React.RefAttributes<HTMLAnchorElement> ) {
+}: ButtonProps &
+  React.AnchorHTMLAttributes<HTMLAnchorElement> &
+  LinkProps &
+  React.RefAttributes<HTMLAnchorElement>) {
   return (
-    <Link
-      {...rest}
-      className={mergeClassNames(rest.className, variant, color)}
-    >
+    <Link {...rest} className={mergeClassNames(rest.className, variant, color)}>
       {children}
     </Link>
   )
@@ -50,7 +50,9 @@ export function Button({
   variant = 'outline',
   color = 'white',
   ...rest
-}: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement> & React.RefAttributes<HTMLButtonElement> ) {
+}: ButtonProps &
+  React.ButtonHTMLAttributes<HTMLButtonElement> &
+  React.RefAttributes<HTMLButtonElement>) {
   return (
     <button
       {...rest}

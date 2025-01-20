@@ -2,24 +2,27 @@
 
 import { useActionState } from 'react'
 import Link from 'next/link'
-import {
-  UserForm,
-  AltActionText,
-  Message,
-  FormField,
-  SubmitButton
-} from '../form'
-import { signIn } from '@/lib/actions/user'
 import { useSearchParams } from 'next/navigation'
-
+import { signIn } from '@/lib/actions/user'
+import {
+  AltActionText,
+  FormField,
+  Message,
+  SubmitButton,
+  UserForm
+} from '../form'
 
 export default function SignInForm() {
   const [message, formAction] = useActionState(signIn, undefined)
   const searchParams = useSearchParams()
-  const action = searchParams.get('action') as 'sign-out' | 'reset-password' | undefined
+  const action = searchParams.get('action') as
+    | 'sign-out'
+    | 'reset-password'
+    | undefined
   const messages = {
     'sign-out': 'You have been signed out.',
-    'reset-password': 'Your password has been reset. Please sign in with your new password.'
+    'reset-password':
+      'Your password has been reset. Please sign in with your new password.'
   }
 
   return (

@@ -1,15 +1,14 @@
-import Money from '@/components/global/money'
 import { CategoryWithAmount } from '@/types'
-import { Fragment } from 'react/jsx-runtime'
-import styles from './style.module.scss'
-import { useCategories } from '@/lib/swr'
 import { Category, CategoryType, DefaultCategory, Report } from '@prisma/client'
-
+import { Fragment } from 'react/jsx-runtime'
+import { useCategories } from '@/lib/swr'
+import Money from '@/components/global/money'
+import styles from './style.module.scss'
 
 function CategoryGroup({
   categories,
   title
-} : {
+}: {
   categories: CategoryWithAmount[]
   title: string
 }) {
@@ -38,7 +37,7 @@ function CategoryGroup({
 
 export default function ExpenseCategories({
   categoryTotals
-} : {
+}: {
   categoryTotals: Report['tCategories']
 }) {
   const { data } = useCategories()
@@ -89,7 +88,7 @@ export default function ExpenseCategories({
         categories={[
           ...defaultCategoriesWithAmount,
           ...userCategoriesWithAmount
-        ]} 
+        ]}
         title="Categories"
       />
     </div>
