@@ -47,7 +47,7 @@ function setupFormData(data: Partial<SignUpFormData> = {}) {
 }
 
 describe('Sign up process', () => {
-  afterAll(async () => {
+  afterEach(async () => {
     const deleteUser = prisma.user.deleteMany()
 
     await prisma.$transaction([deleteUser])
