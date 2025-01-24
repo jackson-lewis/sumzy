@@ -1,5 +1,9 @@
 /** @jest-environment node */
-import { fp_encodedKey, getEncodedKey } from '@/services/user/token'
+import {
+  fp_encodedKey,
+  getEncodedKey,
+  ve_encodedKey
+} from '@/services/user/token'
 
 describe('getEncodedKey', () => {
   it('should return the encoded key for reset_password', () => {
@@ -9,6 +13,6 @@ describe('getEncodedKey', () => {
 
   it('should return the encoded key for verify_email', () => {
     const result = getEncodedKey('verify_email')
-    expect(result).not.toEqual(fp_encodedKey)
+    expect(result).toEqual(ve_encodedKey)
   })
 })
