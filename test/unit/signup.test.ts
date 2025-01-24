@@ -6,6 +6,7 @@ import {
 } from '@/types/user'
 import { signUp } from '@/lib/actions/user-sign-up'
 import { prismaMock } from '../prisma-mock'
+import { userData } from '../seeding'
 
 jest.mock('next/navigation', () => {
   return {
@@ -27,15 +28,12 @@ const initialState: SignUpActionResponse = {
 }
 
 const userInput: SignUpFormData = {
-  name: 'Jackson Lewis',
-  email: 'jacksonlwss@gmail.com',
-  password: 'Password1!',
-  password_confirm: 'Password1!'
+  ...userData,
+  password_confirm: userData.password
 }
 
 function setupFormData(data: Partial<SignUpFormData> = {}) {
   const formData = new FormData()
-
   const mergedData = { ...userInput, ...data }
 
   Object.keys(mergedData).forEach((key) => {
@@ -50,7 +48,6 @@ describe('Sign up action input validation', () => {
     const formData = setupFormData({
       password_confirm: 'Password2!'
     })
-
     const res = await signUp(initialState, formData)
 
     expect(res.success).toBe(false)
@@ -59,9 +56,8 @@ describe('Sign up action input validation', () => {
 
   it('should return error with invalid email', async () => {
     const formData = setupFormData({
-      email: 'jacksonlwss@gmail'
+      email: userData.email
     })
-
     const res = await signUp(initialState, formData)
 
     expect(res.success).toBe(false)
@@ -73,7 +69,6 @@ describe('Sign up action input validation', () => {
     const formData = setupFormData({
       name: ''
     })
-
     const res = await signUp(initialState, formData)
 
     expect(res.success).toBe(false)
@@ -85,7 +80,6 @@ describe('Sign up action input validation', () => {
     const formData = setupFormData({
       email: ''
     })
-
     const res = await signUp(initialState, formData)
 
     expect(res.success).toBe(false)
@@ -98,7 +92,6 @@ describe('Sign up action input validation', () => {
       password: '',
       password_confirm: ''
     })
-
     const res = await signUp(initialState, formData)
 
     expect(res.success).toBe(false)
@@ -113,14 +106,10 @@ describe('Sign up action existing user validation', () => {
   it('should return error if email already in use', async () => {
     prismaMock.user.findFirst.mockResolvedValue({
       id: 1,
-      name: 'Jackson Lewis',
-      email: 'jacksonlwss@gmail.com',
-      password: 'Password1!',
+      ...userData,
       verified: true
     })
-
     const formData = setupFormData()
-
     const res = await signUp(initialState, formData)
 
     expect(res.success).toBe(false)
@@ -133,13 +122,10 @@ describe('Sign up action email verification', () => {
     prismaMock.user.findFirst.mockResolvedValue(null)
     prismaMock.user.create.mockResolvedValue({
       id: 1,
-      name: 'Jackson Lewis',
-      email: 'jacksonlwss@gmail.com',
-      password: 'Password1!',
+      ...userData,
       verified: true
     })
     const formData = setupFormData()
-
     const res = await signUp(initialState, formData)
 
     expect(res).toBeUndefined()

@@ -6,7 +6,7 @@ import {
 } from '@/types/user'
 import { signUp } from '@/lib/actions/user-sign-up'
 import { prisma } from '@/lib/prisma'
-import { seedUser } from '../seeding'
+import { seedUser, userData } from '../seeding'
 
 jest.mock('next/navigation', () => {
   return {
@@ -28,10 +28,8 @@ const initialState: SignUpActionResponse = {
 }
 
 const userInput: SignUpFormData = {
-  name: 'Jackson Lewis',
-  email: 'jacksonlwss30@gmail.com',
-  password: 'Password1!',
-  password_confirm: 'Password1!'
+  ...userData,
+  password_confirm: userData.password
 }
 
 function setupFormData(data: Partial<SignUpFormData> = {}) {
@@ -51,7 +49,9 @@ describe('Sign up process', () => {
     const deleteUser = prisma.user.deleteMany()
 
     await prisma.$transaction([deleteUser])
+  })
 
+  afterAll(async () => {
     await prisma.$disconnect()
   })
 
