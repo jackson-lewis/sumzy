@@ -3,13 +3,13 @@ import { SignJWT, jwtVerify } from 'jose'
 
 type Token = {
   userId: number
-  action: 'sign_in' | 'reset_password' | 'verify_email'
+  action: 'reset_password' | 'verify_email'
 }
 
-const fp_secretKey = process.env.FORGOT_PASSWORD_SECRET
-const fp_encodedKey = new TextEncoder().encode(fp_secretKey)
-const ve_secretKey = process.env.VERIFY_EMAIL_SECRET
-const ve_encodedKey = new TextEncoder().encode(ve_secretKey)
+export const fp_secretKey = process.env.FORGOT_PASSWORD_SECRET
+export const fp_encodedKey = new TextEncoder().encode(fp_secretKey)
+export const ve_secretKey = process.env.VERIFY_EMAIL_SECRET
+export const ve_encodedKey = new TextEncoder().encode(ve_secretKey)
 
 export async function generateEmailVerifyLink(user: User) {
   const token = await new SignJWT({
@@ -38,7 +38,7 @@ export async function generateResetPasswordLink(user: User) {
 }
 
 export async function verifyToken(token: string, action: Token['action']) {
-  const encodedKey = action === 'reset_password' ? fp_encodedKey : ve_encodedKey
+  const encodedKey = getEncodedKey(action)
 
   try {
     const { payload } = await jwtVerify(token, encodedKey, {
@@ -50,4 +50,12 @@ export async function verifyToken(token: string, action: Token['action']) {
       console.log('Failed to verify token')
     }
   }
+}
+
+function getEncodedKey(action: Token['action']) {
+  if (action === 'reset_password') {
+    return fp_encodedKey
+  }
+
+  return ve_encodedKey
 }
