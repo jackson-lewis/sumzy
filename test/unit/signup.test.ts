@@ -56,7 +56,7 @@ describe('Sign up action input validation', () => {
 
   it('should return error with invalid email', async () => {
     const formData = setupFormData({
-      email: userData.email
+      email: userData.email.replace('.com', '')
     })
     const res = await signUp(initialState, formData)
 
