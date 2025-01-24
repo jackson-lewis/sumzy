@@ -52,7 +52,7 @@ export async function verifyToken(token: string, action: Token['action']) {
   }
 }
 
-function getEncodedKey(action: Token['action']) {
+export function getEncodedKey(action: Token['action']) {
   if (action === 'reset_password') {
     return fp_encodedKey
   }
