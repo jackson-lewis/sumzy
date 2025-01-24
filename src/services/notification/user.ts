@@ -1,5 +1,6 @@
 import { ForgotPasswordUser, UnverifiedUser } from '@/types/user'
 import { User } from '@prisma/client'
+import { MailOptions } from 'nodemailer/lib/sendmail-transport'
 import { transporter } from './nodemailer'
 
 export async function sendUserVerifyEmail(user: UnverifiedUser) {
@@ -9,14 +10,24 @@ export async function sendUserVerifyEmail(user: UnverifiedUser) {
     <p>Thank you for signing up to Sumzy. Please click the link below to verify your email address:</p>
     <a href="${user.emailVerifyLink}">Verify Email</a>`
 
-  const info = await transporter.sendMail({
+  const mailOptions: MailOptions = {
     from: 'Sumzy <admin@jacksonlewis.co.uk>',
     to: `${user.name} <${user.email}>`,
     subject: 'Verify Your Email Address',
     html
-  })
+  }
 
-  return info
+  try {
+    await transporter.sendMail(mailOptions)
+    return {
+      success: true
+    }
+  } catch (error) {
+    return {
+      success: false,
+      message: error instanceof Error ? error.message : 'Unknown error'
+    }
+  }
 }
 
 export async function sendPasswordResetEmail(user: ForgotPasswordUser) {
