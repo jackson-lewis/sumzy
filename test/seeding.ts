@@ -1,4 +1,5 @@
-import { Report, User } from '@prisma/client'
+import { Event, Report, User } from '@prisma/client'
+import { JsonValue } from '@prisma/client/runtime/library'
 import { prisma } from '@/lib/prisma'
 
 export const userData: Pick<User, 'name' | 'email' | 'password'> = {
@@ -43,4 +44,34 @@ export async function seedReport(report: Partial<Report> = {}) {
       }
     }
   })
+}
+
+const eventBase: Event = {
+  id: 1,
+  aggregateId: 1,
+  createdAt: new Date(),
+  eventType: 'CREATED',
+  eventData: {
+    id: 1,
+    amount: 10,
+    date: new Date()
+  } as unknown as JsonValue
+}
+
+export const eventWithDefaultCategory: Event = {
+  ...eventBase,
+  eventData: {
+    ...(eventBase.eventData as unknown as Record<string, unknown>),
+    defaultCategoryId: 1,
+    categoryType: 'DEFAULT'
+  } as unknown as JsonValue
+}
+
+export const eventWithUserCategory: Event = {
+  ...eventBase,
+  eventData: {
+    ...(eventBase.eventData as unknown as Record<string, unknown>),
+    categoryId: 2,
+    categoryType: 'USER'
+  } as unknown as JsonValue
 }
