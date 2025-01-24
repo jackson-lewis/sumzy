@@ -9,7 +9,6 @@ import {
   User
 } from '@prisma/client'
 import useSWR from 'swr'
-import useSWRMutation from 'swr/mutation'
 
 export const fetcher = async (url: string) => {
   return fetch(`${process.env.NEXT_PUBLIC_API_GATEWAY_URL}${url}`).then((r) =>
@@ -48,7 +47,7 @@ export function useTx() {
   const frequency = searchParams.get('frequency') || 'one_time'
   const direction = pathname.replace('/dashboard/', '').replace(/s$/, '')
 
-  return useSWRMutation<Transaction[]>(
+  return useSWR<Transaction[]>(
     `/v1/transactions?direction=${direction}&frequency=${frequency}`,
     fetcher
   )
