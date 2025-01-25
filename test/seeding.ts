@@ -1,4 +1,10 @@
-import { Event, Report, User } from '@prisma/client'
+import {
+  type Event,
+  Prisma,
+  type Report,
+  type Transaction,
+  type User
+} from '@prisma/client'
 import { JsonValue } from '@prisma/client/runtime/library'
 import { prisma } from '@/lib/prisma'
 
@@ -74,4 +80,17 @@ export const eventWithUserCategory: Event = {
     categoryId: 2,
     categoryType: 'USER'
   } as unknown as JsonValue
+}
+
+export const transaction: Transaction = {
+  id: 1,
+  userId: 1,
+  amount: new Prisma.Decimal(10),
+  date: new Date(2024, 10, 29),
+  categoryType: 'DEFAULT',
+  categoryId: null,
+  defaultCategoryId: 1,
+  description: 'Test transaction',
+  merchant: 1,
+  frequency: 'one_time'
 }

@@ -36,3 +36,21 @@ export function getTransactionCategory(
     return category.id === transaction.defaultCategoryId
   })
 }
+
+type TransactionsGroupedByDay = {
+  [k: string]: Transaction[]
+}
+
+export function groupTransactionsByDay(
+  transactions: Transaction[]
+): TransactionsGroupedByDay {
+  return transactions.reduce((result, transaction) => {
+    const date = new Date(transaction.date)
+    const day = date.toISOString().split('T')[0]
+
+    return {
+      ...result,
+      [day]: [...(result[day] || []), transaction]
+    }
+  }, {} as TransactionsGroupedByDay)
+}
