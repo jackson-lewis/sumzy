@@ -42,15 +42,7 @@ export function getUserToken() {
 }
 
 export function useTx() {
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-  const frequency = searchParams.get('frequency') || 'one_time'
-  const direction = pathname.replace('/dashboard/', '').replace(/s$/, '')
-
-  return useSWR<Transaction[]>(
-    `/v1/transactions?direction=${direction}&frequency=${frequency}`,
-    fetcher
-  )
+  return useSWR<Transaction[]>('/v1/transactions', fetcher)
 }
 
 export function useCategories() {
