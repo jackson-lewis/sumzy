@@ -23,9 +23,6 @@ COPY . .
 # Prisma generate
 RUN npx prisma generate
 
-# Build the TypeScript code if necessary
-RUN npm run build
-
 # Expose the API Gateway port
 EXPOSE 3000
 
