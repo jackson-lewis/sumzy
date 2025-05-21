@@ -1,4 +1,5 @@
 import LinkButton from '@/components/shared/button'
+import SentryTestComponent from '@/components/test/sentry'
 import styles from './page.module.scss'
 
 export default function Home() {
@@ -9,6 +10,7 @@ export default function Home() {
         <LinkButton href="/sign-up" color="green" variant="fill">
           Sign up
         </LinkButton>
+        <SentryTestComponent />
       </div>
     </main>
   )
