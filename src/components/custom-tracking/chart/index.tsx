@@ -7,6 +7,6 @@ const HouseDepositChart = dynamic(
   { ssr: false }
 )
 
-export default function ChartWrapper() {
-  return <HouseDepositChart />
+export default function ChartWrapper({ id }: { id: number }) {
+  return <HouseDepositChart id={id} />
 }

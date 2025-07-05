@@ -21,7 +21,7 @@ export default async function CustomTracking({
       <h1>{customTracking.name}</h1>
       <span>Created: {formattedDate}</span>
       <AddEntryForm customTracking={customTracking} />
-      <ChartWrapper />
+      <ChartWrapper id={customTracking.id} />
     </div>
   )
 }

@@ -13,7 +13,7 @@ import {
 } from 'recharts'
 import { getCustomTrackingMeta } from '@/lib/actions/get-custom-tracking-meta'
 
-export default function HouseDepositChart() {
+export default function HouseDepositChart({ id }: { id: number }) {
   const dateOptions: Intl.DateTimeFormatOptions = {
     month: 'short'
   }
@@ -31,7 +31,7 @@ export default function HouseDepositChart() {
 
   useEffect(() => {
     startTransition(async () => {
-      const data = await getCustomTrackingMeta(2)
+      const data = await getCustomTrackingMeta(id)
       setMetaData(
         data.map((item) => ({
           name: new Date(item.date).toISOString().slice(0, 7),
