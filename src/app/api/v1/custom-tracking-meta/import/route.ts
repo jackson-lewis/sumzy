@@ -46,14 +46,14 @@ const rawData: { name: string; amount: number }[] = [
   { name: '2025-06', amount: 23793.44 }
 ]
 
-// Set your CustomTracking id here (trackId must exist in the DB)
-const TRACK_ID = 2
+export async function POST(request: Request) {
+  const body = await request.json()
+  const trackId = body.trackId as number
 
-export async function POST() {
   try {
     const created = await prisma.customTrackingMeta.createMany({
       data: rawData.map((item) => ({
-        trackId: TRACK_ID,
+        trackId,
         amount: item.amount,
         date: new Date(item.name + '-01')
       })),
