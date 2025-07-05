@@ -21,6 +21,7 @@ model User {
   password String
   verified Boolean @default(false)
   reports  Report[]
+  customTrackings CustomTracking[]
 }
 
 model DefaultCategory {
@@ -86,4 +87,23 @@ enum EventType {
   CREATED
   UPDATED
   DELETED
+}
+
+model CustomTracking {
+  id          Int       @id @default(autoincrement())
+  userId      Int
+  name        String
+  slug        String
+  description String?
+  createdAt   DateTime  @default(now())
+  user        User      @relation(fields: [userId], references: [id])
+  customTrackingMetas CustomTrackingMeta[]
+}
+
+model CustomTrackingMeta {
+  id          Int       @id @default(autoincrement())
+  trackId     Int
+  amount      Decimal
+  date        DateTime  @default(now())
+  customTracking CustomTracking @relation(fields: [trackId], references: [id])
 }

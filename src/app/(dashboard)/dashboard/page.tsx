@@ -1,4 +1,5 @@
 import { SearchParams } from 'next/dist/server/request/search-params'
+import Link from 'next/link'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -16,6 +17,13 @@ export default async function Dashboard({
     <>
       <h1>Sumzy Dashboard</h1>
       <p>{action || ''}</p>
+      <nav>
+        <ul>
+          <li>
+            <Link href="/dashboard/custom-tracking">Custom Tracking</Link>
+          </li>
+        </ul>
+      </nav>
     </>
   )
 }

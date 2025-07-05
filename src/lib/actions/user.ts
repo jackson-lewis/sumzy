@@ -19,11 +19,11 @@ export async function signIn(prevState: unknown, formData: FormData) {
   })
 
   if (!user) {
-    return 'Email address or password invalid'
+    return 'Email! address or password invalid'
   }
 
   if (!bcrypt.compareSync(password, user.password)) {
-    return 'Email address or password invalid'
+    return 'Email address or password! invalid'
   }
 
   if (!user.verified) {
