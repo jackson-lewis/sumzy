@@ -22,6 +22,8 @@ model User {
   verified Boolean @default(false)
   reports  Report[]
   customTrackings CustomTracking[]
+  accounts   Account[]
+  snapshots  NetWorthSnapshot[]
 }
 
 model DefaultCategory {
@@ -106,4 +108,34 @@ model CustomTrackingMeta {
   amount      Decimal
   date        DateTime  @default(now())
   customTracking CustomTracking @relation(fields: [trackId], references: [id])
+}
+
+
+model Account {
+  id         Int                @id @default(autoincrement())
+  user       User               @relation(fields: [userId], references: [id])
+  userId     Int
+  name       String             // e.g., "Santander Bank", "Vanguard ISA", "Nectar"
+  isActive   Boolean            @default(true)
+  balances   AccountBalance[]
+}
+
+model NetWorthSnapshot {
+  id         Int                @id @default(autoincrement())
+  user       User               @relation(fields: [userId], references: [id])
+  userId     Int
+  snapshotDate DateTime
+  createdAt  DateTime           @default(now())
+  balances   AccountBalance[]
+
+  @@unique([userId, snapshotDate])
+}
+
+model AccountBalance {
+  id                  Int              @id @default(autoincrement())
+  netWorthSnapshot    NetWorthSnapshot @relation(fields: [netWorthSnapshotId], references: [id], onDelete: Cascade)
+  netWorthSnapshotId  Int
+  account             Account          @relation(fields: [accountId], references: [id])
+  accountId           Int
+  balance             Decimal
 }

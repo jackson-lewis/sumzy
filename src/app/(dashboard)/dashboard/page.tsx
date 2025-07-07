@@ -22,6 +22,9 @@ export default async function Dashboard({
           <li>
             <Link href="/dashboard/goals">Goals</Link>
           </li>
+          <li>
+            <Link href="/dashboard/net-worth">Net Worth</Link>
+          </li>
         </ul>
       </nav>
     </>

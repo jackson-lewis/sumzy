@@ -1,0 +1,17 @@
+import { cookies } from 'next/headers'
+import { NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { decrypt } from '@/lib/session'
+
+export async function GET() {
+  const cookie = (await cookies()).get('session')?.value
+  const session = await decrypt(cookie)
+  if (!session) {
+    return NextResponse.json([], { status: 401 })
+  }
+  const accounts = await prisma.account.findMany({
+    where: { userId: Number(session.userId), isActive: true },
+    orderBy: { id: 'asc' }
+  })
+  return NextResponse.json(accounts)
+}
