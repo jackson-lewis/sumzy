@@ -2,7 +2,7 @@ import { cookies } from 'next/headers'
 import { prisma } from './prisma'
 import { decrypt } from './session'
 
-export async function getCustomTrackings() {
+export async function getGoals() {
   const cookie = (await cookies()).get('session')?.value
   const session = await decrypt(cookie)
   if (!session) {
@@ -26,7 +26,7 @@ export async function getCustomTrackings() {
   }
 }
 
-export async function getCustomTracking(slug: string) {
+export async function getGoal(slug: string) {
   const cookie = (await cookies()).get('session')?.value
   const session = await decrypt(cookie)
 
@@ -43,7 +43,7 @@ export async function getCustomTracking(slug: string) {
     })
 
     if (!data) {
-      throw new Error('Custom tracking not found')
+      throw new Error('Goal not found')
     }
 
     return data[0]

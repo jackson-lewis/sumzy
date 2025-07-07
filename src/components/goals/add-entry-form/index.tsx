@@ -6,12 +6,8 @@ import { CustomTracking } from '@prisma/client'
 import { addEntry } from '@/lib/actions/custom-tracking'
 import { SubmitButton } from '@/components/site/user/form'
 
-export default function AddEntryForm({
-  customTracking
-}: {
-  customTracking: CustomTracking
-}) {
-  const addEntryWithId = addEntry.bind(null, { trackId: customTracking.id })
+export default function AddEntryForm({ goal }: { goal: CustomTracking }) {
+  const addEntryWithId = addEntry.bind(null, { trackId: goal.id })
   const [state, formAction] = useActionState(addEntryWithId, null)
 
   return (
