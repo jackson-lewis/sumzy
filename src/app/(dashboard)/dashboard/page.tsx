@@ -20,7 +20,7 @@ export default async function Dashboard({
       <nav>
         <ul>
           <li>
-            <Link href="/dashboard/custom-tracking">Custom Tracking</Link>
+            <Link href="/dashboard/goals">Goals</Link>
           </li>
         </ul>
       </nav>
