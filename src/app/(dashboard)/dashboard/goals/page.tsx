@@ -13,7 +13,7 @@ export default async function Goals() {
         <ul style={{ margin: '20px 0 0' }}>
           {customTrackings.map((tracking) => (
             <li key={tracking.id}>
-              <Link href={`/dashboard/custom-tracking/${tracking.slug}`}>
+              <Link href={`/dashboard/goals/${tracking.slug}`}>
                 {tracking.name}
               </Link>
             </li>
