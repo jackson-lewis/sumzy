@@ -3,19 +3,17 @@ import { getGoals } from '@/lib/goals'
 import CreateGoalForm from '@/components/goals/create'
 
 export default async function Goals() {
-  const customTrackings = await getGoals()
+  const goals = await getGoals()
 
   return (
     <div>
       <h1>Goals</h1>
       <CreateGoalForm />
-      {customTrackings.length > 0 ? (
+      {goals.length > 0 ? (
         <ul style={{ margin: '20px 0 0' }}>
-          {customTrackings.map((tracking) => (
-            <li key={tracking.id}>
-              <Link href={`/dashboard/goals/${tracking.slug}`}>
-                {tracking.name}
-              </Link>
+          {goals.map((goal) => (
+            <li key={goal.id}>
+              <Link href={`/dashboard/goals/${goal.slug}`}>{goal.name}</Link>
             </li>
           ))}
         </ul>
