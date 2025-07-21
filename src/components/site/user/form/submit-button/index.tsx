@@ -1,26 +1,25 @@
 import { useFormStatus } from 'react-dom'
-import { Button, ButtonProps } from '@/components/shared/button'
 import LoadingIcon from '@/components/shared/loading-icon'
+import { Button } from '@/components/ui/button'
 import styles from './style.module.scss'
 
 export default function SubmitButton({
   children,
   ...rest
-}: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) {
+}: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const { pending } = useFormStatus()
 
   return (
     <Button
-      variant="fill"
-      color="green"
-      className={styles.submit}
+      type="submit"
       disabled={pending}
+      className={styles.submit}
       {...rest}
     >
       {children}
       {pending && (
         <div className={styles.loadingWrapper}>
-          <LoadingIcon color="var(--black)" />
+          <LoadingIcon color="var(--background)" />
         </div>
       )}
     </Button>
