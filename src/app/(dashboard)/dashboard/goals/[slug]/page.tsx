@@ -28,7 +28,7 @@ export default async function Goal({
         />
         <PageTitle className="text-center w-full">{goal.name}</PageTitle>
       </div>
-      <span>Created: {formattedDate}</span>
+      <span className="block mb-4 text-center">Created: {formattedDate}</span>
       <AddEntryForm goal={goal} />
       <ChartWrapper id={goal.id} />
       <Table id={goal.id} />

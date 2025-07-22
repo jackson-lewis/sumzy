@@ -18,7 +18,10 @@ export default function CreateGoalForm() {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
+      <DialogTrigger
+        asChild
+        className="absolute right-0 top-1/2 -translate-y-1/2"
+      >
         <Button type="button">Create</Button>
       </DialogTrigger>
       <DialogContent>

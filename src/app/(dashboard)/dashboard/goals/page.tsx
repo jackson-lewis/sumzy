@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { getGoals } from '@/lib/goals'
 import CreateGoalForm from '@/components/goals/create'
+import { BackButton } from '@/components/ui/back-button'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { PageTitle } from '@/components/ui/page-title'
 
@@ -9,8 +10,12 @@ export default async function Goals() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <PageTitle>Goals</PageTitle>
+      <div className="relative flex items-center justify-center mb-4">
+        <BackButton
+          href="/dashboard"
+          className="absolute left-0 top-1/2 -translate-y-1/2"
+        />
+        <PageTitle className="text-center w-full">Goals</PageTitle>
         <CreateGoalForm />
       </div>
       {goals.length > 0 ? (
