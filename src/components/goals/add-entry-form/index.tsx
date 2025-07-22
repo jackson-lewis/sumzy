@@ -44,7 +44,12 @@ export default function AddEntryForm({ goal }: { goal: CustomTracking }) {
               >
                 Amount
               </label>
-              <Input type="number" name="amount" />
+              <Input
+                type="number"
+                name="amount"
+                inputMode="decimal"
+                step="any"
+              />
             </div>
           </div>
           <SubmitButton>Add</SubmitButton>
