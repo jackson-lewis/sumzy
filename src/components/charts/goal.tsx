@@ -42,7 +42,7 @@ export default function GoalChart({ id }: { id: number }) {
     }
   } satisfies ChartConfig
 
-  return (
+  return metaData.length > 0 ? (
     <ChartContainer
       config={chartConfig}
       className="min-h-[200px] max-h-[500px] w-full"
@@ -81,7 +81,13 @@ export default function GoalChart({ id }: { id: number }) {
             />
           }
         />
-        <Line dataKey="amount" type="monotone" strokeWidth={2} dot={false} />
+        <Line
+          dataKey="amount"
+          type="monotone"
+          stroke="var(--primary)"
+          strokeWidth={2}
+          dot={false}
+        />
         <ReferenceLine
           y={30000}
           yAxisId={0}
@@ -91,5 +97,5 @@ export default function GoalChart({ id }: { id: number }) {
         />
       </LineChart>
     </ChartContainer>
-  )
+  ) : null
 }
