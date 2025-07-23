@@ -21,20 +21,59 @@ import {
   DrawerTrigger
 } from '@/components/ui/drawer'
 import { Input } from '@/components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
 
 export default function AddEntryForm({ goal }: { goal: CustomTracking }) {
   const addEntryWithId = addEntry.bind(null, { trackId: goal.id })
   const [state, formAction] = useActionState(addEntryWithId, null)
   const isMobile = useMediaQuery('(max-width: 640px)')
 
+  const getMonthOptions = () => {
+    const options = []
+    const now = new Date()
+    for (let i = -6; i <= 6; i++) {
+      const date = new Date(now.getFullYear(), now.getMonth() + i, 1)
+      const value = date.toISOString().slice(0, 10)
+      const label = date.toLocaleString('en-GB', {
+        month: 'long',
+        year: 'numeric'
+      })
+      options.push({ value, label })
+    }
+    return options
+  }
+  const monthOptions = getMonthOptions()
+  const currentMonthValue = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    1
+  )
+    .toISOString()
+    .slice(0, 10)
+
   const formContent = (
     <form action={formAction} className="space-y-4 p-4">
       <div className="space-y-4">
         <div>
-          <label htmlFor="date" className="block text-sm font-medium mb-1">
-            Date
-          </label>
-          <Input type="date" id="date" name="date" required />
+          <label className="block text-sm font-medium mb-1">Month</label>
+          <Select name="date" defaultValue={currentMonthValue} required>
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select month" />
+            </SelectTrigger>
+            <SelectContent>
+              {monthOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <div>
           <label htmlFor="amount" className="block text-sm font-medium mb-1">
@@ -49,7 +88,7 @@ export default function AddEntryForm({ goal }: { goal: CustomTracking }) {
               name="amount"
               inputMode="decimal"
               step="any"
-              className="pl-7 font-mono"
+              className="pl-7 font-mono appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
             />
           </div>
         </div>
