@@ -23,6 +23,10 @@ export default async function Dashboard({
     {
       name: 'Net Worth',
       href: '/dashboard/net-worth'
+    },
+    {
+      name: 'Account',
+      href: '/dashboard/account'
     }
   ]
 
