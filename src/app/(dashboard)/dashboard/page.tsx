@@ -1,6 +1,7 @@
 import { SearchParams } from 'next/dist/server/request/search-params'
 import Link from 'next/link'
 import { Metadata } from 'next'
+import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
 import { PageTitle } from '@/components/ui/page-title'
 
@@ -14,6 +15,11 @@ export default async function Dashboard({
   searchParams: Promise<SearchParams>
 }) {
   const { action } = await searchParams
+
+  const ACTION_MESSAGES: Record<string, string> = {
+    'sign-in': 'Welcome back to Sumzy!',
+    'sign-up': 'Your account has been created! Welcome to Sumzy.'
+  }
 
   const ROUTES = [
     {
@@ -33,7 +39,11 @@ export default async function Dashboard({
   return (
     <>
       <PageTitle className="text-center w-full mb-4">Sumzy</PageTitle>
-      <p>{action || ''}</p>
+      {action && ACTION_MESSAGES[String(action)] && (
+        <Alert className="mb-4">
+          <AlertDescription>{ACTION_MESSAGES[String(action)]}</AlertDescription>
+        </Alert>
+      )}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         {ROUTES.map((route) => (
           <Link key={route.name} href={route.href} className="block">
