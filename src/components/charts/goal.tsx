@@ -1,4 +1,5 @@
 import { startTransition, useEffect, useState } from 'react'
+import { Loader2 } from 'lucide-react'
 import { CartesianGrid, Line, LineChart, ReferenceLine, XAxis } from 'recharts'
 import { getCustomTrackingMeta } from '@/lib/actions/get-custom-tracking-meta'
 import {
@@ -42,60 +43,67 @@ export default function GoalChart({ id }: { id: number }) {
     }
   } satisfies ChartConfig
 
-  return metaData.length > 0 ? (
+  return (
     <ChartContainer
       config={chartConfig}
       className="min-h-[200px] max-h-[500px] w-full"
     >
-      <LineChart
-        accessibilityLayer
-        data={formattedData}
-        margin={{
-          left: 12,
-          right: 12
-        }}
-      >
-        <CartesianGrid vertical={false} />
-        <XAxis
-          dataKey="date"
-          tickLine={false}
-          axisLine={false}
-          tickMargin={8}
-          minTickGap={32}
-          tickFormatter={(value) => {
-            const date = new Date(value)
-            return date.toLocaleDateString('en-GB', dateOptions)
+      {metaData.length > 0 ? (
+        <LineChart
+          accessibilityLayer
+          data={formattedData}
+          margin={{
+            left: 12,
+            right: 12
           }}
-        />
-        <ChartTooltip
-          content={
-            <ChartTooltipContent
-              className="w-[150px]"
-              nameKey="views"
-              labelFormatter={(value) => {
-                return new Date(value).toLocaleDateString('en-GB', {
-                  month: 'short',
-                  year: 'numeric'
-                })
-              }}
-            />
-          }
-        />
-        <Line
-          dataKey="amount"
-          type="monotone"
-          stroke="var(--primary)"
-          strokeWidth={2}
-          dot={false}
-        />
-        <ReferenceLine
-          y={30000}
-          yAxisId={0}
-          strokeWidth={2}
-          stroke="var(--color-red-500)"
-          ifOverflow="extendDomain"
-        />
-      </LineChart>
+        >
+          <CartesianGrid vertical={false} />
+          <XAxis
+            dataKey="date"
+            tickLine={false}
+            axisLine={false}
+            tickMargin={8}
+            minTickGap={32}
+            tickFormatter={(value) => {
+              const date = new Date(value)
+              return date.toLocaleDateString('en-GB', dateOptions)
+            }}
+          />
+          <ChartTooltip
+            content={
+              <ChartTooltipContent
+                className="w-[150px]"
+                nameKey="views"
+                labelFormatter={(value) => {
+                  return new Date(value).toLocaleDateString('en-GB', {
+                    month: 'short',
+                    year: 'numeric'
+                  })
+                }}
+              />
+            }
+          />
+          <Line
+            dataKey="amount"
+            type="monotone"
+            stroke="var(--primary)"
+            strokeWidth={2}
+            dot={false}
+          />
+          <ReferenceLine
+            y={30000}
+            yAxisId={0}
+            strokeWidth={2}
+            stroke="var(--color-red-500)"
+            ifOverflow="extendDomain"
+          />
+        </LineChart>
+      ) : (
+        <div className="flex min-h-[200px] items-center justify-center w-full">
+          <Loader2 className="mr-2 h-5 w-5 animate-spin text-muted-foreground" />
+          <span className="text-muted-foreground">Fetching your data...</span>
+        </div>
+      )}
     </ChartContainer>
-  ) : null
+  )
 }
