@@ -1,12 +1,11 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import LinkButton from '@/components/shared/button'
-import styles from './style.module.scss'
+import { Button } from '@/components/ui/button'
 
 export default function Header() {
   return (
-    <header className={styles.header}>
-      <Link href="/" className={styles.logolink}>
+    <header className="px-5 py-2.5 flex justify-between">
+      <Link href="/" className="flex gap-2 items-center text-2xl">
         <Image
           src="/sumzy.svg"
           alt="Sumzy logo"
@@ -16,7 +15,9 @@ export default function Header() {
         />
         <span>sumzy</span>
       </Link>
-      <LinkButton href="/sign-in">Sign in</LinkButton>
+      <Button asChild>
+        <Link href="/sign-in">Sign in</Link>
+      </Button>
     </header>
   )
 }

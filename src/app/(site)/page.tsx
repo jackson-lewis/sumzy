@@ -1,14 +1,14 @@
-import LinkButton from '@/components/shared/button'
-import styles from './page.module.scss'
+import { Button } from '@/components/ui/button'
+import { PageTitle } from '@/components/ui/page-title'
 
 export default function Home() {
   return (
     <main>
-      <div className={styles.hero}>
-        <h1>Personal Finance Tracking</h1>
-        <LinkButton href="/sign-up" color="green" variant="fill">
-          Sign up
-        </LinkButton>
+      <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6">
+        <PageTitle className="text-center">Personal Finance Tracking</PageTitle>
+        <Button asChild>
+          <a href="/sign-up">Sign up</a>
+        </Button>
       </div>
     </main>
   )
