@@ -1,7 +1,6 @@
+import { Loader2Icon } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
-import LoadingIcon from '@/components/shared/loading-icon'
 import { Button } from '@/components/ui/button'
-import styles from './style.module.scss'
 
 export default function SubmitButton({
   children,
@@ -10,16 +9,11 @@ export default function SubmitButton({
   const { pending } = useFormStatus()
 
   return (
-    <Button
-      type="submit"
-      disabled={pending}
-      className={styles.submit}
-      {...rest}
-    >
+    <Button type="submit" disabled={pending} {...rest} className="relative">
       {children}
       {pending && (
-        <div className={styles.loadingWrapper}>
-          <LoadingIcon color="var(--background)" />
+        <div className="absolute inset-0 flex items-center justify-center bg-white rounded-md">
+          <Loader2Icon className="animate-spin h-8 w-8 text-black" />
         </div>
       )}
     </Button>

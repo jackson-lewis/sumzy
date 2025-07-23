@@ -4,6 +4,7 @@ import { useActionState } from 'react'
 import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { signIn } from '@/lib/actions/user'
+import { PageTitle } from '@/components/ui/page-title'
 import {
   AltActionText,
   FormField,
@@ -27,7 +28,7 @@ export default function SignInForm() {
 
   return (
     <UserForm action={formAction}>
-      <h1>Sign in</h1>
+      <PageTitle className="text-center mb-4">Sign in</PageTitle>
       <Message
         message={action && !message ? messages[action] : message}
         type={action && !message ? 'info' : 'error'}
