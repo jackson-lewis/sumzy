@@ -98,6 +98,16 @@ export default function GoalChart({ id }: { id: number }) {
                     year: 'numeric'
                   })
                 }}
+                formatter={(value, name) => {
+                  if (name === 'amount') {
+                    return (
+                      <span className="text-foreground font-mono font-medium tabular-nums">
+                        £{value.toLocaleString()}
+                      </span>
+                    )
+                  }
+                  return value
+                }}
               />
             }
           />
