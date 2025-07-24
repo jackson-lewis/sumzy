@@ -80,12 +80,31 @@ export default function GoalChart({ id }: { id: number }) {
             width={30}
             type="number"
             domain={[5000, 31000]}
-            tick={{ fontFamily: 'monospace', fontSize: 12 }}
             interval={0}
             ticks={[5000, 10000, 15000, 20000, 25000, 30000]}
             tickFormatter={(value) => `£${(value / 1000).toLocaleString()}k`}
             axisLine={false}
             tickLine={false}
+            tick={({ x, y, payload }) => {
+              const isTarget = payload.value === 30000
+              return (
+                <text
+                  x={x}
+                  y={y}
+                  textAnchor="end"
+                  fontFamily="monospace"
+                  fontSize={12}
+                  fill={
+                    isTarget
+                      ? 'var(--color-amber-500)'
+                      : 'var(--muted-foreground)'
+                  } // gold for target, slate-500 for others
+                  dy={3}
+                >
+                  £{(payload.value / 1000).toLocaleString()}k
+                </text>
+              )
+            }}
           />
           <ChartTooltip
             content={
@@ -121,38 +140,9 @@ export default function GoalChart({ id }: { id: number }) {
           <ReferenceLine
             y={30000}
             yAxisId={0}
-            strokeWidth={2}
-            stroke="var(--color-amber-700)"
+            strokeWidth={1}
+            stroke="var(--color-amber-500)"
             ifOverflow="extendDomain"
-            label={({ viewBox }) => {
-              const { width, y } = viewBox
-              const labelWidth = 48
-              const labelHeight = 20
-              const centerX = width / 2
-              return (
-                <g>
-                  <rect
-                    x={centerX}
-                    y={y - 10}
-                    width={labelWidth}
-                    height={labelHeight}
-                    rx={4}
-                    fill="#b45309"
-                    opacity={0.95}
-                  />
-                  <text
-                    x={width / 2 + labelWidth / 2}
-                    y={y + 4}
-                    textAnchor="middle"
-                    fontSize="12"
-                    fontWeight="bold"
-                    fill="#fff"
-                  >
-                    Target
-                  </text>
-                </g>
-              )
-            }}
           />
         </LineChart>
       ) : (
