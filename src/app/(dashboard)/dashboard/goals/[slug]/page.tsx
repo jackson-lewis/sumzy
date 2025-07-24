@@ -21,17 +21,17 @@ export default async function Goal({
 
   return (
     <div>
-      <div className="relative flex items-center justify-center mb-4">
+      <div className="relative flex items-center justify-center mb-6">
         <BackButton
           href="/dashboard/goals"
           className="absolute left-0 top-1/2 -translate-y-1/2"
         />
         <PageTitle className="text-center w-full">{goal.name}</PageTitle>
+        <AddEntryForm goal={goal} />
       </div>
-      <span className="block mb-4 text-center">Created: {formattedDate}</span>
-      <AddEntryForm goal={goal} />
       <ChartWrapper id={goal.id} />
       <Table id={goal.id} />
+      <span className="block mt-8 text-center">Created: {formattedDate}</span>
     </div>
   )
 }

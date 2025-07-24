@@ -3,6 +3,7 @@
 import { useActionState } from 'react'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { CustomTracking } from '@prisma/client'
+import { Plus } from 'lucide-react'
 import { addEntry } from '@/lib/actions/custom-tracking'
 import { SubmitButton } from '@/components/site/user/form'
 import { Button } from '@/components/ui/button'
@@ -100,12 +101,21 @@ export default function AddEntryForm({ goal }: { goal: CustomTracking }) {
     </form>
   )
 
-  const triggerButton = <Button type="button">Add Entry</Button>
+  const triggerButton = (
+    <Button
+      type="button"
+      size="icon"
+      aria-label="Add Entry"
+      className="bg-transparent hover:bg-muted shadow-none border-none"
+    >
+      <Plus className="text-primary" />
+    </Button>
+  )
   const title = 'Add Entry'
 
   return isMobile ? (
     <Drawer>
-      <div className="flex justify-center mb-6">
+      <div className="absolute right-0 top-1/2 -translate-y-1/2">
         <DrawerTrigger asChild>{triggerButton}</DrawerTrigger>
       </div>
       <DrawerContent>
@@ -117,7 +127,7 @@ export default function AddEntryForm({ goal }: { goal: CustomTracking }) {
     </Drawer>
   ) : (
     <Dialog>
-      <div className="flex justify-center mb-6">
+      <div className="absolute right-0 top-1/2 -translate-y-1/2">
         <DialogTrigger asChild>{triggerButton}</DialogTrigger>
       </div>
       <DialogContent>

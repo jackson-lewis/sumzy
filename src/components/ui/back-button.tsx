@@ -11,13 +11,13 @@ export function BackButton({ href, className }: BackButtonProps) {
     <Link
       href={href}
       className={cn(
-        'inline-flex items-center gap-2 text-base font-medium p-0 rounded-md hover:bg-muted transition-colors',
+        'inline-flex items-center justify-center text-base font-medium size-9 gap-2 rounded-md hover:bg-muted transition-colors',
         className
       )}
       aria-label="Go back"
     >
       <svg
-        className="h-5 w-5 text-muted-foreground"
+        className="h-6 w-6 text-muted-foreground"
         fill="none"
         stroke="currentColor"
         viewBox="0 0 24 24"
