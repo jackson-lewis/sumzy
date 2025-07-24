@@ -1,6 +1,13 @@
 import { startTransition, useEffect, useState } from 'react'
 import { Loader2 } from 'lucide-react'
-import { CartesianGrid, Line, LineChart, ReferenceLine, XAxis } from 'recharts'
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ReferenceLine,
+  XAxis,
+  YAxis
+} from 'recharts'
 import { getCustomTrackingMeta } from '@/lib/actions/get-custom-tracking-meta'
 import {
   ChartConfig,
@@ -69,6 +76,17 @@ export default function GoalChart({ id }: { id: number }) {
               return date.toLocaleDateString('en-GB', dateOptions)
             }}
           />
+          <YAxis
+            width={30}
+            type="number"
+            domain={[5000, 31000]}
+            tick={{ fontFamily: 'monospace', fontSize: 12 }}
+            interval={0}
+            ticks={[5000, 10000, 15000, 20000, 25000, 30000]}
+            tickFormatter={(value) => `£${(value / 1000).toLocaleString()}k`}
+            axisLine={false}
+            tickLine={false}
+          />
           <ChartTooltip
             content={
               <ChartTooltipContent
@@ -94,8 +112,37 @@ export default function GoalChart({ id }: { id: number }) {
             y={30000}
             yAxisId={0}
             strokeWidth={2}
-            stroke="var(--color-red-500)"
+            stroke="var(--color-amber-700)"
             ifOverflow="extendDomain"
+            label={({ viewBox }) => {
+              const { width, y } = viewBox
+              const labelWidth = 48
+              const labelHeight = 20
+              const centerX = width / 2
+              return (
+                <g>
+                  <rect
+                    x={centerX}
+                    y={y - 10}
+                    width={labelWidth}
+                    height={labelHeight}
+                    rx={4}
+                    fill="#b45309"
+                    opacity={0.95}
+                  />
+                  <text
+                    x={width / 2 + labelWidth / 2}
+                    y={y + 4}
+                    textAnchor="middle"
+                    fontSize="12"
+                    fontWeight="bold"
+                    fill="#fff"
+                  >
+                    Target
+                  </text>
+                </g>
+              )
+            }}
           />
         </LineChart>
       ) : (
