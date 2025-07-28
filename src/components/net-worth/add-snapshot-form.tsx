@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/drawer'
 import { Input } from '@/components/ui/input'
 import { SubmitButton } from '../site/user/form'
+import { CurrencyInput } from '../ui/currency-input'
 
 export default function AddSnapshotForm() {
   const [state, formAction] = useActionState(createNetWorthSnapshot, null)
@@ -56,22 +57,11 @@ export default function AddSnapshotForm() {
             Enter the value for each account:
           </p>
           {accounts.map((account: NetWorthAccount) => (
-            <div key={account.id} className="space-y-2">
-              <label
-                htmlFor={`account-${account.id}`}
-                className="block text-sm font-medium text-muted-foreground"
-              >
-                {account.name}
-              </label>
-              <Input
-                id={`account-${account.id}`}
-                name={`account-${account.id}`}
-                type="number"
-                step="0.01"
-                required
-                className="font-mono"
-              />
-            </div>
+            <CurrencyInput
+              key={account.id}
+              name={`account-${account.id}`}
+              label={account.name}
+            />
           ))}
         </div>
       ) : (

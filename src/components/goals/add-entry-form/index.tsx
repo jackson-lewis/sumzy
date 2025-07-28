@@ -8,6 +8,7 @@ import { Plus } from 'lucide-react'
 import { addEntry } from '@/lib/actions/custom-tracking'
 import { SubmitButton } from '@/components/site/user/form'
 import { Button } from '@/components/ui/button'
+import { CurrencyInput } from '@/components/ui/currency-input'
 import {
   Dialog,
   DialogContent,
@@ -22,7 +23,6 @@ import {
   DrawerTitle,
   DrawerTrigger
 } from '@/components/ui/drawer'
-import { Input } from '@/components/ui/input'
 import {
   Select,
   SelectContent,
@@ -84,23 +84,7 @@ export default function AddEntryForm({ goal }: { goal: CustomTracking }) {
             </SelectContent>
           </Select>
         </div>
-        <div>
-          <label htmlFor="amount" className="block text-sm font-medium mb-1">
-            Amount
-          </label>
-          <div className="relative">
-            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none font-mono">
-              £
-            </span>
-            <Input
-              type="number"
-              name="amount"
-              inputMode="decimal"
-              step="any"
-              className="pl-7 font-mono appearance-none [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-            />
-          </div>
-        </div>
+        <CurrencyInput name="amount" />
       </div>
       <SubmitButton className="w-full">Add</SubmitButton>
       {state?.message && (
