@@ -2,11 +2,10 @@
 
 import dynamic from 'next/dynamic'
 
-const HouseDepositChart = dynamic(
-  () => import('@/components/charts/house-deposit'),
-  { ssr: false }
-)
+const GoalChart = dynamic(() => import('@/components/charts/goal'), {
+  ssr: false
+})
 
 export default function ChartWrapper({ id }: { id: number }) {
-  return <HouseDepositChart id={id} />
+  return <GoalChart id={id} />
 }

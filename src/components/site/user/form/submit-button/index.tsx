@@ -1,26 +1,26 @@
+import { Loader2Icon } from 'lucide-react'
 import { useFormStatus } from 'react-dom'
-import { Button, ButtonProps } from '@/components/shared/button'
-import LoadingIcon from '@/components/shared/loading-icon'
-import styles from './style.module.scss'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
 
 export default function SubmitButton({
   children,
+  className,
   ...rest
-}: ButtonProps & React.ButtonHTMLAttributes<HTMLButtonElement>) {
+}: React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const { pending } = useFormStatus()
 
   return (
     <Button
-      variant="fill"
-      color="green"
-      className={styles.submit}
+      type="submit"
       disabled={pending}
       {...rest}
+      className={cn('relative', className)}
     >
       {children}
       {pending && (
-        <div className={styles.loadingWrapper}>
-          <LoadingIcon color="var(--black)" />
+        <div className="absolute inset-0 flex items-center justify-center bg-white rounded-md">
+          <Loader2Icon className="animate-spin h-8 w-8 text-black" />
         </div>
       )}
     </Button>

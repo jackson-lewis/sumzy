@@ -1,53 +1,43 @@
 import { getCustomTrackingMeta } from '@/lib/actions/get-custom-tracking-meta'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow
+} from '@/components/ui/table'
 
-export default async function Table({ id }: { id: number }) {
+export default async function TableComponent({ id }: { id: number }) {
   const data = await getCustomTrackingMeta(id)
 
   return (
-    <table
-      style={{ width: '100%', borderCollapse: 'collapse', marginTop: '2rem' }}
-    >
-      <thead>
-        <tr>
-          <th
-            style={{
-              borderBottom: '1px solid #ccc',
-              textAlign: 'left',
-              padding: '0.5rem'
-            }}
-          >
-            Date
-          </th>
-          <th
-            style={{
-              borderBottom: '1px solid #ccc',
-              textAlign: 'right',
-              padding: '0.5rem'
-            }}
-          >
-            Amount
-          </th>
-        </tr>
-      </thead>
-      <tbody>
+    <Table className="mt-8">
+      <TableHeader>
+        <TableRow>
+          <TableHead>Date</TableHead>
+          <TableHead className="text-right">Amount</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         {data.reverse().map((row) => (
-          <tr key={row.date.toString()}>
-            <td style={{ padding: '0.5rem' }}>
+          <TableRow key={row.date.toString()}>
+            <TableCell>
               {new Date(row.date).toLocaleDateString('en-GB', {
                 year: 'numeric',
                 month: 'short'
               })}
-            </td>
-            <td style={{ padding: '0.5rem', textAlign: 'right' }}>
+            </TableCell>
+            <TableCell className="text-right font-mono tabular-nums w-32">
               {Number(row.amount).toLocaleString('en-GB', {
                 style: 'currency',
                 currency: 'GBP',
                 minimumFractionDigits: 2
               })}
-            </td>
-          </tr>
+            </TableCell>
+          </TableRow>
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   )
 }

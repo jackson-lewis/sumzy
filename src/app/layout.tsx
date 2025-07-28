@@ -1,6 +1,6 @@
 import { Onest } from 'next/font/google'
 import type { Metadata } from 'next'
-import './globals.scss'
+import './globals.css'
 
 const onest = Onest({
   variable: '--font-onest',
@@ -17,7 +17,7 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en-GB">
+    <html lang="en-GB" className="dark">
       <body className={onest.variable}>{children}</body>
     </html>
   )

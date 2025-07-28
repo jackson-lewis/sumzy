@@ -2,8 +2,8 @@ import { useActionState, useEffect } from 'react'
 import Form from 'next/form'
 import { updateUser } from '@/lib/actions/user'
 import { useUser } from '@/lib/swr'
-import { Button } from '@/components/shared/button'
-import styles from './style.module.scss'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
 export default function AccountForm() {
   const { data, mutate } = useUser()
@@ -13,10 +13,10 @@ export default function AccountForm() {
     if (updatedUser) {
       mutate({ ...data, ...updatedUser })
     }
-  }, [updatedUser, mutate])
+  }, [data, updatedUser, mutate])
 
   return (
-    <Form action={formAction} className={styles.form}>
+    <Form action={formAction} className="max-w-[440px] mx-auto space-y-4">
       <FormField
         label="Name"
         name="name"
@@ -31,7 +31,7 @@ export default function AccountForm() {
         defaultValue={data?.email}
         data-testid="email"
       />
-      <Button disabled={pending} variant="fill" color="green">
+      <Button disabled={pending} type="submit" variant="default">
         Save
       </Button>
     </Form>
@@ -47,9 +47,9 @@ export function FormField({
   label: string
 } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
-    <div className={styles.field}>
+    <div className="space-y-2">
       <label htmlFor={name}>{label}</label>
-      <input type={type} name={name} id={name} required {...rest} />
+      <Input type={type} name={name} id={name} required {...rest} />
     </div>
   )
 }
