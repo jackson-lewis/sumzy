@@ -97,6 +97,7 @@ model CustomTracking {
   name        String
   slug        String
   description String?
+  targetAmount Decimal @default(0)
   createdAt   DateTime  @default(now())
   user        User      @relation(fields: [userId], references: [id])
   customTrackingMetas CustomTrackingMeta[]
