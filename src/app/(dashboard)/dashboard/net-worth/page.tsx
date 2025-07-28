@@ -18,10 +18,6 @@ export default function NetWorth() {
         <AddSnapshotForm />
       </div>
       <NetWorthSnapshotTable />
-      <p>
-        This page will display your net worth over time, including assets and
-        liabilities.
-      </p>
       <div className="mt-4 flex justify-center">
         <Link href="/dashboard/net-worth/accounts">
           <Button variant="outline">Manage Accounts</Button>
