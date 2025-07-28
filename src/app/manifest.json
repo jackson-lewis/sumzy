@@ -4,7 +4,8 @@
   "description": "A personal finance tracker to help you manage your money",
   "start_url": "/dashboard",
   "display": "standalone",
-  "background_color": "#262e2c",
+  "theme_color": "#0a0a0a",
+  "background_color": "#0a0a0a",
   "icons": [
     {
       "src": "/sumzy.svg",
