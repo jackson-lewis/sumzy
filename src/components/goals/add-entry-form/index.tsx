@@ -1,6 +1,7 @@
 'use client'
 
 import { useActionState } from 'react'
+import { useEffect, useState } from 'react'
 import { useMediaQuery } from '@/hooks/use-media-query'
 import { CustomTracking } from '@prisma/client'
 import { Plus } from 'lucide-react'
@@ -34,12 +35,19 @@ export default function AddEntryForm({ goal }: { goal: CustomTracking }) {
   const addEntryWithId = addEntry.bind(null, { trackId: goal.id })
   const [state, formAction] = useActionState(addEntryWithId, null)
   const isMobile = useMediaQuery('(max-width: 640px)')
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    if (state && !state?.message) {
+      setOpen(false)
+    }
+  }, [state])
 
   const getMonthOptions = () => {
     const options = []
     const now = new Date()
     for (let i = -6; i <= 6; i++) {
-      const date = new Date(now.getFullYear(), now.getMonth() + i, 1)
+      const date = new Date(now.getFullYear(), now.getMonth() + i, 2)
       const value = date.toISOString().slice(0, 10)
       const label = date.toLocaleString('en-GB', {
         month: 'long',
@@ -53,7 +61,7 @@ export default function AddEntryForm({ goal }: { goal: CustomTracking }) {
   const currentMonthValue = new Date(
     new Date().getFullYear(),
     new Date().getMonth(),
-    1
+    2
   )
     .toISOString()
     .slice(0, 10)
@@ -114,7 +122,7 @@ export default function AddEntryForm({ goal }: { goal: CustomTracking }) {
   const title = 'Add Entry'
 
   return isMobile ? (
-    <Drawer>
+    <Drawer open={open} onOpenChange={setOpen}>
       <div className="absolute right-0 top-1/2 -translate-y-1/2">
         <DrawerTrigger asChild>{triggerButton}</DrawerTrigger>
       </div>
@@ -126,7 +134,7 @@ export default function AddEntryForm({ goal }: { goal: CustomTracking }) {
       </DrawerContent>
     </Drawer>
   ) : (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <div className="absolute right-0 top-1/2 -translate-y-1/2">
         <DialogTrigger asChild>{triggerButton}</DialogTrigger>
       </div>
