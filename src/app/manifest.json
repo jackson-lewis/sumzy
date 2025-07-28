@@ -5,7 +5,6 @@
   "start_url": "/dashboard",
   "display": "standalone",
   "background_color": "#262e2c",
-  "theme_color": "#42EEBA",
   "icons": [
     {
       "src": "/sumzy.svg",
