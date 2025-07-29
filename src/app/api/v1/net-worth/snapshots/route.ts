@@ -11,7 +11,7 @@ export async function GET() {
   }
   const snapshots = await prisma.netWorthSnapshot.findMany({
     where: { userId: Number(session.userId) },
-    orderBy: { snapshotDate: 'desc' },
+    orderBy: { snapshotDate: 'asc' },
     include: {
       balances: {
         include: { account: true }
