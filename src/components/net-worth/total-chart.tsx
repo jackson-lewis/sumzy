@@ -1,12 +1,15 @@
 'use client'
 
+import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { CartesianGrid, Line, LineChart, Tooltip, XAxis, YAxis } from 'recharts'
 import { useNetWorthSnapshots } from '@/lib/swr/net-worth-snapshots'
+import { Button } from '../ui/button'
 import { ChartConfig, ChartContainer } from '../ui/chart'
 
 export default function NetWorthTotalChart() {
   const { data = [], isLoading } = useNetWorthSnapshots()
+  const [range, setRange] = useState<'6m' | '12m' | 'max'>('12m')
 
   if (isLoading) {
     return (
@@ -24,7 +27,7 @@ export default function NetWorthTotalChart() {
     )
   }
 
-  // Prepare chart data: [{ date, total }]
+  // Prepare chart data: [{ date, total, rawDate }]
   const chartData = data.map((snap) => {
     const total = (snap.balances || []).reduce(
       (sum, bal) => sum + Number(bal.balance),
@@ -35,9 +38,17 @@ export default function NetWorthTotalChart() {
         month: 'short',
         year: 'numeric'
       }),
-      total
+      total,
+      rawDate: new Date(snap.snapshotDate)
     }
   })
+
+  // Filter by range
+  let filteredData = chartData
+  if (range !== 'max') {
+    const months = range === '6m' ? 6 : 12
+    filteredData = chartData.slice(-months)
+  }
 
   const chartConfig = {
     amount: {
@@ -53,7 +64,7 @@ export default function NetWorthTotalChart() {
         className="min-h-[200px] max-h-[500px] w-full"
       >
         <LineChart
-          data={chartData}
+          data={filteredData}
           margin={{ left: 12, right: 12, top: 12, bottom: 12 }}
         >
           <CartesianGrid strokeDasharray="3 3" stroke="var(--slate-400)" />
@@ -72,7 +83,6 @@ export default function NetWorthTotalChart() {
             axisLine={false}
             tickLine={false}
             tick={({ x, y, payload }) => {
-              const isTarget = payload.value === 30000
               return (
                 <text
                   x={x}
@@ -80,11 +90,7 @@ export default function NetWorthTotalChart() {
                   textAnchor="end"
                   fontFamily="monospace"
                   fontSize={12}
-                  fill={
-                    isTarget
-                      ? 'var(--color-amber-500)'
-                      : 'var(--muted-foreground)'
-                  } // gold for target, slate-500 for others
+                  fill={'var(--muted-foreground)'}
                   dy={3}
                 >
                   £{(payload.value / 1000).toLocaleString()}k
@@ -104,6 +110,29 @@ export default function NetWorthTotalChart() {
           />
         </LineChart>
       </ChartContainer>
+      <div className="flex gap-2 mb-2 justify-end">
+        <Button
+          size="sm"
+          variant={range === '6m' ? 'default' : 'outline'}
+          onClick={() => setRange('6m')}
+        >
+          6m
+        </Button>
+        <Button
+          size="sm"
+          variant={range === '12m' ? 'default' : 'outline'}
+          onClick={() => setRange('12m')}
+        >
+          12m
+        </Button>
+        <Button
+          size="sm"
+          variant={range === 'max' ? 'default' : 'outline'}
+          onClick={() => setRange('max')}
+        >
+          max
+        </Button>
+      </div>
     </div>
   )
 }
