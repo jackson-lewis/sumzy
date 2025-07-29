@@ -5,16 +5,17 @@ import { decrypt } from '@/lib/session'
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   const cookie = (await cookies()).get('session')?.value
   const session = await decrypt(cookie)
   const userId = session?.userId || 1
+  const { id } = await params
 
   if (!userId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
-  const snapshotId = Number(params.id)
+  const snapshotId = Number(id)
   if (!snapshotId || isNaN(snapshotId)) {
     return NextResponse.json({ error: 'Invalid snapshot id' }, { status: 400 })
   }
