@@ -1,5 +1,6 @@
 import { Onest } from 'next/font/google'
 import type { Metadata } from 'next'
+import { Toaster } from '@/components/ui/sonner'
 import './globals.css'
 
 const onest = Onest({
@@ -18,7 +19,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en-GB" className="dark">
-      <body className={onest.variable}>{children}</body>
+      <body className={onest.variable}>
+        {children}
+        <Toaster position="top-center" />
+      </body>
     </html>
   )
 }

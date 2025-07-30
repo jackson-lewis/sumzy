@@ -1,6 +1,7 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
+import { toast } from 'sonner'
 import { createCustomTracking } from '@/lib/actions/custom-tracking'
 import { SubmitButton } from '@/components/site/user/form'
 import { Input } from '@/components/ui/input'
@@ -10,8 +11,18 @@ export default function CreateGoalForm() {
   const [state, formAction] = useActionState(createCustomTracking, null)
   const title = 'Create Goal'
 
+  useEffect(() => {
+    if (state) {
+      if (state.success) {
+        toast.success(state.message)
+      } else {
+        toast.error(state.message)
+      }
+    }
+  }, [state])
+
   return (
-    <ResponsiveDialog title={title} formSubmitted={!!state && !state?.message}>
+    <ResponsiveDialog title={title} formSubmitted={!!state?.success}>
       <form action={formAction} className="space-y-4">
         <div>
           <label htmlFor="name" className="block text-sm font-medium mb-1">
@@ -26,7 +37,6 @@ export default function CreateGoalForm() {
           />
         </div>
         <SubmitButton>Create</SubmitButton>
-        {state?.message && <p className="text-sm mt-2">{state.message}</p>}
       </form>
     </ResponsiveDialog>
   )

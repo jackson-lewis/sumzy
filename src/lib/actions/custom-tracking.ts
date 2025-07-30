@@ -14,7 +14,8 @@ export async function createCustomTracking(
   const session = await decrypt(cookie)
 
   let data
-  let message
+  let message = 'Goal created successfully.'
+  let success = false
 
   try {
     data = prisma.customTracking.create({
@@ -27,6 +28,7 @@ export async function createCustomTracking(
           .replace(/[^a-z0-9-]/g, '')
       }
     })
+    success = true
   } catch (error) {
     if (error instanceof Error) {
       message = error.message
@@ -37,7 +39,8 @@ export async function createCustomTracking(
 
   return {
     data,
-    message
+    message,
+    success
   }
 }
 
@@ -45,12 +48,17 @@ export async function addEntry(
   { trackId }: { trackId: number },
   prevState: unknown,
   formData: FormData
-): Promise<{ data?: CustomTrackingMeta | undefined; message?: string }> {
+): Promise<{
+  data?: CustomTrackingMeta | undefined
+  message: string
+  success: boolean
+}> {
   const date = formData.get('date') as string
   const amount = formData.get('amount') as string
 
   let data: CustomTrackingMeta | undefined
-  let message
+  let message = 'Entry added successfully.'
+  let success = false
 
   try {
     data = await prisma.customTrackingMeta.create({
@@ -60,6 +68,7 @@ export async function addEntry(
         amount: Number(amount)
       }
     })
+    success = true
   } catch (error) {
     if (error instanceof Error) {
       message = error.message
@@ -70,6 +79,7 @@ export async function addEntry(
 
   return {
     data,
-    message
+    message,
+    success
   }
 }

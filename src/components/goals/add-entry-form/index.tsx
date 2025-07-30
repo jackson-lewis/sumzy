@@ -1,7 +1,8 @@
 'use client'
 
-import { useActionState } from 'react'
+import { useActionState, useEffect } from 'react'
 import { CustomTracking } from '@prisma/client'
+import { toast } from 'sonner'
 import { addEntry } from '@/lib/actions/custom-tracking'
 import { SubmitButton } from '@/components/site/user/form'
 import { CurrencyInput } from '@/components/ui/currency-input'
@@ -18,6 +19,16 @@ import {
 export default function AddEntryForm({ goal }: { goal: CustomTracking }) {
   const addEntryWithId = addEntry.bind(null, { trackId: goal.id })
   const [state, formAction] = useActionState(addEntryWithId, null)
+
+  useEffect(() => {
+    if (state) {
+      if (state.success) {
+        toast.success(state.message)
+      } else {
+        toast.error(state.message)
+      }
+    }
+  }, [state])
 
   const getMonthOptions = () => {
     const options = []
