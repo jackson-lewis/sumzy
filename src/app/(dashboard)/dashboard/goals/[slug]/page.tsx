@@ -2,8 +2,7 @@ import { getGoal } from '@/lib/goals'
 import AddEntryForm from '@/components/goals/add-entry-form'
 import ChartWrapper from '@/components/goals/chart'
 import Table from '@/components/goals/table'
-import { BackButton } from '@/components/ui/back-button'
-import { PageTitle } from '@/components/ui/page-title'
+import PageHeader from '@/components/ui/page-header'
 
 export default async function Goal({
   params
@@ -21,14 +20,11 @@ export default async function Goal({
 
   return (
     <div>
-      <div className="relative flex items-center justify-center mb-6">
-        <BackButton
-          href="/dashboard/goals"
-          className="absolute left-0 top-1/2 -translate-y-1/2"
-        />
-        <PageTitle className="text-center w-full">{goal.name}</PageTitle>
-        <AddEntryForm goal={goal} />
-      </div>
+      <PageHeader
+        backHref="/dashboard/goals"
+        title={goal.name}
+        action={<AddEntryForm goal={goal} />}
+      />
       <ChartWrapper id={goal.id} />
       <Table id={goal.id} />
       <span className="block mt-8 text-center">Created: {formattedDate}</span>

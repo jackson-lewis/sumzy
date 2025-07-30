@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { Metadata } from 'next'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Card, CardHeader, CardTitle } from '@/components/ui/card'
-import { PageTitle } from '@/components/ui/page-title'
+import PageHeader from '@/components/ui/page-header'
 
 export const metadata: Metadata = {
   title: 'Dashboard ~ Sumzy'
@@ -38,7 +38,7 @@ export default async function Dashboard({
 
   return (
     <>
-      <PageTitle className="text-center w-full mb-4">Sumzy</PageTitle>
+      <PageHeader title="Dashboard" />
       {action && ACTION_MESSAGES[String(action)] && (
         <Alert className="mb-4">
           <AlertDescription>{ACTION_MESSAGES[String(action)]}</AlertDescription>
