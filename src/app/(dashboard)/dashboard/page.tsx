@@ -23,6 +23,10 @@ export default async function Dashboard({
 
   const ROUTES = [
     {
+      name: 'Transactions',
+      href: '/dashboard/transactions'
+    },
+    {
       name: 'Goals',
       href: '/dashboard/goals'
     },

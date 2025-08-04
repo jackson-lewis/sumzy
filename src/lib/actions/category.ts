@@ -10,18 +10,21 @@ export async function createCategory(prevState: unknown, formData: FormData) {
   const session = await decrypt(cookie)
 
   try {
-    return await prisma.category.create({
+    const data = await prisma.category.create({
       data: {
         userId: Number(session?.userId),
         name
       }
     })
+
+    return {
+      success: true,
+      data
+    }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
-    console.log(error)
-    // if (error instanceof && error.code === 11000) {
-    //   return {
-    //     message: `Category "${name}" already exists`
-    //   }
-    // }
+    return {
+      success: false
+    }
   }
 }

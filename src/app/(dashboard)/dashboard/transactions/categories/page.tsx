@@ -1,13 +1,17 @@
 import { Suspense } from 'react'
 import AddCategory from '@/components/categories/add'
 import CategoriesList from '@/components/categories/list'
+import PageHeader from '@/components/ui/page-header'
 
 export default function TransactionCategories() {
   return (
     <>
-      <h1>Categories</h1>
+      <PageHeader
+        title="Categories"
+        backHref="/dashboard/transactions"
+        action={<AddCategory />}
+      />
       <Suspense>
-        <AddCategory />
         <CategoriesList />
       </Suspense>
     </>

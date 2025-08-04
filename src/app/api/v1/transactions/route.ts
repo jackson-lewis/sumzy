@@ -12,7 +12,6 @@ export async function POST(req: NextRequest) {
     categoryId,
     categoryType,
     date,
-    frequency,
     description
   }: {
     frequency: Frequency
@@ -35,7 +34,6 @@ export async function POST(req: NextRequest) {
         defaultCategoryId:
           categoryType === CategoryType.DEFAULT ? Number(trueCategoryId) : null,
         date: trueDate.toISOString() as unknown as Date,
-        frequency,
         description
       }
     })
@@ -82,7 +80,6 @@ export async function GET(request: NextRequest) {
   const userId = request.headers.get('x-user-id')
   const searchParams = request.nextUrl.searchParams
   const direction = searchParams.get('direction') as TransactionDirection
-  const frequency = searchParams.get('frequency') as Frequency
   const from = searchParams.get('from')
   const to = searchParams.get('to')
 
@@ -98,10 +95,6 @@ export async function GET(request: NextRequest) {
     where.amount = {
       gt: 0
     }
-  }
-
-  if (frequency) {
-    where.frequency = frequency
   }
 
   /**

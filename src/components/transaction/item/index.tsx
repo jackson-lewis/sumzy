@@ -23,7 +23,12 @@ export default function TransactionItem({
       <Link href={`/dashboard/transactions/view/${transaction.id}`}>
         <div>
           <Money amount={Number(transaction.amount)} />
-          {!!category && <p className={styles.category}>{category?.name}</p>}
+          <p>{transaction.description}</p>
+          {!!category && (
+            <span className="inline-block rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+              {category?.name}
+            </span>
+          )}
         </div>
       </Link>
     </div>

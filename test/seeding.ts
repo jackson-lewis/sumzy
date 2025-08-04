@@ -90,7 +90,5 @@ export const transaction: Transaction = {
   categoryType: 'DEFAULT',
   categoryId: null,
   defaultCategoryId: 1,
-  description: 'Test transaction',
-  merchant: 1,
-  frequency: 'one_time'
+  description: 'Test transaction'
 }
