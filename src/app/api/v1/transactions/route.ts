@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from 'next/server'
 import { storeEvent } from '@/services/reporting/event'
 import { generateReport } from '@/services/reporting/generate'
 import { TransactionDirection } from '@/types'
-import { CategoryType, Frequency, Prisma } from '@prisma/client'
+import { CategoryType, Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 
 export async function POST(req: NextRequest) {
@@ -14,7 +14,6 @@ export async function POST(req: NextRequest) {
     date,
     description
   }: {
-    frequency: Frequency
     categoryType: CategoryType
     categoryId: string
     [k: string]: string
