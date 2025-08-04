@@ -43,20 +43,13 @@ model Transaction {
   id                Int       @id @default(autoincrement())
   userId            Int
   amount            Decimal
-  frequency         Frequency
   description       String?
-  merchant          Int?
   categoryId        Int?
   defaultCategoryId Int?
   categoryType      CategoryType
   date              DateTime  @default(now())
   category          Category? @relation(fields: [categoryId], references: [id])
   defaultCategory   DefaultCategory? @relation(fields: [defaultCategoryId], references: [id])
-}
-
-enum Frequency {
-  one_time
-  recurring
 }
 
 enum CategoryType {
