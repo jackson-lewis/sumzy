@@ -121,7 +121,7 @@ export default function TransactionDialog() {
         <CurrencyInput
           name="amount"
           autoFocus={true}
-          value={(Number(amountValue) * 1).toString()}
+          value={amountValue ?? (Number(amountValue) * 1).toString()}
           onChange={(e) =>
             setAmountValue(
               (
