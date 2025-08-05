@@ -4,7 +4,6 @@ import { Transaction } from '@prisma/client'
 import { useTx } from '@/lib/swr'
 import { groupTransactionsByDay } from '@/lib/transactions'
 import TransactionItem, { TransactionItemSkeleton } from '../item'
-import styles from './style.module.scss'
 
 export function DayGroup({
   day,
@@ -21,14 +20,16 @@ export function DayGroup({
   })
   const dateRender = `${weekday}, ${dayMonth}`
   return (
-    <>
-      <span className={styles.date}>{dateRender}</span>
-      <div className={styles.list}>
+    <div className="mb-6">
+      <span className="block text-xs font-semibold text-muted-foreground mb-2 ml-1">
+        {dateRender}
+      </span>
+      <div className="flex flex-col gap-2">
         {transactions.map((transaction) => (
           <TransactionItem key={transaction.id} transaction={transaction} />
         ))}
       </div>
-    </>
+    </div>
   )
 }
 
@@ -37,7 +38,7 @@ export default function TransactionsList() {
 
   if (isLoading) {
     return (
-      <div className={styles.list}>
+      <div className="flex flex-col gap-2">
         <TransactionItemSkeleton />
       </div>
     )

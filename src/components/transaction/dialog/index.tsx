@@ -11,6 +11,13 @@ import { Button } from '@/components/ui/button'
 import { CurrencyInput } from '@/components/ui/currency-input'
 import { Input } from '@/components/ui/input'
 import { ResponsiveDialog } from '@/components/ui/responsive-dialog'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select'
 import DateSelector from './date-selector'
 
 export default function TransactionDialog() {
@@ -81,44 +88,39 @@ export default function TransactionDialog() {
   }
 
   const formContent = (
-    <form action={formAction} className="space-y-4 p-4">
+    <form action={formAction} className="space-y-4">
       <input type="hidden" name="update" value={update ? 'true' : 'false'} />
       <input type="hidden" name="id" value={transaction?.id} />
       <input type="hidden" name="categoryType" value={categoryType} />
-      <fieldset name="direction" className="flex gap-4 mb-2">
-        <div>
-          <label className="block mb-1">Direction</label>
-          <div className="flex gap-2">
-            <Button
-              type="button"
-              variant={transactionSetup[0] === 'income' ? 'default' : 'outline'}
-              onClick={() =>
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                handleDirectionChange({ target: { value: 'income' } } as any)
-              }
-            >
-              Income
-            </Button>
-            <Button
-              type="button"
-              variant={
-                transactionSetup[0] === 'expense' ? 'default' : 'outline'
-              }
-              onClick={() =>
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                handleDirectionChange({ target: { value: 'expense' } } as any)
-              }
-            >
-              Expense
-            </Button>
-          </div>
-        </div>
+      <fieldset name="direction" className="flex gap-4 mb-4">
+        <Button
+          type="button"
+          variant={transactionSetup[0] === 'income' ? 'default' : 'outline'}
+          onClick={() =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            handleDirectionChange({ target: { value: 'income' } } as any)
+          }
+          className="flex-grow"
+        >
+          Income
+        </Button>
+        <Button
+          type="button"
+          variant={transactionSetup[0] === 'expense' ? 'default' : 'outline'}
+          onClick={() =>
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            handleDirectionChange({ target: { value: 'expense' } } as any)
+          }
+          className="flex-grow"
+        >
+          Expense
+        </Button>
       </fieldset>
       <fieldset name="details">
         <CurrencyInput
           name="amount"
           autoFocus={true}
-          value={Number(amountValue)}
+          value={amountValue}
           onChange={(e) => setAmountValue(e.target.value)}
         />
         <div className="mt-4">
@@ -135,28 +137,34 @@ export default function TransactionDialog() {
         </div>
         {data ? (
           <div className="mt-4">
-            <label htmlFor="category" className="block mb-1">
+            <label htmlFor="categoryId" className="block mb-1">
               Category
             </label>
-            <select
+            <Select
               name="categoryId"
-              id="categoryId"
               value={categoryValue}
+              onValueChange={(val) =>
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                handleCategoryChange({ target: { value: val } } as any)
+              }
               required
-              onChange={handleCategoryChange}
-              className="w-full border rounded px-2 py-1"
             >
-              {data.defaultCategories.map((category) => (
-                <option key={`d${category.id}`} value={`d${category.id}`}>
-                  {category.name}
-                </option>
-              ))}
-              {data.userCategories.map((category) => (
-                <option key={`u${category.id}`} value={`u${category.id}`}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Select category" />
+              </SelectTrigger>
+              <SelectContent>
+                {data.defaultCategories.map((category) => (
+                  <SelectItem key={`d${category.id}`} value={`d${category.id}`}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+                {data.userCategories.map((category) => (
+                  <SelectItem key={`u${category.id}`} value={`u${category.id}`}>
+                    {category.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         ) : (
           <p>Failed to load categories</p>

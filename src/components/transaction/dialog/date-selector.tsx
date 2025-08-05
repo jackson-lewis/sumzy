@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react'
-import styles from './style.module.scss'
+import { Input } from '@/components/ui/input'
 
 export default function DateSelector({ value }: { value?: Date }) {
   const [date, setDate] = useState<string>('')
@@ -28,16 +28,17 @@ export default function DateSelector({ value }: { value?: Date }) {
   }
 
   return (
-    <div className={styles.field}>
-      <label htmlFor="date">Date</label>
-      <input
+    <div className="flex flex-col gap-1 mb-4">
+      <label htmlFor="date" className="block text-sm font-medium mb-1">
+        Date
+      </label>
+      <Input
         type="date"
         name="date"
         id="date"
         data-testid="date_selector_input"
         value={date}
         onChange={handleChange}
-        className={styles.date}
       />
     </div>
   )
