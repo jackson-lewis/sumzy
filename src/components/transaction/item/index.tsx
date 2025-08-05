@@ -17,6 +17,8 @@ export default function TransactionItem({
     categories?.userCategories
   )
 
+  const amount = Number(transaction.amount)
+
   return (
     <div className="rounded-lg bg-background shadow-sm border px-4 py-3 hover:bg-accent transition">
       <Link
@@ -24,7 +26,10 @@ export default function TransactionItem({
         className="block"
       >
         <div className="flex gap-2 items-center">
-          <Money amount={Number(transaction.amount)} />
+          <Money
+            amount={amount * (amount > 0 ? 1 : -1)}
+            className={amount > 0 ? 'text-green-500' : ''}
+          />
           <p className="text-sm text-foreground/80">
             {transaction.description}
           </p>
