@@ -2,6 +2,7 @@
 
 import { ReactNode, useEffect, useState } from 'react'
 import { useMediaQuery } from '@/hooks/use-media-query'
+import * as Sentry from '@sentry/nextjs'
 import { Plus } from 'lucide-react'
 import {
   Dialog,
@@ -19,6 +20,8 @@ import {
 } from '@/components/ui/drawer'
 import { Button } from './button'
 
+const { logger } = Sentry
+
 export function ResponsiveDialog({
   title,
   formSubmitted,
@@ -33,9 +36,14 @@ export function ResponsiveDialog({
 
   useEffect(() => {
     if (formSubmitted) {
+      logger.info('Form submitted with success.')
       setOpen(false)
     }
   }, [formSubmitted])
+
+  useEffect(() => {
+    logger.info(logger.fmt`Transaction dialog ${open ? 'opened' : 'closed'}.`)
+  }, [open])
 
   const triggerButton = (
     <Button

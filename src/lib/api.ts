@@ -2,6 +2,7 @@
 
 import { cookies } from 'next/headers'
 import { LoginCredentials } from '@/types'
+import * as Sentry from '@sentry/nextjs'
 
 type HttpMethods = 'POST' | 'PATCH' | 'DELETE'
 
@@ -120,6 +121,12 @@ export async function apiRequest<T>(
 
     fnReturn.data = json
   } catch (error) {
+    Sentry.captureException(error, {
+      tags: {
+        endpoint
+      }
+    })
+
     fnReturn.error =
       error instanceof Error ? error : new Error('Something went wrong')
   }

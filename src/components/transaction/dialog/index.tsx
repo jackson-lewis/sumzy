@@ -3,6 +3,7 @@
 import { ChangeEvent, useActionState, useEffect, useState } from 'react'
 import { TransactionDirection } from '@/types'
 import { CategoryType } from '@prisma/client'
+import { logger } from '@sentry/nextjs'
 import { transactionAction } from '@/lib/actions/transaction'
 import { useCategories, useTx } from '@/lib/swr'
 import useTransactions from '@/lib/use-transactions'
@@ -46,6 +47,10 @@ export default function TransactionDialog() {
 
   useEffect(() => {
     if (transactions && state && !(state instanceof Error)) {
+      logger.info('Mutating transactions after action state change.', {
+        transactionId: state.id
+      })
+
       if (update) {
         mutate(
           transactions.map((tx) => {

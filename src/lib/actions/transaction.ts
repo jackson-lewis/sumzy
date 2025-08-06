@@ -1,7 +1,10 @@
 'use server'
 
 import { Prisma, Transaction } from '@prisma/client'
+import * as Sentry from '@sentry/nextjs'
 import { apiRequest } from '../api'
+
+const { logger } = Sentry
 
 export async function transactionAction(
   prevState: unknown,
@@ -13,7 +16,12 @@ export async function transactionAction(
   const { direction, ...transaction } = data
   const update = formData.get('update')
 
+  logger.info('Creating transaction')
+
   if (direction === 'expense') {
+    logger.info(
+      logger.fmt`Transaction is expense, converting ${transaction.amount} to negative.`
+    )
     transaction.amount = new Prisma.Decimal(Number(transaction.amount) * -1)
   }
 

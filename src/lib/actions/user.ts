@@ -3,14 +3,19 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { User } from '@prisma/client'
+import * as Sentry from '@sentry/nextjs'
 import bcrypt from 'bcrypt'
 import { apiRequest } from '@/lib/api'
 import { prisma } from '../prisma'
 import { createSession, decrypt, deleteSession } from '../session'
 
+const { logger } = Sentry
+
 export async function signIn(prevState: unknown, formData: FormData) {
   const email = formData.get('email') as string
   const password = formData.get('password') as string
+
+  logger.info(logger.fmt`User attempting to sign in with email: ${email}`)
 
   const user = await prisma.user.findFirst({
     where: {
@@ -19,22 +24,32 @@ export async function signIn(prevState: unknown, formData: FormData) {
   })
 
   if (!user) {
+    logger.warn(logger.fmt`User sign in failed with email: ${email}`)
+
     return 'Email! address or password invalid'
   }
 
   if (!bcrypt.compareSync(password, user.password)) {
+    logger.warn(logger.fmt`User sign in failed on pwd: ${password}`)
+
     return 'Email address or password! invalid'
   }
 
   if (!user.verified) {
+    logger.warn(logger.fmt`User sign in failed as not verified: ${email}`)
+
     return 'Email address not verified'
   }
+
+  logger.info(logger.fmt`User sign in successful: ${email}`)
 
   await createSession(user.id)
   redirect('/dashboard?action=sign-in')
 }
 
 export async function signOut() {
+  logger.info('User signing out')
+
   deleteSession()
   redirect('/sign-in?action=sign-out')
 }
