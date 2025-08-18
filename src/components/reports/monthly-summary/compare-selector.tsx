@@ -1,6 +1,5 @@
 import { Dispatch, SetStateAction } from 'react'
 import { ComparePeriod } from '@/types'
-import styles from './style.module.scss'
 
 export default function CompareSelector<CP extends ComparePeriod>({
   comparePeriod,
@@ -14,7 +13,7 @@ export default function CompareSelector<CP extends ComparePeriod>({
   hasYearOverYearReport: boolean
 }) {
   return (
-    <div className={styles['compare-selector']}>
+    <div className="flex justify-center gap-5">
       <div>
         <input
           type="radio"

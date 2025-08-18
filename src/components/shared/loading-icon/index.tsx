@@ -1,4 +1,4 @@
-import styles from './style.module.scss'
+import cx from 'clsx'
 
 export default function LoadingIcon({
   color = 'var(--white)',
@@ -7,12 +7,8 @@ export default function LoadingIcon({
   color?: string
   className?: string
 }) {
-  const mergedClassName = className
-    ? `${styles.loading} ${className}`
-    : styles.loading
-
   return (
-    <div className={mergedClassName}>
+    <div className={cx('animate-spin inline-block align-middle', className)}>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         height="24px"

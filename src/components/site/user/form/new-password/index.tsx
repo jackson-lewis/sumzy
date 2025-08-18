@@ -2,7 +2,8 @@ import { useEffect, useState } from 'react'
 import { PasswordValidationTypes } from '@/types/user'
 import { validatePassword } from '@/lib/user'
 import { FormField } from '..'
-import styles from './style.module.scss'
+
+// Removed SCSS import
 
 export default function NewPasswordField({
   setDisableSubmit,
@@ -68,7 +69,7 @@ export default function NewPasswordField({
         }}
         error={error}
       />
-      <ul className={styles.passwordValidations}>
+      <ul className="mt-4 mb-4 flex flex-col gap-2 text-sm">
         {validationTypes.map(({ name, label }) => (
           <PasswordValidationLine
             key={name}
@@ -103,7 +104,7 @@ function PasswordValidationLine({
   pass?: boolean
 }) {
   return (
-    <li data-testid={name} data-pass={pass}>
+    <li data-testid={name} data-pass={pass} className="flex items-center gap-2">
       {pass ? (
         <svg
           xmlns="http://www.w3.org/2000/svg"

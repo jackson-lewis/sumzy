@@ -1,5 +1,5 @@
 import { CSSProperties } from 'react'
-import styles from './style.module.scss'
+import cx from 'clsx'
 
 export function Skeleton({
   variant,
@@ -8,10 +8,14 @@ export function Skeleton({
   variant: 'text' | 'rect' | 'circle'
   style?: CSSProperties
 }) {
-  return (
-    <div
-      className={[styles.skeleton, styles[variant]].join(' ')}
-      style={style}
-    />
-  )
+  const base = 'block w-full bg-[#f0f0f0] rounded animate-pulse'
+  let variantClass = ''
+  if (variant === 'text') {
+    variantClass = ''
+  } else if (variant === 'rect') {
+    variantClass = ''
+  } else if (variant === 'circle') {
+    variantClass = 'rounded-full'
+  }
+  return <div className={cx(base, variantClass)} style={style} />
 }

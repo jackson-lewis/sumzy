@@ -2,58 +2,65 @@
 
 import Link from 'next/link'
 import useTransactions from '@/lib/use-transactions'
-import styles from './style.module.scss'
 
 export default function MobileNavBar() {
   const { showEditModal } = useTransactions()
 
   return (
-    <div className={styles.wrapper}>
+    <div className="w-full px-2.5 pt-2.5 pb-[22px] fixed bottom-0 left-0 right-0 z-[1000] border-t border-[#2e3735] bg-black">
       <nav>
-        <ul className={styles.ul}>
+        <ul className="flex justify-around list-none m-0 p-0">
           <li>
-            <Link href="/dashboard/expenses">
+            <Link href="/dashboard/expenses" className="w-12 h-12 p-1.5 block">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="36px"
                 viewBox="0 -960 960 960"
                 width="36px"
+                className="block fill-white"
               >
                 <path d="M440-313v-447q0-17 11.5-28.5T480-800q17 0 28.5 11.5T520-760v447l196-196q12-12 28-11.5t28 12.5q11 12 11.5 28T772-452L508-188q-6 6-13 8.5t-15 2.5q-8 0-15-2.5t-13-8.5L188-452q-11-11-11-27.5t11-28.5q12-12 28.5-12t28.5 12l195 195Z" />
               </svg>
             </Link>
           </li>
           <li>
-            <Link href="/dashboard/income">
+            <Link href="/dashboard/income" className="w-12 h-12 p-1.5 block">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="36px"
                 viewBox="0 -960 960 960"
                 width="36px"
+                className="block fill-white"
               >
                 <path d="M440-647 244-451q-12 12-28 11.5T188-452q-11-12-11.5-28t11.5-28l264-264q6-6 13-8.5t15-2.5q8 0 15 2.5t13 8.5l264 264q11 11 11 27.5T772-452q-12 12-28.5 12T715-452L520-647v447q0 17-11.5 28.5T480-160q-17 0-28.5-11.5T440-200v-447Z" />
               </svg>
             </Link>
           </li>
           <li>
-            <button onClick={() => showEditModal()}>
+            <button
+              onClick={() => showEditModal()}
+              className="w-12 h-12 p-1.5 block cursor-pointer bg-none border-none"
+              type="button"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="36px"
                 viewBox="0 -960 960 960"
                 width="36px"
+                className="block fill-white"
               >
                 <path d="M440-440v120q0 17 11.5 28.5T480-280q17 0 28.5-11.5T520-320v-120h120q17 0 28.5-11.5T680-480q0-17-11.5-28.5T640-520H520v-120q0-17-11.5-28.5T480-680q-17 0-28.5 11.5T440-640v120H320q-17 0-28.5 11.5T280-480q0 17 11.5 28.5T320-440h120Zm40 360q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480v320q0 33-23.5 56.5T800-80H480Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z" />
               </svg>
             </button>
           </li>
           <li>
-            <Link href="/dashboard/reports">
+            <Link href="/dashboard/reports" className="w-12 h-12 p-1.5 block">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 height="36px"
                 viewBox="0 -960 960 960"
                 width="36px"
+                className="block fill-white"
               >
                 <path d="M160-120q-17 0-28.5-11.5T120-160v-40q0-17 11.5-28.5T160-240q17 0 28.5 11.5T200-200v40q0 17-11.5 28.5T160-120Zm160 0q-17 0-28.5-11.5T280-160v-220q0-17 11.5-28.5T320-420q17 0 28.5 11.5T360-380v220q0 17-11.5 28.5T320-120Zm160 0q-17 0-28.5-11.5T440-160v-140q0-17 11.5-28.5T480-340q17 0 28.5 11.5T520-300v140q0 17-11.5 28.5T480-120Zm160 0q-17 0-28.5-11.5T600-160v-200q0-17 11.5-28.5T640-400q17 0 28.5 11.5T680-360v200q0 17-11.5 28.5T640-120Zm160 0q-17 0-28.5-11.5T760-160v-360q0-17 11.5-28.5T800-560q17 0 28.5 11.5T840-520v360q0 17-11.5 28.5T800-120ZM560-481q-16 0-30.5-6T503-504L400-607 188-395q-12 12-28.5 11.5T131-396q-11-12-10.5-28.5T132-452l211-211q12-12 26.5-17.5T400-686q16 0 31 5.5t26 17.5l103 103 212-212q12-12 28.5-11.5T829-771q11 12 10.5 28.5T828-715L617-504q-11 11-26 17t-31 6Z" />
               </svg>

@@ -3,7 +3,6 @@ import { Category, CategoryType, DefaultCategory, Report } from '@prisma/client'
 import { Fragment } from 'react/jsx-runtime'
 import { useCategories } from '@/lib/swr'
 import Money from '@/components/global/money'
-import styles from './style.module.scss'
 
 function CategoryGroup({
   categories,
@@ -15,7 +14,7 @@ function CategoryGroup({
   return (
     <>
       <h2>{title}</h2>
-      <dl className={styles['expense-categories']}>
+      <dl className="grid grid-cols-2 gap-y-1">
         {categories.map((category) => {
           if (category.amount === 0) {
             return null
@@ -23,8 +22,10 @@ function CategoryGroup({
 
           return (
             <Fragment key={category.id}>
-              <dt>{category?.name}</dt>
-              <dd>
+              <dt className="pb-1 border-b border-[#ddd] last:border-b-0 last:pb-0">
+                {category?.name}
+              </dt>
+              <dd className="pb-1 border-b border-[#ddd] last:border-b-0 last:pb-0 m-0">
                 <Money amount={category.amount} />
               </dd>
             </Fragment>

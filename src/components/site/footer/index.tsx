@@ -1,8 +1,6 @@
-import styles from './style.module.scss'
-
 export default function Footer() {
   return (
-    <footer className={styles.footer}>
+    <footer className="w-full py-4 text-center text-xs text-muted-foreground border-t border-border">
       <small>&copy; 2024 sumzy</small>
     </footer>
   )

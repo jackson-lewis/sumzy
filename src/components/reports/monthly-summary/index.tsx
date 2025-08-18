@@ -7,7 +7,6 @@ import { useReports } from '@/lib/swr'
 import Money from '@/components/global/money'
 import CompareSelector from './compare-selector'
 import ExpenseCategories from './expense-categories'
-import styles from './style.module.scss'
 
 function Total({
   title,
@@ -39,16 +38,24 @@ function Total({
   return (
     <>
       <dt>{title}</dt>
-      <dd className={styles.total}>
+      <dd className="font-semibold text-xl row-start-2">
         <Money amount={total} />
       </dd>
       {compareTotal !== undefined ? (
-        <dd className={[styles.compare, styles[direction]].join(' ')}>
+        <dd
+          className={
+            direction === 'positive'
+              ? 'row-start-3 text-green-600'
+              : direction === 'negative'
+                ? 'row-start-3 text-red-600'
+                : 'row-start-3'
+          }
+        >
           <Money amount={compareTotal.amount} />
           <span>{`${compareTotal.percentage}%`}</span>
         </dd>
       ) : (
-        <dd className={styles.compare} />
+        <dd className="row-start-3" />
       )}
     </>
   )
@@ -98,7 +105,7 @@ export default function MonthlySummaryReport() {
       <ExpenseCategories categoryTotals={report.tCategories} />
       {report.compare && (
         <>
-          <dl className={styles.totals}>
+          <dl className="mt-[50px] p-2.5 grid grid-cols-3 gap-2.5 border border-[#ddd] rounded-lg text-center">
             <Total
               title="Income"
               total={report.tIncome}

@@ -1,7 +1,8 @@
 import { Suspense } from 'react'
 import { SWRConfig } from 'swr'
 import TransactionsProvider from '@/lib/transactions-context'
-import styles from './layout.module.scss'
+
+// Removed SCSS import
 
 export default function DashboardLayout({
   children
@@ -12,7 +13,7 @@ export default function DashboardLayout({
     <SWRConfig>
       <Suspense>
         <TransactionsProvider>
-          <main className={styles.main}>{children}</main>
+          <main className="px-5 pt-5 pb-[100px]">{children}</main>
           <div id="transaction-modal-root" />
         </TransactionsProvider>
       </Suspense>
