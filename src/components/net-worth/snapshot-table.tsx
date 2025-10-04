@@ -90,7 +90,10 @@ export default function NetWorthSnapshotTable() {
               key={date}
               className="text-right font-mono tabular-nums font-normal"
             >
-              {new Date(date).toLocaleDateString()}
+              {new Date(date).toLocaleDateString('en-GB', {
+                year: 'numeric',
+                month: 'short'
+              })}
             </TableHead>
           ))}
         </TableRow>
