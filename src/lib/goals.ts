@@ -1,3 +1,5 @@
+'use server'
+
 import { cookies } from 'next/headers'
 import { prisma } from './prisma'
 import { decrypt } from './session'
@@ -46,7 +48,36 @@ export async function getGoal(slug: string) {
       throw new Error('Goal not found')
     }
 
-    return data[0]
+    return JSON.parse(JSON.stringify(data[0])) as (typeof data)[0]
+  } catch (error) {
+    if (error instanceof Error) {
+      throw new Error(error.message)
+    }
+    throw new Error('An unexpected error occurred.')
+  }
+}
+
+export async function deleteGoal(id: number) {
+  const cookie = (await cookies()).get('session')?.value
+  const session = await decrypt(cookie)
+
+  if (!session) {
+    throw new Error('Session not found')
+  }
+
+  try {
+    const deleted = await prisma.customTracking.deleteMany({
+      where: {
+        id,
+        userId: Number(session.userId)
+      }
+    })
+
+    if (deleted.count === 0) {
+      throw new Error('Goal not found or not deleted')
+    }
+
+    return deleted
   } catch (error) {
     if (error instanceof Error) {
       throw new Error(error.message)
