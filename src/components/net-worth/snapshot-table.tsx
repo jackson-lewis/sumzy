@@ -55,9 +55,9 @@ export default function NetWorthSnapshotTable() {
   })
 
   const accountIds = Array.from(accountMap.keys())
-  const dates = Array.from(dateMap.keys()).sort(
-    (a, b) => new Date(a).getTime() - new Date(b).getTime()
-  )
+  const dates = Array.from(dateMap.keys())
+    .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
+    .reverse()
 
   // Build a lookup: accountId -> date -> balance
   const balanceLookup: Record<number, Record<string, number>> = {}
