@@ -9,7 +9,7 @@ import { ChartConfig, ChartContainer } from '../ui/chart'
 
 export default function NetWorthTotalChart() {
   const { data = [], isLoading } = useNetWorthSnapshots()
-  const [range, setRange] = useState<'6m' | '12m' | 'max'>('12m')
+  const [range, setRange] = useState<'6m' | '12m' | 'max'>('max')
 
   if (isLoading) {
     return (
