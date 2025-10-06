@@ -1,4 +1,4 @@
-import { startTransition, useEffect, useState } from 'react'
+import { use, useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import {
   CartesianGrid,
@@ -16,39 +16,36 @@ import {
   ChartTooltipContent
 } from '../ui/chart'
 
-export default function GoalChart({ id }: { id: number }) {
+export default function GoalChart({
+  data
+}: {
+  data: ReturnType<typeof getCustomTrackingMeta>
+}) {
+  const metaData = use(data)
+  const metaDataParsed = metaData.map((item) => ({
+    name: new Date(item.date).toISOString().slice(0, 7),
+    amount: Number(item.amount)
+  }))
+
   const dateOptions: Intl.DateTimeFormatOptions = {
     month: 'short'
   }
 
-  const [metaData, setMetaData] = useState<{ name: string; amount: number }[]>(
-    []
-  )
   const [view, setView] = useState<'max' | '6m' | '12m'>('max')
-
-  useEffect(() => {
-    startTransition(async () => {
-      const data = await getCustomTrackingMeta(id)
-      setMetaData(
-        data.map((item) => ({
-          name: new Date(item.date).toISOString().slice(0, 7),
-          amount: Number(item.amount)
-        }))
-      )
-    })
-  }, [id])
 
   // Filter metaData based on view
   const filteredMetaData = (() => {
     if (view === 'max') {
-      return metaData
+      return metaDataParsed
     }
 
-    if (metaData.length === 0) {
+    if (metaDataParsed.length === 0) {
       return []
     }
 
-    const sorted = [...metaData].sort((a, b) => a.name.localeCompare(b.name))
+    const sorted = [...metaDataParsed].sort((a, b) =>
+      a.name.localeCompare(b.name)
+    )
 
     if (view === '6m') {
       return sorted.slice(-6)
@@ -58,7 +55,7 @@ export default function GoalChart({ id }: { id: number }) {
       return sorted.slice(-12)
     }
 
-    return metaData
+    return metaDataParsed
   })()
 
   const formattedData = filteredMetaData.map((item) => ({

@@ -1,3 +1,6 @@
+'use client'
+
+import { use } from 'react'
 import { getCustomTrackingMeta } from '@/lib/actions/get-custom-tracking-meta'
 import {
   Table,
@@ -8,8 +11,12 @@ import {
   TableRow
 } from '@/components/ui/table'
 
-export default async function TableComponent({ id }: { id: number }) {
-  const data = await getCustomTrackingMeta(id)
+export default function TableComponent({
+  data
+}: {
+  data: ReturnType<typeof getCustomTrackingMeta>
+}) {
+  const metaData = use(data)
 
   return (
     <Table className="mt-8">
@@ -20,7 +27,7 @@ export default async function TableComponent({ id }: { id: number }) {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.reverse().map((row) => (
+        {metaData.reverse().map((row) => (
           <TableRow key={row.date.toString()}>
             <TableCell>
               {new Date(row.date).toLocaleDateString('en-GB', {

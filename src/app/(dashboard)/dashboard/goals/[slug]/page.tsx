@@ -1,3 +1,4 @@
+import { getCustomTrackingMeta } from '@/lib/actions/get-custom-tracking-meta'
 import { getGoal } from '@/lib/goals'
 import AddEntryForm from '@/components/goals/add-entry-form'
 import ChartWrapper from '@/components/goals/chart'
@@ -13,6 +14,7 @@ export default async function Goal({
 }) {
   const { slug } = await params
   const goal = await getGoal(slug)
+  const data = getCustomTrackingMeta(goal.id)
   const createdDate = new Date(goal.createdAt)
   const formattedDate = createdDate.toLocaleDateString('en-GB', {
     year: 'numeric',
@@ -27,9 +29,9 @@ export default async function Goal({
         title={goal.name}
         action={<AddEntryForm goal={goal} />}
       />
-      <GoalSummary goal={goal} />
-      <ChartWrapper id={goal.id} />
-      <Table id={goal.id} />
+      <GoalSummary data={data} goal={goal} />
+      <ChartWrapper data={data} />
+      <Table data={data} />
       <div className="mt-8 text-center">
         <span className="block mb-2">Created: {formattedDate}</span>
         <GoalDeleteButton goal={goal} />
