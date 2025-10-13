@@ -4,11 +4,13 @@ import { useCategories, useTx } from '@/lib/swr'
 import { getTransactionCategory } from '@/lib/transactions'
 import Money from '@/components/global/money'
 import { Button } from '@/components/ui/button'
+import CreateSubscriptionForm from './CreateSubscriptionForm'
 
 export default function Details({ id }: { id: string }) {
   const { data: transactions, isLoading } = useTx()
   const { data: categories } = useCategories()
   const [transaction, setTransaction] = useState<Transaction | null>(null)
+  const [showForm, setShowForm] = useState(false)
 
   useEffect(() => {
     if (transactions) {
@@ -61,9 +63,20 @@ export default function Details({ id }: { id: string }) {
         </span>
       </div>
       <div className="mt-6">
-        <Button variant="outline" className="w-full">
-          Create Subscription
-        </Button>
+        {showForm ? (
+          <CreateSubscriptionForm
+            originTransactionId={transaction.id}
+            onCreated={() => setShowForm(false)}
+          />
+        ) : (
+          <Button
+            variant="outline"
+            className="w-full"
+            onClick={() => setShowForm(true)}
+          >
+            Create Subscription
+          </Button>
+        )}
       </div>
     </div>
   )

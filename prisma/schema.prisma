@@ -24,6 +24,7 @@ model User {
   customTrackings CustomTracking[]
   accounts   Account[]
   snapshots  NetWorthSnapshot[]
+  subscriptions Subscription[]
 }
 
 model DefaultCategory {
@@ -39,6 +40,11 @@ model Category {
   transactions Transaction[]
 }
 
+enum CategoryType {
+  DEFAULT
+  USER
+}
+
 model Transaction {
   id                Int       @id @default(autoincrement())
   userId            Int
@@ -50,11 +56,28 @@ model Transaction {
   date              DateTime  @default(now())
   category          Category? @relation(fields: [categoryId], references: [id])
   defaultCategory   DefaultCategory? @relation(fields: [defaultCategoryId], references: [id])
+  subscriptionId    Int? // Optional: not all transactions have a subscription
+  subscription      Subscription? @relation("SubscriptionTransactions", fields: [subscriptionId], references: [id]) // Optional
+  originOfSubscription Subscription? @relation("OriginTransaction")
 }
 
-enum CategoryType {
-  DEFAULT
-  USER
+model Subscription {
+  id                Int       @id @default(autoincrement())
+  userId            Int
+  amount            Decimal
+  description       String?
+  categoryId        Int?
+  defaultCategoryId Int?
+  categoryType      CategoryType
+  frequency         FrequencyType
+  originTransactionId Int @unique
+  originTransaction Transaction @relation("OriginTransaction", fields: [originTransactionId], references: [id])
+  transactions      Transaction[] @relation("SubscriptionTransactions")
+  user              User @relation(fields: [userId], references: [id])
+}
+
+enum FrequencyType {
+  DATE_OF_MONTH
 }
 
 model Event {
@@ -133,3 +156,4 @@ model AccountBalance {
   accountId           Int
   balance             Decimal
 }
+

@@ -90,5 +90,6 @@ export const transaction: Transaction = {
   categoryType: 'DEFAULT',
   categoryId: null,
   defaultCategoryId: 1,
-  description: 'Test transaction'
+  description: 'Test transaction',
+  subscriptionId: null
 }
