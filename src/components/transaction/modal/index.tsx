@@ -2,6 +2,7 @@
 
 import { type ComponentRef, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import { X } from 'lucide-react'
 import { createPortal } from 'react-dom'
 import Details from './details'
 
@@ -22,30 +23,19 @@ export function Modal({ id }: { id: string }) {
   return createPortal(
     <dialog
       ref={dialogRef}
-      className="rounded-lg shadow-lg border border-border bg-background p-0 max-w-lg w-full min-h-[200px] relative"
+      className="fixed inset-0 m-5 rounded-xl shadow-2xl border border-border bg-muted p-0 w-[calc(100vw-40px)] h-[calc(100vh-40px)] max-w-none max-h-none flex flex-col justify-center"
       onClose={onClose}
+      style={{ padding: 0 }}
     >
       <Details id={id} />
       <button
         onClick={onClose}
-        className="absolute top-4 right-4 w-8 h-8 rounded-full bg-muted flex items-center justify-center hover:bg-muted-foreground transition"
+        className="absolute top-4 right-4 w-9 h-9 rounded-full border border-border bg-background/80 text-foreground flex items-center justify-center shadow-lg hover:bg-accent hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-none transition"
         aria-label="Close"
+        type="button"
       >
         <span className="sr-only">Close</span>
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 16 16"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M4 4L12 12M12 4L4 12"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </svg>
+        <X className="w-5 h-5" />
       </button>
     </dialog>,
     document.getElementById('transaction-modal-root')!
