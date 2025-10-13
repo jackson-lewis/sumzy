@@ -1,3 +1,5 @@
+'use client'
+
 import { useEffect, useState } from 'react'
 import { Transaction } from '@prisma/client'
 import { useCategories, useTx } from '@/lib/swr'
