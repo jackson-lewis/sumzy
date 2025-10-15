@@ -58,6 +58,8 @@ model Transaction {
   defaultCategory   DefaultCategory? @relation(fields: [defaultCategoryId], references: [id])
   subscriptionId    Int? // Optional: not all transactions have a subscription
   subscription      Subscription? @relation("SubscriptionTransactions", fields: [subscriptionId], references: [id]) // Optional
+  merchantId        Int?
+  merchant          Merchant? @relation(fields: [merchantId], references: [id])
   originOfSubscription Subscription? @relation("OriginTransaction")
 }
 
@@ -74,10 +76,19 @@ model Subscription {
   originTransaction Transaction @relation("OriginTransaction", fields: [originTransactionId], references: [id])
   transactions      Transaction[] @relation("SubscriptionTransactions")
   user              User @relation(fields: [userId], references: [id])
+  merchantId        Int?
+  merchant          Merchant? @relation(fields: [merchantId], references: [id])
 }
 
 enum FrequencyType {
   DATE_OF_MONTH
+}
+
+model Merchant {
+  id            Int            @id @default(autoincrement())
+  name          String
+  transactions  Transaction[]
+  subscriptions Subscription[]
 }
 
 model Event {
