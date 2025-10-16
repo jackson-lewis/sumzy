@@ -5,7 +5,14 @@ import { prisma } from '@/lib/prisma'
 
 const { logger } = Sentry
 
+const monitorSlug = 'subscription'
+
 export async function GET() {
+  const checkInId = Sentry.captureCheckIn({
+    monitorSlug,
+    status: 'in_progress'
+  })
+
   const today = new Date()
   const dayOfMonth = today.getDate()
 
@@ -19,7 +26,7 @@ export async function GET() {
   })
 
   logger.info(
-    `Found ${subscriptions.length} subscriptions with frequency DATE_OF_MONTH`
+    logger.fmt`Found ${subscriptions.length} subscriptions with frequency DATE_OF_MONTH`
   )
 
   const matchingSubs = subscriptions.filter((sub) => {
@@ -29,7 +36,7 @@ export async function GET() {
   })
 
   logger.info(
-    `${matchingSubs.length} subscriptions match today's day (${dayOfMonth})`
+    logger.fmt`Found ${matchingSubs.length} subscriptions match today's day (${dayOfMonth})`
   )
 
   let createdCount = 0
@@ -48,9 +55,15 @@ export async function GET() {
     })
     createdCount++
     logger.info(
-      `Created transaction for subscription ${sub.id} (user ${sub.userId})`
+      logger.fmt`Created transaction for subscription ${sub.id} (user ${sub.userId})`
     )
   }
+
+  Sentry.captureCheckIn({
+    checkInId,
+    monitorSlug,
+    status: 'ok'
+  })
 
   return NextResponse.json({ created: createdCount })
 }
