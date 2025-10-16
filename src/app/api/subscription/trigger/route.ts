@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 
 const { logger } = Sentry
 
-const monitorSlug = 'subscription'
+const monitorSlug = 'create-transactions-from-subscriptions'
 
 export async function GET() {
   const checkInId = Sentry.captureCheckIn({
