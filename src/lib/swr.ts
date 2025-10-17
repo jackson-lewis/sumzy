@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation'
 import {
   Category,
   DefaultCategory,
+  Merchant,
   Report,
   Transaction,
   User
@@ -65,4 +66,8 @@ export function useReports() {
 
 export function useUser() {
   return useSWR<User>(['/v1/users', getUserToken()], fetcherWithToken)
+}
+
+export function useMerchants() {
+  return useSWR<Merchant[]>('/v1/transactions/merchants', fetcher)
 }

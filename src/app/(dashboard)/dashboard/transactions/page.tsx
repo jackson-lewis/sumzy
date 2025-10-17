@@ -20,6 +20,9 @@ export default function Expenses() {
         <Link href="/dashboard/transactions/categories">
           <Button variant="outline">Manage Categories</Button>
         </Link>
+        <Link href="/dashboard/transactions/merchants" className="ml-4">
+          <Button variant="outline">Manage Merchants</Button>
+        </Link>
       </div>
     </>
   )
