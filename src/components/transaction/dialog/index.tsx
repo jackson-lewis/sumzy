@@ -146,7 +146,9 @@ export default function TransactionDialog() {
           <Select
             name="merchantId"
             value={merchantId}
-            onValueChange={setMerchantId}
+            onValueChange={(val) => {
+              setMerchantId(val)
+            }}
             required
           >
             <SelectTrigger className="w-full">

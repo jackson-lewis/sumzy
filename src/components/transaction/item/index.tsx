@@ -1,7 +1,9 @@
 import Link from 'next/link'
 import { Transaction } from '@prisma/client'
 import { useCategories } from '@/lib/swr'
+import { useMerchants } from '@/lib/swr'
 import { getTransactionCategory } from '@/lib/transactions'
+import { getTransactionMerchant } from '@/lib/transactions-merchant'
 import Money from '@/components/global/money'
 import { Skeleton } from '@/components/shared/skeleton'
 
@@ -11,11 +13,13 @@ export default function TransactionItem({
   transaction: Transaction
 }) {
   const { data: categories } = useCategories()
+  const { data: merchants } = useMerchants()
   const category = getTransactionCategory(
     transaction,
     categories?.defaultCategories,
     categories?.userCategories
   )
+  const merchant = getTransactionMerchant(transaction, merchants)
 
   const amount = Number(transaction.amount)
 
@@ -31,7 +35,7 @@ export default function TransactionItem({
             className={amount > 0 ? 'text-green-500' : ''}
           />
           <p className="text-sm text-foreground/80">
-            {transaction.description}
+            {merchant?.name || transaction.description}
           </p>
           {!!category && (
             <span className="inline-block rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">

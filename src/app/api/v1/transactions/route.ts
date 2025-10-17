@@ -12,7 +12,8 @@ export async function POST(req: NextRequest) {
     categoryId,
     categoryType,
     date,
-    description
+    description,
+    merchantId
   }: {
     categoryType: CategoryType
     categoryId: string
@@ -33,7 +34,8 @@ export async function POST(req: NextRequest) {
         defaultCategoryId:
           categoryType === CategoryType.DEFAULT ? Number(trueCategoryId) : null,
         date: trueDate.toISOString() as unknown as Date,
-        description
+        description,
+        merchantId: Number(merchantId)
       }
     })
 
