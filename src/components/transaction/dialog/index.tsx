@@ -5,7 +5,7 @@ import { TransactionDirection } from '@/types'
 import { CategoryType } from '@prisma/client'
 import { logger } from '@sentry/nextjs'
 import { transactionAction } from '@/lib/actions/transaction'
-import { useCategories, useTx } from '@/lib/swr'
+import { useCategories, useMerchants, useTx } from '@/lib/swr'
 import useTransactions from '@/lib/use-transactions'
 import { SubmitButton } from '@/components/site/user/form'
 import { Button } from '@/components/ui/button'
@@ -22,6 +22,9 @@ import {
 import DateSelector from './date-selector'
 
 export default function TransactionDialog() {
+  // Merchant select state
+  const { data: merchants = [] } = useMerchants()
+  const [merchantId, setMerchantId] = useState<string>('')
   const { closeEditModal, transaction, transactionSetup, setTransactionSetup } =
     useTransactions()
   const [amountValue, setAmountValue] = useState<string>('')
@@ -137,16 +140,26 @@ export default function TransactionDialog() {
           }
         />
         <div className="mt-4">
-          <label htmlFor="desc" className="block mb-1">
-            Description
+          <label htmlFor="merchantId" className="block mb-1">
+            Merchant
           </label>
-          <Input
-            type="text"
-            name="description"
-            id="desc"
-            value={descValue}
-            onChange={(event) => setDescValue(event.target.value)}
-          />
+          <Select
+            name="merchantId"
+            value={merchantId}
+            onValueChange={setMerchantId}
+            required
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Select merchant" />
+            </SelectTrigger>
+            <SelectContent>
+              {merchants.map((merchant) => (
+                <SelectItem key={merchant.id} value={merchant.id.toString()}>
+                  {merchant.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         {data ? (
           <div className="mt-4">
@@ -182,6 +195,18 @@ export default function TransactionDialog() {
         ) : (
           <p>Failed to load categories</p>
         )}
+        <div className="mt-4">
+          <label htmlFor="desc" className="block mb-1">
+            Description
+          </label>
+          <Input
+            type="text"
+            name="description"
+            id="desc"
+            value={descValue}
+            onChange={(event) => setDescValue(event.target.value)}
+          />
+        </div>
         <div className="mt-4">
           <DateSelector value={transaction?.date} />
         </div>
