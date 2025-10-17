@@ -32,7 +32,7 @@ export default function TransactionDialog() {
   const [categoryType, setCategoryType] = useState<CategoryType>()
   const [descValue, setDescValue] = useState<string>('')
   const update = !!transaction
-  const [state, formAction] = useActionState(transactionAction, null)
+  const [state, formAction, pending] = useActionState(transactionAction, null)
   const { data } = useCategories()
   const { data: transactions, mutate } = useTx()
 
@@ -212,8 +212,14 @@ export default function TransactionDialog() {
         <div className="mt-4">
           <DateSelector value={transaction?.date} />
         </div>
-        <SubmitButton className="w-full">
-          {update ? 'Update' : 'Add'}
+        <SubmitButton className="w-full" disabled={pending}>
+          {pending
+            ? update
+              ? 'Updating...'
+              : 'Adding...'
+            : update
+              ? 'Update'
+              : 'Add'}
         </SubmitButton>
       </fieldset>
     </form>
