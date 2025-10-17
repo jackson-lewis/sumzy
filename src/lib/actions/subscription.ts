@@ -24,6 +24,7 @@ export async function createSubscription({
       categoryId: origin.categoryId,
       defaultCategoryId: origin.defaultCategoryId,
       categoryType: origin.categoryType,
+      merchantId: origin.merchantId,
       frequency,
       originTransactionId: origin.id
     }

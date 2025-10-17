@@ -50,7 +50,8 @@ export async function GET() {
         defaultCategoryId: sub.defaultCategoryId,
         categoryType: sub.categoryType,
         date: today,
-        subscriptionId: sub.id
+        subscriptionId: sub.id,
+        merchantId: sub.merchantId
       }
     })
     createdCount++
