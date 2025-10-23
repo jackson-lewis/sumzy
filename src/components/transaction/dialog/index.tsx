@@ -9,6 +9,7 @@ import { useCategories, useMerchants, useTx } from '@/lib/swr'
 import useTransactions from '@/lib/use-transactions'
 import { SubmitButton } from '@/components/site/user/form'
 import { Button } from '@/components/ui/button'
+import { Combobox } from '@/components/ui/combobox'
 import { CurrencyInput } from '@/components/ui/currency-input'
 import { Input } from '@/components/ui/input'
 import { ResponsiveDialog } from '@/components/ui/responsive-dialog'
@@ -24,7 +25,6 @@ import DateSelector from './date-selector'
 export default function TransactionDialog() {
   // Merchant select state
   const { data: merchants = [] } = useMerchants()
-  const [merchantId, setMerchantId] = useState<string>('')
   const { closeEditModal, transaction, transactionSetup, setTransactionSetup } =
     useTransactions()
   const [amountValue, setAmountValue] = useState<string>('')
@@ -147,25 +147,14 @@ export default function TransactionDialog() {
           <label htmlFor="merchantId" className="block mb-1">
             Merchant
           </label>
-          <Select
+          <Combobox
+            label="Merchant"
             name="merchantId"
-            value={merchantId}
-            onValueChange={(val) => {
-              setMerchantId(val)
-            }}
-            required
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select merchant" />
-            </SelectTrigger>
-            <SelectContent>
-              {merchants.map((merchant) => (
-                <SelectItem key={merchant.id} value={merchant.id.toString()}>
-                  {merchant.name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            options={merchants.map((merchant) => ({
+              value: merchant.id.toString(),
+              label: merchant.name
+            }))}
+          />
         </div>
         {data ? (
           <div className="mt-4">
