@@ -37,6 +37,10 @@ export default function TransactionDialog() {
   const { data: transactions, mutate } = useTx()
 
   useEffect(() => {
+    setTransactionSetup(['expense', undefined])
+  }, [setTransactionSetup])
+
+  useEffect(() => {
     if (transaction) {
       setAmountValue(transaction.amount.toString())
       setCategoryValue(
