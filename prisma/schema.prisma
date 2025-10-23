@@ -25,6 +25,7 @@ model User {
   accounts   Account[]
   snapshots  NetWorthSnapshot[]
   subscriptions Subscription[]
+  favoriteMerchants Merchant[] @relation("FavoriteMerchants")
 }
 
 model DefaultCategory {
@@ -89,6 +90,7 @@ model Merchant {
   name          String
   transactions  Transaction[]
   subscriptions Subscription[]
+  favorites     User[]         @relation("FavoriteMerchants")
 }
 
 model Event {
