@@ -69,5 +69,8 @@ export function useUser() {
 }
 
 export function useMerchants() {
-  return useSWR<Merchant[]>('/v1/transactions/merchants', fetcher)
+  return useSWR<(Merchant & { favorites: User[] })[]>(
+    '/v1/transactions/merchants',
+    fetcher
+  )
 }

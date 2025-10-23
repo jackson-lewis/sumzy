@@ -28,7 +28,7 @@ export default function CreateMerchantForm() {
         merchantId: state.data?.id
       })
 
-      mutate([...merchants, state.data])
+      mutate([...merchants, { ...state.data, favorites: [] }])
     }
   }, [mutate, state])
 

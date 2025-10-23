@@ -5,7 +5,7 @@ import { TransactionDirection } from '@/types'
 import { CategoryType } from '@prisma/client'
 import { logger } from '@sentry/nextjs'
 import { transactionAction } from '@/lib/actions/transaction'
-import { useCategories, useMerchants, useTx } from '@/lib/swr'
+import { useCategories, useMerchants, useTx, useUser } from '@/lib/swr'
 import useTransactions from '@/lib/use-transactions'
 import { SubmitButton } from '@/components/site/user/form'
 import { Button } from '@/components/ui/button'
@@ -35,6 +35,7 @@ export default function TransactionDialog() {
   const [state, formAction, pending] = useActionState(transactionAction, null)
   const { data } = useCategories()
   const { data: transactions, mutate } = useTx()
+  const { data: user } = useUser()
 
   useEffect(() => {
     setTransactionSetup(['expense', undefined])
@@ -150,10 +151,18 @@ export default function TransactionDialog() {
           <Combobox
             label="Merchant"
             name="merchantId"
-            options={merchants.map((merchant) => ({
-              value: merchant.id.toString(),
-              label: merchant.name
-            }))}
+            options={merchants
+              .sort((a, b) => {
+                const isAFavorited = a.favorites?.some((u) => u.id === user?.id)
+                const isBFavorited = b.favorites?.some((u) => u.id === user?.id)
+                if (isAFavorited && !isBFavorited) return -1
+                if (!isAFavorited && isBFavorited) return 1
+                return 0
+              })
+              .map((merchant) => ({
+                value: merchant.id.toString(),
+                label: merchant.name
+              }))}
           />
         </div>
         {data ? (
