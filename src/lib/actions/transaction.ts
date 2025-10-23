@@ -2,6 +2,7 @@
 
 import { Prisma, Transaction } from '@prisma/client'
 import * as Sentry from '@sentry/nextjs'
+import { prisma } from '@/lib/prisma'
 import { apiRequest } from '../api'
 
 const { logger } = Sentry
@@ -39,4 +40,12 @@ export async function transactionAction(
   }
 
   return response.data
+}
+
+export async function deleteTransaction(transactionId: number) {
+  // You may want to add session/cookie validation here if needed
+  await prisma.transaction.delete({
+    where: { id: transactionId }
+  })
+  return { success: true }
 }

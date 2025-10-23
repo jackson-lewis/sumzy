@@ -1,7 +1,9 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { Transaction } from '@prisma/client'
+import { deleteTransaction } from '@/lib/actions/transaction'
 import { useCategories, useTx } from '@/lib/swr'
 import { getTransactionCategory } from '@/lib/transactions'
 import Money from '@/components/global/money'
@@ -9,10 +11,11 @@ import { Button } from '@/components/ui/button'
 import CreateSubscriptionForm from './CreateSubscriptionForm'
 
 export default function Details({ id }: { id: string }) {
-  const { data: transactions, isLoading } = useTx()
+  const { data: transactions, isLoading, mutate } = useTx()
   const { data: categories } = useCategories()
   const [transaction, setTransaction] = useState<Transaction | null>(null)
   const [showForm, setShowForm] = useState(false)
+  const router = useRouter()
 
   useEffect(() => {
     if (transactions) {
@@ -36,6 +39,22 @@ export default function Details({ id }: { id: string }) {
     categories?.defaultCategories,
     categories?.userCategories
   )
+
+  async function handleDelete() {
+    if (transaction) {
+      deleteTransaction(transaction.id)
+
+      mutate(
+        transactions?.filter((tx) => {
+          if (tx.id === transaction.id) {
+            return false
+          }
+          return tx
+        })
+      )
+      router.back()
+    }
+  }
 
   return (
     <div className="p-8 flex flex-col gap-4">
@@ -64,7 +83,7 @@ export default function Details({ id }: { id: string }) {
           })}
         </span>
       </div>
-      <div className="mt-6">
+      <div className="mt-6 flex flex-col gap-2">
         {showForm ? (
           <CreateSubscriptionForm
             originTransactionId={transaction.id}
@@ -79,6 +98,9 @@ export default function Details({ id }: { id: string }) {
             Create Subscription
           </Button>
         )}
+        <Button variant="destructive" className="w-full" onClick={handleDelete}>
+          Delete Transaction
+        </Button>
       </div>
     </div>
   )
