@@ -27,6 +27,10 @@ export default async function Dashboard({
       href: '/dashboard/transactions'
     },
     {
+      name: 'Monthly Summary Report',
+      href: '/dashboard/reports'
+    },
+    {
       name: 'Goals',
       href: '/dashboard/goals'
     },
