@@ -1,5 +1,4 @@
 import { CategoryWithAmount } from '@/types'
-import { Category, CategoryType, DefaultCategory, Report } from '@prisma/client'
 import { Fragment } from 'react/jsx-runtime'
 import { useCategories } from '@/lib/swr'
 import Money from '@/components/global/money'
@@ -13,8 +12,8 @@ function CategoryGroup({
 }) {
   return (
     <>
-      <h2>{title}</h2>
-      <dl className="grid grid-cols-2 gap-y-1">
+      <h3 className="text-lg font-semibold mb-2">{title}</h3>
+      <dl className="grid grid-cols-2 gap-y-1 mb-6">
         {categories.map((category) => {
           if (category.amount === 0) {
             return null
@@ -39,7 +38,9 @@ function CategoryGroup({
 export default function ExpenseCategories({
   categoryTotals
 }: {
-  categoryTotals: Report['tCategories']
+  categoryTotals: {
+    [key: string]: number
+  }
 }) {
   const { data } = useCategories()
 
@@ -47,51 +48,80 @@ export default function ExpenseCategories({
     return <p>Failed to load categories.</p>
   }
 
-  function getCategoriesWithAmount(
-    categories: (Category | DefaultCategory)[],
-    type: CategoryType
-  ) {
-    const marker = type.at(0)
+  const categories = Object.keys(categoryTotals)
+    .map((categoryGuid) => {
+      const [categoryType, categoryIdStr] = categoryGuid.split('-')
+      const categoryId = Number(categoryIdStr)
 
-    if (!categories || !marker) {
-      return []
-    }
+      const category =
+        categoryType === 'DEFAULT'
+          ? data.defaultCategories.find((cat) => cat.id === categoryId)
+          : data.userCategories.find((cat) => cat.id === categoryId)
 
-    const modCategoryTotals = categoryTotals as unknown as {
-      [k: string]: number
-    }
-
-    return categories
-      .map((category) => {
+      if (!category) {
         return {
-          ...category,
-          amount: modCategoryTotals[marker + category.id] || 0
+          id: categoryId,
+          name: 'Unknown',
+          amount: categoryTotals[categoryGuid],
+          type: categoryType
         }
-      })
-      .sort((a, b) => {
-        return a.amount > b.amount ? -1 : 1
-      })
-  }
+      }
 
-  const defaultCategoriesWithAmount = getCategoriesWithAmount(
-    data.defaultCategories,
-    'DEFAULT'
-  )
+      return {
+        ...category,
+        amount: categoryTotals[categoryGuid],
+        type: categoryType
+      }
+    })
+    .sort((a, b) => {
+      return a.amount > b.amount ? -1 : 1
+    })
 
-  const userCategoriesWithAmount = getCategoriesWithAmount(
-    data.userCategories,
-    'USER'
-  )
+  const grouped = [
+    categories.find(
+      (category) => category.type === 'USER' && category.id === 5
+    ),
+    categories.find(
+      (category) => category.type === 'DEFAULT' && category.id === 4
+    ),
+    {
+      id: 99,
+      name: 'Spending',
+      amount: categories.reduce((acc, category) => {
+        const excluded = {
+          DEFAULT: [1, 4, 6, 7],
+          USER: [1, 5, 7]
+        }
+
+        return excluded[category.type as 'DEFAULT' | 'USER']?.includes(
+          category.id
+        )
+          ? acc
+          : acc + (category.amount || 0)
+      }, 0)
+    },
+    {
+      id: 98,
+      name: 'Fixed',
+      amount: categories.reduce((acc, category) => {
+        const included = {
+          DEFAULT: [1, 7],
+          USER: [1]
+        }
+
+        return included[category.type as 'DEFAULT' | 'USER']?.includes(
+          category.id
+        )
+          ? acc + (category.amount || 0)
+          : acc
+      }, 0)
+    }
+  ].filter(Boolean) as CategoryWithAmount[]
 
   return (
     <div>
-      <CategoryGroup
-        categories={[
-          ...defaultCategoriesWithAmount,
-          ...userCategoriesWithAmount
-        ]}
-        title="Categories"
-      />
+      <CategoryGroup categories={grouped} title="Grouped" />
+      <CategoryGroup categories={categories} title="Categories" />
     </div>
   )
 }

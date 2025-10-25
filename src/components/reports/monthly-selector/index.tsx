@@ -23,8 +23,9 @@ export default function MonthlySelector() {
   }
 
   return (
-    <div>
+    <div className="flex gap-4">
       <select name="year" id="year" value={year} onChange={handleChange}>
+        <option>2022</option>
         <option>2023</option>
         <option>2024</option>
         <option>2025</option>

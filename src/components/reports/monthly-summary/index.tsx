@@ -1,11 +1,13 @@
 'use client'
 
-import { useState } from 'react'
-import { ComparePeriod, CompareTotal, Report as FakeReport } from '@/types'
+import { useEffect, useState } from 'react'
+import { CompareTotal } from '@/types'
+import { Transaction } from '@prisma/client'
+import useSWR from 'swr'
 import { useActiveMonth, useActiveYear } from '@/lib/form-submit'
-import { useReports } from '@/lib/swr'
+import { fetcher } from '@/lib/swr'
 import Money from '@/components/global/money'
-import CompareSelector from './compare-selector'
+import MonthlySelector from '../monthly-selector'
 import ExpenseCategories from './expense-categories'
 
 function Total({
@@ -15,7 +17,7 @@ function Total({
 }: {
   title: string
   total: number
-  compareTotal: CompareTotal | undefined
+  compareTotal?: CompareTotal | undefined
 }) {
   let direction = 'neutral'
 
@@ -61,75 +63,79 @@ function Total({
   )
 }
 
-function LastUpdatedDate({ date }: { date: Date }) {
-  const dateTime = date.toLocaleDateString('en-GB', {
-    dateStyle: 'medium'
-  })
-
-  const displayTime = date.toLocaleDateString('en-GB')
-
-  return (
-    <p>
-      Last updated: <time dateTime={dateTime}>{displayTime}</time>
-    </p>
-  )
-}
-
 export default function MonthlySummaryReport() {
-  const { data: report } = useReports()
   const year = useActiveYear()
   const month = useActiveMonth()
+  const { data: transactions } = useSWR<Transaction[]>(
+    `/v1/transactions?from=${year}-${month}-01&to=${year}-${month}-31`,
+    fetcher
+  )
 
   const date = new Date(Number(year), Number(month) - 1)
   const monthYear = date.toLocaleDateString('en-GB', {
     month: 'long',
     year: 'numeric'
   })
-  const [comparePeriod, setComparePeriod] = useState<ComparePeriod>('prevMonth')
+
+  const [report, setReport] = useState<{
+    income: number
+    expense: number
+    surplus: number
+    categories: Record<string, number>
+  }>()
+
+  useEffect(() => {
+    if (transactions) {
+      const newReport: typeof report = {
+        income: 0,
+        expense: 0,
+        surplus: 0,
+        categories: {}
+      }
+
+      transactions.forEach((transaction) => {
+        const amount = Number(transaction.amount)
+        const catKey = [
+          transaction.categoryType,
+          transaction.categoryType === 'DEFAULT'
+            ? transaction.defaultCategoryId
+            : transaction.categoryId
+        ].join('-')
+
+        if (catKey) {
+          newReport.categories[catKey] =
+            (newReport.categories[catKey] || 0) + amount
+        }
+
+        if (amount > 0) {
+          newReport.income += amount
+        } else {
+          newReport.expense += amount
+        }
+      })
+
+      newReport.surplus = newReport.income + newReport.expense
+
+      setReport(newReport)
+    }
+  }, [transactions])
 
   if (!report) {
-    return (
-      <>
-        <h1>{monthYear} Report</h1>
-        <p>Report could not be found.</p>
-      </>
-    )
+    return <div>Loading...</div>
   }
-
-  const compare = report.compare as FakeReport['compare']
 
   return (
     <>
-      <h1>{monthYear} Report</h1>
-      <LastUpdatedDate date={new Date(report.lastUpdatedDate)} />
-      <ExpenseCategories categoryTotals={report.tCategories} />
-      {report.compare && (
-        <>
-          <dl className="mt-[50px] p-2.5 grid grid-cols-3 gap-2.5 border border-[#ddd] rounded-lg text-center">
-            <Total
-              title="Income"
-              total={report.tIncome}
-              compareTotal={compare[comparePeriod]?.income}
-            />
-            <Total
-              title="Expense"
-              total={report.tExpense}
-              compareTotal={compare[comparePeriod]?.expense}
-            />
-            <Total
-              title="Surplus"
-              total={report.tSurplus}
-              compareTotal={compare[comparePeriod]?.surplus}
-            />
-          </dl>
-          <CompareSelector
-            comparePeriod={comparePeriod}
-            setComparePeriod={setComparePeriod}
-            hasPrevMonthReport={!!compare.prevMonth}
-            hasYearOverYearReport={!!compare.yearOverYear}
-          />
-        </>
-      )}
+      <div className="flex items-center justify-between mt-6 mb-6">
+        <h2 className="text-xl">{monthYear} Report</h2>
+        <MonthlySelector />
+      </div>
+      <dl className="mb-8 p-2.5 grid grid-cols-3 gap-2.5 border border-[#ddd] rounded-lg text-center">
+        <Total title="Income" total={report.income} />
+        <Total title="Expense" total={report.expense} />
+        <Total title="Surplus" total={report.surplus} />
+      </dl>
+      <ExpenseCategories categoryTotals={report.categories} />
     </>
   )
 }
