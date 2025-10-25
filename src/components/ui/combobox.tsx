@@ -32,7 +32,11 @@ export function Combobox({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <input type="hidden" name={name} value={value} />
+      <input
+        type="hidden"
+        name={name}
+        value={options.find((option) => option.label === value)?.value}
+      />
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -40,9 +44,7 @@ export function Combobox({
           aria-expanded={open}
           className="w-full justify-between"
         >
-          {value
-            ? options.find((option) => option.value === value)?.label
-            : `Select ${label}...`}
+          {value || `Select ${label}...`}
           <ChevronsUpDownIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -55,7 +57,7 @@ export function Combobox({
               {options.map((option) => (
                 <CommandItem
                   key={option.value}
-                  value={option.value}
+                  value={option.label}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? '' : currentValue)
                     setOpen(false)
