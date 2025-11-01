@@ -106,6 +106,8 @@ export async function GET(request: NextRequest) {
     const toDate = formatDate(to)
 
     if (fromDate && toDate) {
+      toDate.setHours(23, 59, 59, 999)
+
       where.date = {
         gte: fromDate.toISOString(),
         lt: toDate.toISOString()
