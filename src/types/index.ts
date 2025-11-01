@@ -1,4 +1,5 @@
 import 'react'
+import { CategoryType } from '@prisma/client'
 
 declare module 'react' {
   interface CSSProperties {
@@ -24,6 +25,7 @@ export type CategoryWithAmount = {
   id: number
   name: string
   amount: number
+  type: CategoryType
 }
 
 export type ReportTotals = {

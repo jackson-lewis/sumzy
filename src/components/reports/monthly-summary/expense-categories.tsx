@@ -20,7 +20,7 @@ function CategoryGroup({
           }
 
           return (
-            <Fragment key={category.id}>
+            <Fragment key={`${category.type}-${category.id}`}>
               <dt className="pb-1 border-b border-[#ddd] last:border-b-0 last:pb-0">
                 {category?.name}
               </dt>
@@ -75,7 +75,7 @@ export default function ExpenseCategories({
     })
     .sort((a, b) => {
       return a.amount > b.amount ? -1 : 1
-    })
+    }) as CategoryWithAmount[]
 
   const grouped = [
     categories.find(
