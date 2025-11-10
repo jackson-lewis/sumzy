@@ -19,9 +19,6 @@ export async function GET() {
   const subscriptions = await prisma.subscription.findMany({
     where: {
       frequency: FrequencyType.DATE_OF_MONTH
-    },
-    include: {
-      originTransaction: true
     }
   })
 
@@ -30,9 +27,9 @@ export async function GET() {
   )
 
   const matchingSubs = subscriptions.filter((sub) => {
-    if (!sub.originTransaction?.date) return false
-    const originDay = new Date(sub.originTransaction.date).getDate()
-    return originDay === dayOfMonth
+    if (!sub.date) return false
+    const subDay = new Date(sub.date).getDate()
+    return subDay === dayOfMonth
   })
 
   logger.info(

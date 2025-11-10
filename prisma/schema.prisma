@@ -73,6 +73,7 @@ model Subscription {
   defaultCategoryId Int?
   categoryType      CategoryType
   frequency         FrequencyType
+  date              DateTime?
   originTransactionId Int @unique
   originTransaction Transaction @relation("OriginTransaction", fields: [originTransactionId], references: [id])
   transactions      Transaction[] @relation("SubscriptionTransactions")
