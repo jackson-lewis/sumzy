@@ -39,7 +39,7 @@ export default function HouseDepositChart({ id }: { id: number }) {
         }))
       )
     })
-  }, [])
+  }, [id])
 
   // Use metaData instead of rawData
   const formattedData = metaData.map((item) => ({

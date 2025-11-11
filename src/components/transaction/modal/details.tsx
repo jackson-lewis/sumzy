@@ -1,8 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Transaction } from '@prisma/client'
 import { deleteTransaction } from '@/lib/actions/transaction'
 import { useCategories, useTx } from '@/lib/swr'
 import { getTransactionCategory } from '@/lib/transactions'
@@ -13,15 +12,10 @@ import CreateSubscriptionForm from './CreateSubscriptionForm'
 export default function Details({ id }: { id: string }) {
   const { data: transactions, isLoading, mutate } = useTx()
   const { data: categories } = useCategories()
-  const [transaction, setTransaction] = useState<Transaction | null>(null)
   const [showForm, setShowForm] = useState(false)
   const router = useRouter()
 
-  useEffect(() => {
-    if (transactions) {
-      setTransaction(transactions.find((t) => String(t.id) === id) || null)
-    }
-  }, [transactions, id])
+  const transaction = transactions?.find((t) => String(t.id) === id) || null
 
   if (isLoading) {
     return <div className="p-8 text-center">Loading...</div>

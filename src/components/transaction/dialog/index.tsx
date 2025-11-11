@@ -37,43 +37,35 @@ export default function TransactionDialog() {
   const { data: transactions, mutate } = useTx()
   const { data: user } = useUser()
 
-  useEffect(() => {
-    setTransactionSetup(['expense', undefined])
-  }, [setTransactionSetup])
+  if (transaction) {
+    setAmountValue(transaction.amount.toString())
+    setCategoryValue(
+      (transaction.categoryType === 'DEFAULT'
+        ? `d${transaction.defaultCategoryId}`
+        : `u${transaction.categoryId}`) || ''
+    )
+    setDescValue(transaction.description || '')
+  }
 
-  useEffect(() => {
-    if (transaction) {
-      setAmountValue(transaction.amount.toString())
-      setCategoryValue(
-        (transaction.categoryType === 'DEFAULT'
-          ? `d${transaction.defaultCategoryId}`
-          : `u${transaction.categoryId}`) || ''
+  if (transactions && state && !(state instanceof Error)) {
+    logger.info('Mutating transactions after action state change.', {
+      transactionId: state.id
+    })
+
+    if (update) {
+      mutate(
+        transactions.map((tx) => {
+          if (tx.id === state.id) {
+            return state
+          }
+          return tx
+        })
       )
-      setDescValue(transaction.description || '')
+    } else {
+      mutate([...transactions, state])
     }
-  }, [transaction])
-
-  useEffect(() => {
-    if (transactions && state && !(state instanceof Error)) {
-      logger.info('Mutating transactions after action state change.', {
-        transactionId: state.id
-      })
-
-      if (update) {
-        mutate(
-          transactions.map((tx) => {
-            if (tx.id === state.id) {
-              return state
-            }
-            return tx
-          })
-        )
-      } else {
-        mutate([...transactions, state])
-      }
-      closeAction()
-    }
-  }, [state])
+    closeAction()
+  }
 
   function closeAction() {
     closeEditModal()
@@ -99,6 +91,10 @@ export default function TransactionDialog() {
     setCategoryValue(event.target.value)
     setCategoryType(categoryType)
   }
+
+  useEffect(() => {
+    setTransactionSetup(['expense', undefined])
+  }, [setTransactionSetup])
 
   const formContent = (
     <form action={formAction} className="space-y-4">

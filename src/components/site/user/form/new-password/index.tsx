@@ -14,9 +14,6 @@ export default function NewPasswordField({
 }) {
   const [password, setPassword] = useState('')
   const [passwordC, setPasswordC] = useState('')
-  const [validations, setValidations] = useState<{
-    [k in PasswordValidationTypes]: boolean
-  }>()
 
   const validationTypes: {
     name: PasswordValidationTypes
@@ -40,16 +37,13 @@ export default function NewPasswordField({
     }
   ]
 
-  useEffect(() => {
-    const validated = validatePassword(password)
-    setValidations(validated)
+  const validations = validatePassword(password)
 
-    const passAllChecks = Object.values(validated).every((check) => {
-      return check === true
-    })
+  const passAllChecks = Object.values(validations).every((check) => {
+    return check === true
+  })
 
-    setDisableSubmit(!passAllChecks)
-  }, [password, setDisableSubmit])
+  setDisableSubmit(!passAllChecks)
 
   useEffect(() => {
     setDisableSubmit(password !== passwordC)

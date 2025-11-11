@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "prisma generate && next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "typecheck": "tsc",
     "test:ci": "prisma migrate deploy && jest",
     "test": "npm run docker:test:up && dotenv -e .env.test -- prisma migrate deploy && dotenv -e .env.test -- jest",
@@ -51,7 +51,6 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/jest-dom": "^6.6.3",
     "@testing-library/react": "^16.1.0",

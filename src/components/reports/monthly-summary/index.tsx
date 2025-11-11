@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
 import { CompareTotal } from '@/types'
 import { Transaction } from '@prisma/client'
 import useSWR from 'swr'
@@ -77,47 +77,42 @@ export default function MonthlySummaryReport() {
     year: 'numeric'
   })
 
-  const [report, setReport] = useState<{
-    income: number
-    expense: number
-    surplus: number
-    categories: Record<string, number>
-  }>()
+  const report = useMemo(() => {
+    if (!transactions) {
+      return undefined
+    }
 
-  useEffect(() => {
-    if (transactions) {
-      const newReport: typeof report = {
-        income: 0,
-        expense: 0,
-        surplus: 0,
-        categories: {}
+    const newReport = {
+      income: 0,
+      expense: 0,
+      surplus: 0,
+      categories: {} as Record<string, number>
+    }
+
+    transactions.forEach((transaction) => {
+      const amount = Number(transaction.amount)
+      const catKey = [
+        transaction.categoryType,
+        transaction.categoryType === 'DEFAULT'
+          ? transaction.defaultCategoryId
+          : transaction.categoryId
+      ].join('-')
+
+      if (catKey) {
+        newReport.categories[catKey] =
+          (newReport.categories[catKey] || 0) + amount
       }
 
-      transactions.forEach((transaction) => {
-        const amount = Number(transaction.amount)
-        const catKey = [
-          transaction.categoryType,
-          transaction.categoryType === 'DEFAULT'
-            ? transaction.defaultCategoryId
-            : transaction.categoryId
-        ].join('-')
+      if (amount > 0) {
+        newReport.income += amount
+      } else {
+        newReport.expense += amount
+      }
+    })
 
-        if (catKey) {
-          newReport.categories[catKey] =
-            (newReport.categories[catKey] || 0) + amount
-        }
+    newReport.surplus = newReport.income + newReport.expense
 
-        if (amount > 0) {
-          newReport.income += amount
-        } else {
-          newReport.expense += amount
-        }
-      })
-
-      newReport.surplus = newReport.income + newReport.expense
-
-      setReport(newReport)
-    }
+    return newReport
   }, [transactions])
 
   if (!report) {

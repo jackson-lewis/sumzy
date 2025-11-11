@@ -1,27 +1,20 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useState } from 'react'
 import { Input } from '@/components/ui/input'
 
+function formatDate(date?: Date) {
+  const today = date && !isNaN(date.getTime()) ? date : new Date()
+  const day = today.getDate()
+  const month = today.getMonth() + 1
+
+  return [
+    today.getFullYear(),
+    month > 9 ? month : `0${month}`,
+    day > 9 ? day : `0${day}`
+  ].join('-')
+}
+
 export default function DateSelector({ value }: { value?: Date }) {
-  const [date, setDate] = useState<string>('')
-
-  useEffect(() => {
-    let today = value ? new Date(value) : new Date()
-
-    if (today.toString() === 'Invalid Date') {
-      today = new Date()
-    }
-
-    const day = today.getDate()
-    const month = today.getMonth() + 1
-
-    setDate(
-      [
-        today.getFullYear(),
-        month > 10 ? month : `0${month}`,
-        day > 10 ? day : `0${day}`
-      ].join('-')
-    )
-  }, [value])
+  const [date, setDate] = useState<string>(() => formatDate(value))
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     setDate(event.target.value)

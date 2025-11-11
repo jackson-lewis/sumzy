@@ -5,21 +5,22 @@ import { useRouter } from 'next/navigation'
 import { useActiveMonth, useActiveYear } from '@/lib/form-submit'
 
 export default function MonthlySelector() {
-  let year = useActiveYear()
-  let month = useActiveMonth()
+  const year = useActiveYear()
+  const month = useActiveMonth()
   const router = useRouter()
 
   function handleChange(event: ChangeEvent<HTMLSelectElement>) {
-    const { value } = event.target
-    const valueAsNumber = Number(value)
+    const { value, name } = event.target
+    let newYear = year
+    let newMonth = month
 
-    if (value.length === 4) {
-      year = value
-    } else if (valueAsNumber > 0 && valueAsNumber <= 12) {
-      month = value
+    if (name === 'year') {
+      newYear = value
+    } else if (name === 'month') {
+      newMonth = value
     }
 
-    router.push(`?year=${year}&month=${month}`)
+    router.push(`?year=${newYear}&month=${newMonth}`)
   }
 
   return (

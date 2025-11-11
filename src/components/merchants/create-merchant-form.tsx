@@ -30,7 +30,7 @@ export default function CreateMerchantForm() {
 
       mutate([...merchants, { ...state.data, favorites: [] }])
     }
-  }, [mutate, state])
+  }, [merchants, mutate, state])
 
   return (
     <ResponsiveDialog title="Add Merchant" formSubmitted={!!state?.success}>
