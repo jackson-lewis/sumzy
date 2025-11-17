@@ -102,6 +102,7 @@ export default function TransactionDialog() {
       <input type="hidden" name="update" value={update ? 'true' : 'false'} />
       <input type="hidden" name="id" value={transaction?.id} />
       <input type="hidden" name="categoryType" value={categoryType} />
+      <input type="hidden" name="direction" value={transactionDirection} />
       <fieldset name="direction" className="flex gap-4 mb-4">
         <Button
           type="button"
@@ -125,14 +126,9 @@ export default function TransactionDialog() {
           name="amount"
           autoFocus={true}
           value={amountValue ?? (Number(amountValue) * 1).toString()}
-          onChange={(e) =>
-            setAmountValue(
-              (
-                Number(e.target.value) *
-                (transactionDirection === 'expense' ? -1 : 1)
-              ).toString()
-            )
-          }
+          onChange={(e) => {
+            setAmountValue(e.target.value)
+          }}
         />
         <div className="mt-4">
           <label htmlFor="merchantId" className="block mb-1">
