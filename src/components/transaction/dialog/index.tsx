@@ -47,7 +47,12 @@ export default function TransactionDialog() {
     setDescValue(transaction.description || '')
   }
 
-  if (transactions && state && !(state instanceof Error)) {
+  // Only update transactions when state changes and is not an error
+  useEffect(() => {
+    if (!state || state instanceof Error || !transactions) {
+      return
+    }
+
     logger.info('Mutating transactions after action state change.', {
       transactionId: state.id
     })
@@ -65,7 +70,8 @@ export default function TransactionDialog() {
       mutate([...transactions, state])
     }
     closeAction()
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state])
 
   function closeAction() {
     closeEditModal()
