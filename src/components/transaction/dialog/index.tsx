@@ -23,10 +23,8 @@ import {
 import DateSelector from './date-selector'
 
 export default function TransactionDialog() {
-  // Merchant select state
   const { data: merchants = [] } = useMerchants()
-  const { closeEditModal, transaction, transactionSetup, setTransactionSetup } =
-    useTransactions()
+  const { closeEditModal, transaction } = useTransactions()
   const [amountValue, setAmountValue] = useState<string>('')
   const [categoryValue, setCategoryValue] = useState<string>()
   const [categoryType, setCategoryType] = useState<CategoryType>()
@@ -36,6 +34,9 @@ export default function TransactionDialog() {
   const { data } = useCategories()
   const { data: transactions, mutate } = useTx()
   const { data: user } = useUser()
+  const [transactionDirection, setTransactionDirection] = useState<
+    'income' | 'expense'
+  >('expense')
 
   if (transaction) {
     setAmountValue(transaction.amount.toString())
@@ -79,16 +80,14 @@ export default function TransactionDialog() {
     setCategoryValue('d1')
     setCategoryType('DEFAULT')
     setDescValue('')
-    setTransactionSetup([undefined, undefined])
+    setTransactionDirection('expense')
   }
 
-  function handleDirectionChange(event: ChangeEvent<HTMLInputElement>) {
+  function handleDirectionChange(direction: TransactionDirection) {
     if (update) {
       return
     }
-    setTransactionSetup((setup) => {
-      return [event.target.value as TransactionDirection, setup[1]]
-    })
+    setTransactionDirection(direction)
   }
 
   function handleCategoryChange(event: ChangeEvent<HTMLSelectElement>) {
@@ -98,35 +97,24 @@ export default function TransactionDialog() {
     setCategoryType(categoryType)
   }
 
-  useEffect(() => {
-    setTransactionSetup(['expense', undefined])
-  }, [setTransactionSetup])
-
   const formContent = (
     <form action={formAction} className="space-y-4">
       <input type="hidden" name="update" value={update ? 'true' : 'false'} />
       <input type="hidden" name="id" value={transaction?.id} />
       <input type="hidden" name="categoryType" value={categoryType} />
-      <input type="hidden" name="direction" value={transactionSetup[0]} />
       <fieldset name="direction" className="flex gap-4 mb-4">
         <Button
           type="button"
-          variant={transactionSetup[0] === 'income' ? 'default' : 'outline'}
-          onClick={() =>
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            handleDirectionChange({ target: { value: 'income' } } as any)
-          }
+          variant={transactionDirection === 'income' ? 'default' : 'outline'}
+          onClick={() => handleDirectionChange('income')}
           className="flex-grow"
         >
           Income
         </Button>
         <Button
           type="button"
-          variant={transactionSetup[0] === 'expense' ? 'default' : 'outline'}
-          onClick={() =>
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            handleDirectionChange({ target: { value: 'expense' } } as any)
-          }
+          variant={transactionDirection === 'expense' ? 'default' : 'outline'}
+          onClick={() => handleDirectionChange('expense')}
           className="flex-grow"
         >
           Expense
@@ -141,7 +129,7 @@ export default function TransactionDialog() {
             setAmountValue(
               (
                 Number(e.target.value) *
-                (transactionSetup[0] === 'expense' ? -1 : 1)
+                (transactionDirection === 'expense' ? -1 : 1)
               ).toString()
             )
           }
