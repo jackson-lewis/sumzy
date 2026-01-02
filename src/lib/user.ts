@@ -12,7 +12,7 @@ export function validatePassword(pwd: string): {
 }
 
 export function pwdLength(pwd: string) {
-  return pwd.length >= 10
+  return pwd.length >= 8
 }
 
 export function pwdContainsUppercase(pwd: string) {

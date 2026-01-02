@@ -7,15 +7,15 @@ import {
 } from '@/lib/user'
 
 describe('Validate password length', () => {
-  it('should return true for password 10 chars in length', async () => {
-    const password = 'passworddd'
+  it('should return true for password 8 chars in length', async () => {
+    const password = 'password'
     const valid = pwdLength(password)
 
     expect(valid).toBe(true)
   })
 
-  it('should return false for password 8 chars in length', async () => {
-    const password = 'password'
+  it('should return false for password 7 chars in length', async () => {
+    const password = 'passwor'
     const valid = pwdLength(password)
 
     expect(valid).toBe(false)
@@ -84,7 +84,7 @@ describe('Validate password', () => {
   })
 
   it('should return false when password not of length', async () => {
-    const password = 'Passwor1!'
+    const password = 'Pass1!'
     const valid = validatePassword(password)
 
     expect(valid).toStrictEqual({
