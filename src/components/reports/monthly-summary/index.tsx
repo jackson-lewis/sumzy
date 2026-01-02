@@ -99,10 +99,6 @@ export default function MonthlySummaryReport() {
       categories: {} as Record<string, number>
     }
 
-    const matchedTransactions = transactions.filter((transaction) => transaction.defaultCategoryId === 7)
-
-    console.log({ matchedTransactions })
-
     transactions.forEach((transaction) => {
       const amount = Number(transaction.amount)
       const catKey = [
