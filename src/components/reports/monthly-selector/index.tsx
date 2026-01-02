@@ -3,6 +3,7 @@
 import { ChangeEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { useActiveMonth, useActiveYear } from '@/lib/form-submit'
+import { Button } from '@/components/ui/button'
 
 export default function MonthlySelector() {
   const year = useActiveYear()
@@ -21,6 +22,38 @@ export default function MonthlySelector() {
     }
 
     router.push(`?year=${newYear}&month=${newMonth}`)
+  }
+
+  function goToPreviousMonth() {
+    let newYear = parseInt(year)
+    let newMonth = parseInt(month) - 1
+
+    if (newMonth < 1) {
+      newMonth = 12
+      newYear -= 1
+    }
+
+    router.push(`?year=${newYear}&month=${newMonth}`)
+  }
+
+  function goToNextMonth() {
+    let newYear = parseInt(year)
+    let newMonth = parseInt(month) + 1
+
+    if (newMonth > 12) {
+      newMonth = 1
+      newYear += 1
+    }
+
+    router.push(`?year=${newYear}&month=${newMonth}`)
+  }
+
+  function goToThisMonth() {
+    const now = new Date()
+    const currentYear = now.getFullYear()
+    const currentMonth = now.getMonth() + 1
+
+    router.push(`?year=${currentYear}&month=${currentMonth}`)
   }
 
   return (
@@ -46,6 +79,15 @@ export default function MonthlySelector() {
         <option>11</option>
         <option>12</option>
       </select>
+      <Button onClick={goToPreviousMonth} variant="outline" size="sm">
+        Previous Month
+      </Button>
+      <Button onClick={goToNextMonth} variant="outline" size="sm">
+        Next Month
+      </Button>
+      <Button onClick={goToThisMonth} variant="outline" size="sm">
+        This Month
+      </Button>
     </div>
   )
 }
