@@ -66,8 +66,18 @@ function Total({
 export default function MonthlySummaryReport() {
   const year = useActiveYear()
   const month = useActiveMonth()
+  let toDay = '31'
+
+  if (month === '4' || month === '6' || month === '9' || month === '11') {
+    toDay = '30'
+  }
+
+  if (month === '2') {
+    toDay = '28'
+  }
+
   const { data: transactions } = useSWR<Transaction[]>(
-    `/v1/transactions?from=${year}-${month}-01&to=${year}-${month}-31`,
+    `/v1/transactions?from=${year}-${month}-01&to=${year}-${month}-${toDay}`,
     fetcher
   )
 
@@ -88,6 +98,10 @@ export default function MonthlySummaryReport() {
       surplus: 0,
       categories: {} as Record<string, number>
     }
+
+    const matchedTransactions = transactions.filter((transaction) => transaction.defaultCategoryId === 7)
+
+    console.log({ matchedTransactions })
 
     transactions.forEach((transaction) => {
       const amount = Number(transaction.amount)
