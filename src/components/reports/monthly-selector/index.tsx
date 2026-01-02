@@ -30,6 +30,7 @@ export default function MonthlySelector() {
         <option>2023</option>
         <option>2024</option>
         <option>2025</option>
+        <option>2026</option>
       </select>
       <select name="month" id="month" value={month} onChange={handleChange}>
         <option>1</option>
