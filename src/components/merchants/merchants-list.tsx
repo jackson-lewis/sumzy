@@ -13,8 +13,6 @@ export default function MerchantsList() {
     mutate()
   }
 
-  console.log({ merchants })
-
   return (
     <>
       <ul className="mb-8 divide-y">
