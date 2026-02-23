@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import { CompareTotal } from '@/types'
-import { Transaction } from '@prisma/client'
+import { Subscription, Transaction } from '@prisma/client'
 import useSWR from 'swr'
 import { useActiveMonth, useActiveYear } from '@/lib/form-submit'
 import { fetcher } from '@/lib/swr'
@@ -81,6 +81,50 @@ export default function MonthlySummaryReport() {
     fetcher
   )
 
+  const { data: subscriptions } = useSWR<Subscription[]>(
+    '/v1/transactions/subscriptions',
+    fetcher
+  )
+
+  const mergedFutureTransactions = useMemo<Transaction[]>(() => {
+    const matchedSubscriptionIds = transactions?.filter((transaction) => {
+      return transaction.subscriptionId !== null
+    })
+      .map(({subscriptionId}) => subscriptionId)
+      .filter((id): id is number => id !== null) || []
+
+    const unmatchedSubscriptions = subscriptions?.filter((subscription) => {
+      return !matchedSubscriptionIds.includes(subscription.id)
+    }) || []
+
+    const mockedFutureTransactions: Transaction[] = unmatchedSubscriptions.map((subscription) => {
+      const subscriptionDate = subscription.date ? new Date(subscription.date) : null
+      const date = new Date(Number(year), Number(month) - 1, subscriptionDate?.getDate() || 1)
+
+      return {
+        id: subscription.id,
+        userId: subscription.userId,
+        amount: subscription.amount,
+        description: subscription.description,
+        categoryId: subscription.categoryId,
+        defaultCategoryId: subscription.defaultCategoryId,
+        categoryType: subscription.categoryType,
+        date,
+        subscriptionId: subscription.id,
+        merchantId: subscription.merchantId
+      }
+    })
+
+    if (!transactions) {
+      return []
+    }
+
+    return [
+      ...transactions,
+      ...mockedFutureTransactions
+    ]
+  }, [transactions, subscriptions, year, month])
+
   const date = new Date(Number(year), Number(month) - 1)
   const monthYear = date.toLocaleDateString('en-GB', {
     month: 'long',
@@ -88,7 +132,7 @@ export default function MonthlySummaryReport() {
   })
 
   const report = useMemo(() => {
-    if (!transactions) {
+    if (!mergedFutureTransactions) {
       return undefined
     }
 
@@ -99,7 +143,7 @@ export default function MonthlySummaryReport() {
       categories: {} as Record<string, number>
     }
 
-    transactions.forEach((transaction) => {
+    mergedFutureTransactions.forEach((transaction) => {
       const amount = Number(transaction.amount)
       const catKey = [
         transaction.categoryType,
@@ -123,7 +167,7 @@ export default function MonthlySummaryReport() {
     newReport.surplus = newReport.income + newReport.expense
 
     return newReport
-  }, [transactions])
+  }, [mergedFutureTransactions])
 
   if (!report) {
     return <div>Loading...</div>
